@@ -1,14 +1,24 @@
 {
-  "name": "ผ่อนบ้าน — พยากรณ์สินเชื่อ",
-  "short_name": "ผ่อนบ้าน",
+  "name": "Fin ตั้ม — ติดตามสินเชื่อ",
+  "short_name": "Fin ตั้ม",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#F1F4F7",
-  "theme_color": "#0F172A",
+  "background_color": "#F6F3EE",
+  "theme_color": "#F2B800",
   "lang": "th",
   "icons": [
-    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
-    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
   ]
 }

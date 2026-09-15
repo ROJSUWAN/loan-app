@@ -73,8 +73,16 @@
   table.cmp td{padding:7px 4px;border-bottom:1px solid #F3EEE4;text-align:right;white-space:nowrap}
   table.cmp tr.f td{color:var(--muted)}table.cmp td.ok{color:var(--ok);font-weight:700}table.cmp td.bad{color:var(--bad);font-weight:700}
   .tblwrap{overflow-x:auto;margin:0 -16px;padding:0 16px}
-  .day{display:grid;grid-template-columns:52px 1fr auto;gap:8px;padding:8px 0;border-bottom:1px solid #F3EEE4;font-size:14.5px;align-items:center}
-  .day .d{font-weight:700;color:var(--brown)}.day .i{text-align:right;color:var(--int);font-weight:700}.day.today{background:var(--amber);margin:0 -8px;padding:8px}
+  .day{display:grid;grid-template-columns:44px 1fr 1fr auto;gap:6px;padding:7px 0;border-bottom:1px solid #F3EEE4;font-size:14px;align-items:center;white-space:nowrap}
+  .day .d{font-weight:700;color:var(--brown)}.day .m{color:var(--muted);font-size:13px}.day .i{text-align:right;color:var(--int);font-weight:700}
+  .day.today{background:var(--amber);margin:0 -8px;padding:7px 8px;border-radius:8px}
+  .day.h{font-size:11.5px;color:var(--muted);padding:2px 0 6px;font-weight:600}.day.h *{color:var(--muted);font-weight:600;text-align:inherit}
+  .cardhd{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
+  .cardhd h2{margin:0}.cardhd .chev{width:26px;height:26px;border-radius:50%;background:#F3EEE4;color:var(--brown);display:flex;align-items:center;justify-content:center;font-size:14px;transition:transform .2s}
+  .card.open .chev{transform:rotate(180deg)}
+  .msum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+  .msum div{background:#FBF8F1;border-radius:10px;padding:8px 10px}.msum .l{font-size:12px;color:var(--muted)}.msum .v{font-weight:700;font-size:16px}.msum .v.int{color:var(--int)}
+  .body{display:none;margin-top:10px}.card.open .body{display:block}
   .entry{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}
   .entry .dt{font-size:13px;color:var(--muted);width:82px;flex:none}.entry .tx{flex:1;font-size:15px}.entry .am{font-weight:700;color:var(--ok)}.entry .am.draw{color:var(--bad)}.entry .am.fee{color:var(--muted)}
   .entry button{border:0;background:none;color:#A89F92;font-size:22px}
@@ -123,9 +131,9 @@
   <div class="card hero" id="hero"></div>
   <div class="warn" id="warn" style="display:none"></div>
   <div class="stats" id="stats"></div>
-  <div class="card"><h2>เงินต้นคงเหลือ</h2><div class="chart"><canvas id="cBal"></canvas></div><div class="muted" style="margin-top:6px" id="balNote"></div></div>
-  <div class="card"><h2>ดอกเบี้ยรายวัน เดือนนี้</h2><div id="days"></div></div>
-  <div class="card"><h2>ค่างวดรายปี · ดอกเบี้ย vs เงินต้น</h2><div class="chart"><canvas id="cYear"></canvas></div></div>
+  <div class="card"><h2>📉 เงินต้น</h2><div class="chart"><canvas id="cBal"></canvas></div><div class="muted" style="margin-top:6px" id="balNote"></div></div>
+  <div class="card" id="dayCard"><div class="cardhd" id="dayHd"><h2 id="dayTitle">📅 ดอกเบี้ยเดือนนี้</h2><span class="chev">▾</span></div><div class="msum" id="daySum"></div><div class="body" id="days"></div></div>
+  <div class="card"><h2>📊 รายปี · ดอก vs ต้น</h2><div class="chart"><canvas id="cYear"></canvas></div></div>
 </main>
 
 <!-- ───────── แผน vs จริง ───────── -->
@@ -143,7 +151,7 @@
 <!-- ───────── บันทึก ───────── -->
 <main id="tab-log">
   <div class="card"><div class="logsum" id="logsum"></div></div>
-  <div class="card"><p class="muted" style="margin:0 0 6px">รายการจริงจากธนาคาร: เบิกเงินกู้เพิ่มเงินต้น, ชำระ/โปะ ตัดดอกเบี้ยค้างก่อนแล้วค่อยตัดเงินต้น (เหมือนในแอปกรุงศรี)</p><div id="log"></div></div>
+  <div class="card"><p class="muted" style="margin:0 0 6px">จ่าย/โปะ → ตัดดอกค้างก่อน เหลือค่อยตัดต้น (แบบเดียวกับธนาคาร)</p><div id="log"></div></div>
 </main>
 
 <!-- ───────── ตั้งค่า ───────── -->
@@ -151,24 +159,24 @@
   <div class="loanpick" id="loanpick"></div>
   <div id="setBody"></div>
   <div class="card">
-    <h2>Fin ตั้ม AI (Typhoon)</h2>
+    <h2>✦ AI (Typhoon)</h2>
     <label><span>API key</span><input type="password" id="ai_key"></label>
     <label><span>โมเดล</span><select id="ai_model"><option value="typhoon-v2.5-30b-a3b-instruct">typhoon-v2.5-30b-a3b-instruct (แนะนำ)</option><option value="typhoon-v2.1-12b-instruct">typhoon-v2.1-12b-instruct (เร็ว)</option></select></label>
-    <label><span>Endpoint (เปลี่ยนเฉพาะเมื่อใช้ proxy)</span><input type="text" id="ai_ep"></label>
-    <p class="muted" style="margin:0">key เก็บใน localStorage ของเครื่องนี้ ไม่ถูกส่งไปที่อื่นนอกจาก Typhoon อย่าแชร์ลิงก์แอปพร้อม key</p>
+    <label><span>Endpoint (ถ้าใช้ proxy)</span><input type="text" id="ai_ep"></label>
+    <p class="muted" style="margin:0">key อยู่ในเครื่องนี้เท่านั้น</p>
   </div>
   <div class="card">
-    <h2>สำรองข้อมูล</h2>
-    <div class="row"><button class="btn ghost" id="expBtn">ส่งออก JSON</button><button class="btn ghost" id="impBtn">นำเข้า JSON</button></div>
+    <h2>💾 สำรองข้อมูล</h2>
+    <div class="row"><button class="btn ghost" id="expBtn">⬇ ส่งออก</button><button class="btn ghost" id="impBtn">⬆ นำเข้า</button></div>
     <input type="file" id="impFile" accept="application/json" style="display:none">
   </div>
-  <button class="btn danger block" id="resetBtn">รีเซ็ตทั้งหมดเป็นค่าเริ่มต้น</button>
+  <button class="btn danger block" id="resetBtn">🗑 รีเซ็ตทั้งหมด</button>
 </main>
 
 <!-- ───────── แชท ───────── -->
 <main id="tab-chat">
   <div class="chatwrap">
-    <div id="chatSetup" class="card" style="display:none"><h2>ตั้งค่า Typhoon</h2><p class="muted" style="margin:0 0 10px">ใส่ API key จาก opentyphoon.ai (Playground → API Keys) key เก็บไว้ในเครื่องนี้เท่านั้น</p><div id="chatSetupBody"></div></div>
+    <div id="chatSetup" class="card" style="display:none"><h2>✦ เชื่อม Typhoon</h2><p class="muted" style="margin:0 0 10px">API key จาก opentyphoon.ai → Playground → API Keys</p><div id="chatSetupBody"></div></div>
     <div class="chips" id="chips"></div>
     <div class="msgs" id="msgs"></div>
     <div class="chatbar"><textarea id="chatIn" rows="1" placeholder="ถามเรื่องสินเชื่อของคุณ…"></textarea><button id="chatSend" aria-label="ส่ง">➤</button></div>
@@ -179,11 +187,11 @@
 <div class="sheet-bg" id="sheetBg"></div>
 <div class="sheet" id="sheet">
   <div class="handle"></div>
-  <h3>บันทึกรายการ</h3>
+  <h3>✏️ จดรายการ</h3>
   <label><span>สัญญา</span><select id="eLoan"></select></label>
   <label><span>วันที่</span><input type="date" id="eDate"></label>
-  <label><span>ประเภท</span><select id="eKind"><option value="pay">ชำระค่างวด</option><option value="extra">โปะเพิ่ม</option><option value="draw">เบิกเงินกู้ (เพิ่มเงินต้น)</option><option value="fee">ค่าธรรมเนียม / อื่นๆ</option></select></label>
-  <label><span>จำนวนเงิน (บาท)</span><input type="number" inputmode="decimal" id="eAmt" step="100"></label>
+  <label><span>ประเภท</span><select id="eKind"><option value="pay">✅ ชำระค่างวด</option><option value="extra">➕ โปะเพิ่ม</option><option value="draw">🏦 เบิกเงินกู้ (ต้นเพิ่ม)</option><option value="fee">🧾 ค่าธรรมเนียม</option></select></label>
+  <label><span>จำนวน (฿)</span><input type="number" inputmode="decimal" id="eAmt" step="100"></label>
   <label><span>หมายเหตุ</span><input type="text" id="eNote" placeholder="เช่น หักบัญชีอัตโนมัติ"></label>
   <button class="btn primary block" id="eSave">บันทึก</button>
 </div>
@@ -295,31 +303,35 @@ function renderScope(){$('scope').innerHTML=[['all','รวมทุกสัญ
 function renderDash(){
   const sim=simScope(),sn=sim.snap,ls=scopeLoans();const single=ls.length===1?ls[0]:null;
   const plan=planScope();const daysSince=sn.lastActual?Math.round((P(TODAY)-P(sn.lastActual))/864e5):null;
-  let h=`<div class="lbl">ยอดเงินต้นคงค้าง${single?` · ${single.name} <span class="muted">${single.acct}</span>`:' · รวม '+ls.length+' สัญญา'}</div>
-    <div class="big">${THB(sn.bal,2)} <small>บาท</small></div>
+  let h=`<div class="lbl">🏠 เงินต้นคงค้าง${single?` · ${single.name} <span class="muted">${single.acct}</span>`:' · รวม '+ls.length+' สัญญา'}</div>
+    <div class="big">${THB(sn.bal,2)} <small>฿</small></div>
     <div class="kv">
-      <div><div class="k">ยอดที่ต้องชำระทั้งหมดวันนี้</div><div class="v">${THB(sn.bal+sn.accrued,2)}</div></div>
-      <div><div class="k">ดอกเบี้ยค้าง${daysSince!=null?` (${daysSince} วัน)`:''}</div><div class="v int">${THB(sn.accrued,2)}</div></div>
-      <div><div class="k">ดอกเบี้ยเดินวันละ</div><div class="v int">${THB(sn.daily,2)}</div></div>
-      <div><div class="k">อัตราเฉลี่ยถ่วงน้ำหนัก</div><div class="v">${pct(sn.rate,4)}</div></div>
+      <div><div class="k">💰 ต้องจ่ายวันนี้ (ต้น+ดอก)</div><div class="v">${THB(sn.bal+sn.accrued,2)}</div></div>
+      <div><div class="k">⏳ ดอกค้าง${daysSince!=null?` ${daysSince} วัน`:''}</div><div class="v int">${THB(sn.accrued,2)}</div></div>
+      <div><div class="k">📆 ดอกวันละ</div><div class="v int">${THB(sn.daily,2)}</div></div>
+      <div><div class="k">% เฉลี่ย/ปี</div><div class="v">${pct(sn.rate,4)}</div></div>
     </div>`;
   if(single&&single.rateMode==='tier'&&sn.parts){const tot=Math.max(sn.bal,1);h+=`<div class="ladder">${sn.parts.map((p,i)=>p.amount>0?`<div style="width:${p.amount/tot*100}%;background:${COLORS[i%6]}">${p.amount/tot>0.14?pct(p.rate):''}</div>`:'').join('')}</div><div class="legend">${sn.parts.map((p,i)=>`<div><i style="background:${COLORS[i%6]}"></i><div><b>${pct(p.rate)}</b> <span class="muted">${p.to==null?'เกิน '+THB(p.from):THB(p.from)+' – '+THB(p.to)}</span> · ${THB(p.amount)}</div></div>`).join('')}</div>`}
-  h+=`<button class="aibtn" onclick="askAI('อธิบายสถานะสินเชื่อของฉันวันนี้แบบเข้าใจง่าย และแนะนำสิ่งที่ควรทำเดือนนี้')">✦ ให้ Fin ตั้ม อธิบาย</button>`;
+  h+=`<button class="aibtn" onclick="askAI('อธิบายสถานะสินเชื่อของฉันวันนี้แบบเข้าใจง่าย และแนะนำสิ่งที่ควรทำเดือนนี้')">✦ อธิบายให้ฟัง</button>`;
   $('hero').innerHTML=h;
-  const w=$('warn');if(sim.stuck){w.style.display='';w.textContent='ค่างวดไม่พอตัดเงินต้น — ปรับค่างวดในแท็บตั้งค่า'}else w.style.display='none';
+  const w=$('warn');if(sim.stuck){w.style.display='';w.textContent='⚠️ ค่างวดน้อยกว่าดอกเบี้ย เงินต้นไม่ลด — แก้ในตั้งค่า'}else w.style.display='none';
   const nowM=sim.months.find(m=>m.key===TODAY.slice(0,7));
-  let planStat=['เทียบแผน','ยังไม่ล็อกแผน','ไปที่แท็บ แผน/จริง',''];
-  if(plan&&nowM){const pm=plan.months.find(m=>m.key===nowM.key);if(pm){const d=pm.close-nowM.close;planStat=['เงินต้นเทียบแผน',(d>=0?'−':'+')+THB(Math.abs(d)),d>=0?'ต่ำกว่าแผน (ดี)':'สูงกว่าแผน',d>=0?'ok':'bad']}}
-  const st=[['ผ่อนหมดประมาณ',sim.payoff?thM(sim.payoff.slice(0,7)):'–',`${sim.months.length} เดือน (${(sim.months.length/12).toFixed(1)} ปี)`,''],
-    ['ดอกเบี้ยรวมทั้งสัญญา',THB(sim.tI),`เฉลี่ย ${THB(sim.tI/Math.max(sim.months.length,1))}/เดือน`,''],
-    ['ดอกเบี้ยเดือนนี้',nowM?THB(nowM.interest):'–',nowM?`ตัดเงินต้น ${THB(nowM.pp)}`:'',''],planStat];
+  let planStat=['🎯 เทียบแผน','ยังไม่ล็อก','ล็อกได้ที่แท็บ แผน/จริง',''];
+  if(plan&&nowM){const pm=plan.months.find(m=>m.key===nowM.key);if(pm){const d=pm.close-nowM.close;planStat=['🎯 เทียบแผน',(d>=0?'−':'+')+THB(Math.abs(d)),d>=0?'ต้นต่ำกว่าแผน 👍':'ต้นสูงกว่าแผน',d>=0?'ok':'bad']}}
+  const st=[['🏁 หมดประมาณ',sim.payoff?thM(sim.payoff.slice(0,7)):'–',`อีก ${sim.months.length} เดือน · ${(sim.months.length/12).toFixed(1)} ปี`,''],
+    ['💸 ดอกรวมทั้งสัญญา',THB(sim.tI),`≈ ${THB(sim.tI/Math.max(sim.months.length,1))}/เดือน`,''],
+    ['📅 ดอกเดือนนี้',nowM?THB(nowM.interest):'–',nowM?`ตัดต้น ${THB(nowM.pp)}`:'',''],planStat];
   $('stats').innerHTML=st.map(([l,v,s,c])=>`<div class="stat"><div class="l">${l}</div><div class="v ${c}">${v}</div><div class="s">${s}</div></div>`).join('');
   const step=Math.max(1,Math.floor(sim.months.length/100));const rows=sim.months.filter((_,i)=>i%step===0||i===sim.months.length-1);
   const ds=[{label:'จริง+พยากรณ์',data:rows.map(r=>r.close),borderColor:'#C99A00',backgroundColor:'rgba(242,184,0,.18)',fill:true,pointRadius:0,tension:.25,borderWidth:2.5}];
   if(plan){const pm=Object.fromEntries(plan.months.map(m=>[m.key,m.close]));ds.push({label:'แผน',data:rows.map(r=>pm[r.key]??null),borderColor:'#5C4A2E',borderDash:[5,4],pointRadius:0,borderWidth:1.5,fill:false})}
   mkChart('cBal',{type:'line',data:{labels:rows.map(r=>r.label),datasets:ds},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:!!plan,position:'bottom',labels:{font,boxWidth:12}},tooltip:{callbacks:{label:c=>c.dataset.label+' '+THB(c.raw)}}},scales:{x:{ticks:{font,maxTicksLimit:5,maxRotation:0},grid:{display:false}},y:{ticks:{font,callback:v=>(v/1e6).toFixed(2)+'M'},grid}}}});
-  $('balNote').textContent=plan?`เส้นประ = แผนที่ล็อกไว้เมื่อ ${thD(plan.lockedAt)}`:'';
-  $('days').innerHTML=sim.days.length?sim.days.map(d=>`<div class="day${d.date===TODAY?' today':''}"><div class="d">${+d.date.slice(8)} ${TM[+d.date.slice(5,7)-1]}</div><div class="muted">ต้น ${THB(d.bal)} · ค้างสะสม ${THB(d.accrued,2)}</div><div class="i">+${THB(d.di,2)}</div></div>`).join(''):'<div class="empty">ยังไม่มีข้อมูลเดือนนี้</div>';
+  $('balNote').textContent=plan?`- - แผน (ล็อก ${thD(plan.lockedAt)})`:'';
+  const mInt=sim.days.reduce((a,d)=>a+d.di,0),mDays=sim.days.length;const past=sim.days.filter(d=>d.date<=TODAY);
+  $('dayTitle').textContent=`📅 ดอกเบี้ย ${TM[+TODAY.slice(5,7)-1]}`;
+  $('daySum').innerHTML=`<div><div class="l">ทั้งเดือน</div><div class="v int">${THB(mInt)}</div></div><div><div class="l">วันละ</div><div class="v int">${THB(mDays?mInt/mDays:0,2)}</div></div><div><div class="l">ถึงวันนี้ ${past.length} วัน</div><div class="v int">${THB(past.reduce((a,d)=>a+d.di,0))}</div></div>`;
+  const cm=n=>n>=1e6?(n/1e6).toFixed(2)+'M':n>=1e3?(n/1e3).toFixed(0)+'k':THB(n);
+  $('days').innerHTML=sim.days.length?`<div class="day h"><div>วัน</div><div>ต้น</div><div>ค้างสะสม</div><div class="i">ดอก/วัน</div></div>`+sim.days.map(d=>`<div class="day${d.date===TODAY?' today':''}"><div class="d">${+d.date.slice(8)}</div><div class="m">${cm(d.bal)}</div><div class="m">${THB(d.accrued)}</div><div class="i">+${THB(d.di,2)}</div></div>`).join(''):'<div class="empty">ยังไม่มีข้อมูลเดือนนี้</div>';
   const yr={};for(const m of sim.months){const y=+m.key.slice(0,4)+543;yr[y]??={i:0,p:0};yr[y].i+=m.interest;yr[y].p+=m.pp}
   mkChart('cYear',{type:'bar',data:{labels:Object.keys(yr),datasets:[{label:'ดอกเบี้ย',data:Object.values(yr).map(v=>v.i),backgroundColor:'#B85C1E'},{label:'เงินต้น',data:Object.values(yr).map(v=>v.p),backgroundColor:'#C99A00'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font,boxWidth:12}},tooltip:{callbacks:{label:c=>c.dataset.label+' '+THB(c.raw)}}},scales:{x:{stacked:true,ticks:{font,maxTicksLimit:8},grid:{display:false}},y:{stacked:true,ticks:{font,callback:v=>(v/1e3).toFixed(0)+'k'},grid}}}});
 }
@@ -330,19 +342,19 @@ function renderCmp(){
   const ls=scopeLoans(),sim=simScope(),plan=planScope();
   let h='';
   const unlocked=ls.filter(l=>!l.plan);
-  if(unlocked.length){h+=`<div class="card"><h2>ล็อกแผน</h2><p class="muted" style="margin:0 0 10px">แผน = ตารางผ่อนจากค่างวดที่ตั้งไว้ ณ วันนี้ ล็อกแล้วทุกรายการจริงจะถูกเทียบกับแผนนี้ (${unlocked.map(l=>l.name).join(', ')} ยังไม่ล็อก)</p><button class="btn primary block" id="lockBtn">ล็อกแผนตอนนี้</button></div>`}
-  else h+=`<div class="card"><div class="row" style="justify-content:space-between"><div><b>แผนล็อกเมื่อ ${thD(plan.lockedAt)}</b><div class="muted">ล็อกใหม่เมื่อเปลี่ยนค่างวดหรือเงื่อนไข</div></div><button class="btn ghost sm" id="relockBtn">ล็อกใหม่</button></div></div>`;
+  if(unlocked.length){h+=`<div class="card"><h2>🎯 ล็อกแผน</h2><p class="muted" style="margin:0 0 10px">บันทึกตารางผ่อนวันนี้ไว้เป็น "แผน" แล้วเทียบกับยอดจริงทุกเดือน (${unlocked.map(l=>l.name).join(', ')} ยังไม่ล็อก)</p><button class="btn primary block" id="lockBtn">🔒 ล็อกแผน</button></div>`}
+  else h+=`<div class="card"><div class="row" style="justify-content:space-between"><div><b>🔒 แผน ${thD(plan.lockedAt)}</b><div class="muted">เปลี่ยนค่างวดแล้วค่อยล็อกใหม่</div></div><button class="btn ghost sm" id="relockBtn">ล็อกใหม่</button></div></div>`;
   if(plan){
     const nowK=TODAY.slice(0,7);const pm=Object.fromEntries(plan.months.map(m=>[m.key,m]));
     let cumP=0,cumA=0;const rows=sim.months.map(m=>{const p=pm[m.key];cumP+=p?p.interest:0;cumA+=m.interest;return{key:m.key,label:m.label,pI:p?p.interest:null,aI:m.interest,pB:p?p.close:null,aB:m.close,cumP,cumA,fc:m.key>nowK}});
     const nowR=rows.find(r=>r.key===nowK)||rows.at(-1);
-    if(nowR&&nowR.pB!=null){const dB=nowR.pB-nowR.aB,dI=nowR.cumP-nowR.cumA;h+=`<div class="stats"><div class="stat"><div class="l">เงินต้นเทียบแผน (${nowR.label})</div><div class="v ${dB>=0?'ok':'bad'}">${dB>=0?'−':'+'}${THB(Math.abs(dB))}</div><div class="s">${dB>=0?'ต่ำกว่าแผน':'สูงกว่าแผน'}</div></div><div class="stat"><div class="l">ดอกเบี้ยสะสมเทียบแผน</div><div class="v ${dI>=0?'ok':'bad'}">${dI>=0?'−':'+'}${THB(Math.abs(dI))}</div><div class="s">${dI>=0?'ประหยัดได้':'จ่ายเกินแผน'}</div></div><div class="stat"><div class="l">ผ่อนหมด (แผน)</div><div class="v">${thM(plan.months.at(-1).key)}</div><div class="s">${plan.months.length} เดือน</div></div><div class="stat"><div class="l">ผ่อนหมด (พยากรณ์จากยอดจริง)</div><div class="v ${sim.months.length<=plan.months.length?'ok':'bad'}">${sim.payoff?thM(sim.payoff.slice(0,7)):'–'}</div><div class="s">${sim.months.length<=plan.months.length?'เร็วขึ้น':'ช้าลง'} ${Math.abs(plan.months.length-sim.months.length)} เดือน</div></div></div>`}
+    if(nowR&&nowR.pB!=null){const dB=nowR.pB-nowR.aB,dI=nowR.cumP-nowR.cumA;h+=`<div class="stats"><div class="stat"><div class="l">🏠 ต้น vs แผน (${nowR.label})</div><div class="v ${dB>=0?'ok':'bad'}">${dB>=0?'−':'+'}${THB(Math.abs(dB))}</div><div class="s">${dB>=0?'ต่ำกว่าแผน 👍':'สูงกว่าแผน'}</div></div><div class="stat"><div class="l">💸 ดอกสะสม vs แผน</div><div class="v ${dI>=0?'ok':'bad'}">${dI>=0?'−':'+'}${THB(Math.abs(dI))}</div><div class="s">${dI>=0?'ประหยัดได้':'เกินแผน'}</div></div><div class="stat"><div class="l">🏁 แผนหมด</div><div class="v">${thM(plan.months.at(-1).key)}</div><div class="s">${plan.months.length} เดือน</div></div><div class="stat"><div class="l">🏁 จริงคาดหมด</div><div class="v ${sim.months.length<=plan.months.length?'ok':'bad'}">${sim.payoff?thM(sim.payoff.slice(0,7)):'–'}</div><div class="s">${sim.months.length<=plan.months.length?'เร็วขึ้น':'ช้าลง'} ${Math.abs(plan.months.length-sim.months.length)} เดือน</div></div></div>`}
     let view=rows;
     if(cmpMode==='y'){const y={};for(const r of rows){const k=r.key.slice(0,4);const o=y[k]??={key:k,label:'พ.ศ. '+(+k+543),pI:0,aI:0,pB:null,aB:0,fc:false,has:false};o.pI+=r.pI??0;o.aI+=r.aI;o.pB=r.pB??o.pB;o.aB=r.aB;o.fc=r.fc;o.has||=r.pI!=null;o.cumP=r.cumP;o.cumA=r.cumA}view=Object.values(y).map(o=>({...o,pI:o.has?o.pI:null}))}
     const slice=cmpMode==='m'?view.filter(r=>r.key<=nowK||view.indexOf(r)<view.findIndex(x=>x.key>nowK)+12):view;
-    h+=`<div class="card"><h2>ดอกเบี้ย · แผน vs จริง</h2><div class="chart"><canvas id="cCmp"></canvas></div></div>`;
-    h+=`<div class="card"><h2>ตารางเทียบ${cmpMode==='m'?' (ถึง 12 เดือนข้างหน้า)':''}</h2><div class="tblwrap"><table class="cmp"><tr><th>${cmpMode==='m'?'เดือน':'ปี'}</th><th>ดอกแผน</th><th>ดอกจริง</th><th>ต่าง</th><th>ต้นแผน</th><th>ต้นจริง</th></tr>${slice.map(r=>{const d=(r.pI??0)-r.aI;return`<tr class="${r.fc?'f':''}"><td>${r.label}${r.fc?' <span class="badge">พยากรณ์</span>':''}</td><td>${r.pI!=null?THB(r.pI):'–'}</td><td>${THB(r.aI)}</td><td class="${r.pI==null?'':d>=0?'ok':'bad'}">${r.pI!=null?(d>=0?'−':'+')+THB(Math.abs(d)):'–'}</td><td>${r.pB!=null?THB(r.pB):'–'}</td><td>${THB(r.aB)}</td></tr>`}).join('')}</table></div></div>`;
-    h+=`<button class="aibtn" onclick="askAI('วิเคราะห์ผลเทียบแผนกับจริงของฉัน ทำไมถึงต่างจากแผน และควรปรับอะไร')">✦ ให้ Fin ตั้ม วิเคราะห์</button>`;
+    h+=`<div class="card"><h2>💸 ดอก: แผน vs จริง</h2><div class="chart"><canvas id="cCmp"></canvas></div></div>`;
+    h+=`<div class="card"><h2>📋 เทียบ${cmpMode==='m'?' (+12 เดือน)':''}</h2><div class="tblwrap"><table class="cmp"><tr><th>${cmpMode==='m'?'เดือน':'ปี'}</th><th>ดอก แผน</th><th>ดอก จริง</th><th>±</th><th>ต้น แผน</th><th>ต้น จริง</th></tr>${slice.map(r=>{const d=(r.pI??0)-r.aI;return`<tr class="${r.fc?'f':''}"><td>${r.label}${r.fc?' <span class="badge">คาด</span>':''}</td><td>${r.pI!=null?THB(r.pI):'–'}</td><td>${THB(r.aI)}</td><td class="${r.pI==null?'':d>=0?'ok':'bad'}">${r.pI!=null?(d>=0?'−':'+')+THB(Math.abs(d)):'–'}</td><td>${r.pB!=null?THB(r.pB):'–'}</td><td>${THB(r.aB)}</td></tr>`}).join('')}</table></div></div>`;
+    h+=`<button class="aibtn" onclick="askAI('วิเคราะห์ผลเทียบแผนกับจริงของฉัน ทำไมถึงต่างจากแผน และควรปรับอะไร')">✦ วิเคราะห์ให้หน่อย</button>`;
     $('cmpBody').innerHTML=h;
     const cv=cmpMode==='m'?slice:view;
     mkChart('cCmp',{type:'bar',data:{labels:cv.map(r=>r.label),datasets:[{label:'แผน',data:cv.map(r=>r.pI),backgroundColor:'#D9CFBF'},{label:'จริง/พยากรณ์',data:cv.map(r=>r.aI),backgroundColor:cv.map(r=>r.fc?'rgba(184,92,30,.45)':'#B85C1E')}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font,boxWidth:12}},tooltip:{callbacks:{label:c=>c.dataset.label+' '+THB(c.raw)}}},scales:{x:{ticks:{font,maxTicksLimit:8,maxRotation:0},grid:{display:false}},y:{ticks:{font,callback:v=>(v/1e3).toFixed(0)+'k'},grid}}}});
@@ -355,18 +367,18 @@ $('cmpY').onclick=()=>{cmpMode='y';$('cmpY').classList.add('on');$('cmpM').class
 
 // ═══════════ render: schedule ═══════════
 function renderSched(){const sim=simScope();const nowK=TODAY.slice(0,7);
-  $('schedSum').textContent=`${sim.months.length} เดือน · ดอกเบี้ยรวม ${THB(sim.tI)} บาท`;
+  $('schedSum').textContent=`${sim.months.length} เดือน · ดอกรวม ${THB(sim.tI)} ฿`;
   let h='',y='';for(const m of sim.months){const yy=+m.key.slice(0,4)+543;if(yy!==y){y=yy;h+=`<div class="yr">พ.ศ. ${yy}</div>`}
-    h+=`<div class="mrow${m.actual?' actual':''}${m.key===nowK?' now':''}"><div class="a">${m.label}${m.actual?' <span class="badge">จริง</span>':''}</div><div class="b">${THB(m.close)}</div><div class="c">เฉลี่ย <b>${pct(m.rate,3)}</b> · ชำระ ${THB(m.paid)}</div><div class="d">ดอก <b>${THB(m.interest)}</b> · ต้น ${THB(m.pp)}</div></div>`}
+    h+=`<div class="mrow${m.actual?' actual':''}${m.key===nowK?' now':''}"><div class="a">${m.label}${m.actual?' <span class="badge">จริง</span>':''}</div><div class="b">${THB(m.close)}</div><div class="c"><b>${pct(m.rate,2)}</b> · จ่าย ${THB(m.paid)}</div><div class="d">ดอก <b>${THB(m.interest)}</b> · ต้น ${THB(m.pp)}</div></div>`}
   $('sched').innerHTML=h||'<div class="empty">ยังไม่มีข้อมูล</div>';
   $('csvBtn').onclick=()=>{const head='เดือน,เงินต้นต้นเดือน,อัตราเฉลี่ย%,ดอกเบี้ย,ชำระ,ตัดเงินต้น,คงเหลือ,จริง/พยากรณ์\n';const body=sim.months.map(m=>[m.label,m.open.toFixed(2),m.rate.toFixed(4),m.interest.toFixed(2),m.paid.toFixed(2),m.pp.toFixed(2),m.close.toFixed(2),m.actual?'จริง':'พยากรณ์'].join(',')).join('\n');
     const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+head+body],{type:'text/csv;charset=utf-8'}));a.download='loan-schedule.csv';a.click()}}
 
 // ═══════════ render: log ═══════════
-const KN={pay:'ชำระค่างวด',extra:'โปะเพิ่ม',draw:'เบิกเงินกู้',fee:'ค่าธรรมเนียม'};
+const KN={pay:'ชำระ',extra:'โปะ',draw:'เบิกกู้',fee:'ค่าธรรมเนียม'};
 function renderLog(){const ls=scopeLoans();const all=ls.flatMap(l=>l.txns.map(t=>({...t,loan:l})));const sum=f=>all.filter(f).reduce((s,e)=>s+e.amount,0);
-  $('logsum').innerHTML=`<div><div class="l">ชำระแล้วรวม</div><div class="v">${THB(sum(e=>e.kind==='pay'||e.kind==='extra'))}</div></div><div><div class="l">โปะเพิ่ม</div><div class="v">${THB(sum(e=>e.kind==='extra'))}</div></div><div><div class="l">เบิกเงินกู้</div><div class="v">${THB(sum(e=>e.kind==='draw'))}</div></div>`;
-  $('log').innerHTML=all.length?all.sort((a,b)=>b.date.localeCompare(a.date)).map(e=>`<div class="entry"><div class="dt">${thD(e.date)}</div><div class="tx">${KN[e.kind]}${ls.length>1?` <span class="badge">${e.loan.name}</span>`:''}${e.note?`<div class="muted">${e.note}</div>`:''}</div><div class="am ${e.kind}">${e.kind==='draw'?'−':'+'}${THB(e.amount,2)}</div><button data-l="${e.loan.id}" data-id="${e.id}" aria-label="ลบ">×</button></div>`).join(''):'<div class="empty">ยังไม่มีรายการ<br>กด + เพื่อบันทึก</div>';
+  $('logsum').innerHTML=`<div><div class="l">✅ จ่ายแล้ว</div><div class="v">${THB(sum(e=>e.kind==='pay'||e.kind==='extra'))}</div></div><div><div class="l">➕ โปะ</div><div class="v">${THB(sum(e=>e.kind==='extra'))}</div></div><div><div class="l">🏦 เบิก</div><div class="v">${THB(sum(e=>e.kind==='draw'))}</div></div>`;
+  $('log').innerHTML=all.length?all.sort((a,b)=>b.date.localeCompare(a.date)).map(e=>`<div class="entry"><div class="dt">${thD(e.date)}</div><div class="tx">${KN[e.kind]}${ls.length>1?` <span class="badge">${e.loan.name}</span>`:''}${e.note?`<div class="muted">${e.note}</div>`:''}</div><div class="am ${e.kind}">${e.kind==='draw'?'−':'+'}${THB(e.amount,2)}</div><button data-l="${e.loan.id}" data-id="${e.id}" aria-label="ลบ">×</button></div>`).join(''):'<div class="empty">ยังไม่มีรายการ<br>กด ➕ เพื่อจด</div>';
   $('log').querySelectorAll('button').forEach(b=>b.onclick=()=>{const l=loanById(b.dataset.l);l.txns=l.txns.filter(x=>x.id!==b.dataset.id);save();dirtyAll();renderLog()})}
 const openSheet=()=>{$('eLoan').innerHTML=S.loans.map(l=>`<option value="${l.id}">${l.name}</option>`).join('');if(S.scope!=='all')$('eLoan').value=S.scope;$('eDate').value=TODAY;$('eKind').value='pay';$('eAmt').value=loanById($('eLoan').value).payment;$('eNote').value='';$('sheet').classList.add('show');$('sheetBg').classList.add('show')};
 const closeSheet=()=>{$('sheet').classList.remove('show');$('sheetBg').classList.remove('show')};
@@ -387,27 +399,27 @@ function renderSettings(){
   <div class="card"><h2>สัญญา</h2>
     <label><span>ชื่อ</span><input id="f_name" value="${l.name}"></label>
     <label><span>เลขที่สัญญา (ท้าย)</span><input id="f_acct" value="${l.acct}"></label>
-    <label><span>วงเงิน / เงินต้นเริ่มต้น (บาท)</span><input type="number" inputmode="decimal" id="f_principal" step="1000" value="${l.principal}"></label>
-    <label><span>วันเริ่มสัญญา (วันเบิกเงินกู้)</span><input type="date" id="f_startDate" value="${l.startDate}"></label>
-    <label><span>วันชำระประจำเดือน (วันที่)</span><input type="number" inputmode="numeric" id="f_payDay" min="1" max="31" value="${l.payDay}"></label>
-    <label><span>ค่างวดต่อเดือน (บาท)</span><input type="number" inputmode="decimal" id="f_payment" step="500" value="${l.payment}"></label>
-    <label><span>โปะเพิ่มทุกเดือน (บาท)</span><input type="number" inputmode="decimal" id="f_extra" step="500" value="${l.extra}"></label>
-    <label><span>อยากผ่อนหมดภายใน (เดือน)</span><div class="row"><input type="number" inputmode="numeric" id="f_termMonths" step="12" value="${l.termMonths}"><button class="btn ghost" id="solveBtn">คำนวณค่างวด</button></div></label>
+    <label><span>วงเงิน (฿)</span><input type="number" inputmode="decimal" id="f_principal" step="1000" value="${l.principal}"></label>
+    <label><span>วันเบิกเงินกู้</span><input type="date" id="f_startDate" value="${l.startDate}"></label>
+    <label><span>จ่ายทุกวันที่</span><input type="number" inputmode="numeric" id="f_payDay" min="1" max="31" value="${l.payDay}"></label>
+    <label><span>ค่างวด/เดือน (฿)</span><input type="number" inputmode="decimal" id="f_payment" step="500" value="${l.payment}"></label>
+    <label><span>โปะเพิ่ม/เดือน (฿)</span><input type="number" inputmode="decimal" id="f_extra" step="500" value="${l.extra}"></label>
+    <label><span>อยากหมดใน (เดือน)</span><div class="row"><input type="number" inputmode="numeric" id="f_termMonths" step="12" value="${l.termMonths}"><button class="btn ghost" id="solveBtn">🧮 หาค่างวด</button></div></label>
   </div>
-  <div class="card"><h2>ดอกเบี้ย (คิดรายวัน ÷ 365)</h2>
+  <div class="card"><h2>% ดอกเบี้ย (รายวัน ÷365)</h2>
     <div class="seg"><button id="modeFlat" class="${tier?'':'on'}">อัตราเดียว</button><button id="modeTier" class="${tier?'on':''}">ขั้นบันได</button></div>
-    <div id="flatBox" style="display:${tier?'none':''}"><label><span>อัตราดอกเบี้ยต่อปี (%)</span><input type="number" inputmode="decimal" id="f_flatRate" step="0.0001" value="${l.flatRate}"></label></div>
+    <div id="flatBox" style="display:${tier?'none':''}"><label><span>% ต่อปี</span><input type="number" inputmode="decimal" id="f_flatRate" step="0.0001" value="${l.flatRate}"></label></div>
     <div id="tierBox" style="display:${tier?'':'none'}">
-      <div class="tier" style="margin-bottom:2px"><i></i><span class="muted" style="font-size:12px">เงินต้นสะสมไม่เกิน (บาท)</span><span class="muted" style="font-size:12px">% ต่อปี</span><span></span></div>
+      <div class="tier" style="margin-bottom:2px"><i></i><span class="muted" style="font-size:12px">ต้นไม่เกิน (฿)</span><span class="muted" style="font-size:12px">%/ปี</span><span></span></div>
       ${l.tiers.map(t=>{const ci=sorted.findIndex(s=>s.id===t.id);return`<div class="tier" data-t="${t.id}"><i style="background:${COLORS[ci%6]}"></i>${t.upTo==null?'<div class="rest">ส่วนที่เหลือทั้งหมด</div>':`<input type="number" inputmode="decimal" step="100000" value="${t.upTo}" data-f="upTo">`}<input type="number" inputmode="decimal" step="0.05" value="${t.rate}" data-f="rate">${t.upTo==null?'<span></span>':'<button aria-label="ลบ">×</button>'}</div>`}).join('')}
       <button class="btn ghost sm" id="addTier">+ เพิ่มขั้น</button>
     </div>
     <div class="calc" id="calc"></div>
   </div>
-  <div class="card"><h2>ตรวจอัตราจริงจากรายการธนาคาร</h2>
-    <p class="muted" style="margin:0 0 10px">ใส่ยอดดอกเบี้ยที่ธนาคารคิด จำนวนวัน และเงินต้นในช่วงนั้น จะได้อัตราที่แท้จริง</p>
-    <div class="row"><label><span>ดอกเบี้ย (บาท)</span><input type="number" inputmode="decimal" id="r_int" value="2305.17"></label><label><span>จำนวนวัน</span><input type="number" inputmode="numeric" id="r_days" value="12"></label></div>
-    <label><span>เงินต้นในช่วงนั้น (บาท)</span><input type="number" inputmode="decimal" id="r_bal" value="${l.principal}"></label>
+  <div class="card"><h2>🔍 หา % จริงจากสลิป</h2>
+    <p class="muted" style="margin:0 0 10px">ใส่ดอกที่ธนาคารคิด + กี่วัน + เงินต้น → ได้ % จริง</p>
+    <div class="row"><label><span>ดอก (฿)</span><input type="number" inputmode="decimal" id="r_int" value="2305.17"></label><label><span>วัน</span><input type="number" inputmode="numeric" id="r_days" value="12"></label></div>
+    <label><span>เงินต้น (฿)</span><input type="number" inputmode="decimal" id="r_bal" value="${l.principal}"></label>
     <div class="calc" id="r_out"></div>
   </div>
   ${S.loans.length>1?`<button class="btn danger block" id="delLoan" style="margin-bottom:12px">ลบสัญญานี้</button>`:''}`;
@@ -417,13 +429,13 @@ function renderSettings(){
   $('setBody').querySelectorAll('.tier[data-t]').forEach(d=>{const t=l.tiers.find(x=>x.id===d.dataset.t);d.querySelectorAll('input').forEach(inp=>inp.oninput=()=>{t[inp.dataset.f]=inp.value===''?NaN:Number(inp.value);save();dirtyAll();renderCalc(l)});const b=d.querySelector('button');if(b)b.onclick=()=>{l.tiers=l.tiers.filter(x=>x.id!==t.id);save();dirtyAll();renderSettings()}});
   $('addTier').onclick=()=>{const caps=l.tiers.filter(t=>t.upTo!=null).map(t=>t.upTo);const next=(caps.length?Math.max(...caps):0)+500000;l.tiers=[...l.tiers.filter(t=>t.upTo!=null),{id:uid(),upTo:next,rate:3},...l.tiers.filter(t=>t.upTo==null)];save();dirtyAll();renderSettings()};
   $('solveBtn').onclick=()=>{l.payment=solvePayment(l,l.termMonths);$('f_payment').value=l.payment;save();dirtyAll();toast(`ค่างวด ${THB(l.payment)} บาท/เดือน`)};
-  const rc=()=>{const i=+$('r_int').value,d=+$('r_days').value,b=+$('r_bal').value;const r=b>0&&d>0?i*365/(d*b)*100:0;$('r_out').innerHTML=`<div><span>อัตราที่แท้จริง</span><b>${pct(r,4)} ต่อปี</b></div><div class="muted" style="display:block">= ${THB(i,2)} × 365 ÷ (${d} × ${THB(b)}) — ดอกเบี้ยวันละ ${THB(i/d,2)} บาท</div><button class="btn ghost sm" id="useRate" style="margin-top:8px">ใช้อัตรานี้กับสัญญา</button>`;$('useRate').onclick=()=>{l.rateMode='flat';l.flatRate=+r.toFixed(4);save();dirtyAll();renderSettings();toast('ตั้งอัตราแล้ว')}};
+  const rc=()=>{const i=+$('r_int').value,d=+$('r_days').value,b=+$('r_bal').value;const r=b>0&&d>0?i*365/(d*b)*100:0;$('r_out').innerHTML=`<div><span>% จริง</span><b>${pct(r,4)}/ปี</b></div><div class="muted" style="display:block">${THB(i,2)} × 365 ÷ (${d} × ${THB(b)}) · วันละ ${THB(i/d,2)} ฿</div><button class="btn ghost sm" id="useRate" style="margin-top:8px">✔ ใช้ % นี้</button>`;$('useRate').onclick=()=>{l.rateMode='flat';l.flatRate=+r.toFixed(4);save();dirtyAll();renderSettings();toast('ตั้งอัตราแล้ว')}};
   ['r_int','r_days','r_bal'].forEach(id=>$(id).oninput=rc);rc();
   const del=$('delLoan');if(del)del.onclick=()=>{if(confirm(`ลบ ${l.name} และรายการทั้งหมด?`)){S.loans=S.loans.filter(x=>x.id!==l.id);if(S.scope===l.id)S.scope='all';save();renderScope();dirtyAll();renderSettings()}};
   renderCalc(l);
 }
 function renderCalc(l){const el=$('calc');if(!el)return;const{rate,parts}=yearlyRate(l.principal,l,sortedTiers(l));const daily=l.principal*rate/100/365;
-  el.innerHTML=`<div class="muted" style="display:block;margin-bottom:4px">ตัวอย่างที่เงินต้น ${THB(l.principal)} บาท</div>`+(l.rateMode==='tier'?parts.filter(p=>p.amount>0).map(p=>`<div><span>${THB(p.amount)} × ${pct(p.rate)}</span><span>${THB(p.amount*p.rate/100/365,2)}/วัน</span></div>`).join(''):'')+`<div class="tot"><span>อัตราเฉลี่ย ${pct(rate,4)}</span><span>${THB(daily,2)} บาท/วัน</span></div><div><span>≈ ต่อเดือน (30 วัน)</span><span>${THB(daily*30,2)} บาท</span></div>`}
+  el.innerHTML=`<div class="muted" style="display:block;margin-bottom:4px">ที่ต้น ${THB(l.principal)} ฿</div>`+(l.rateMode==='tier'?parts.filter(p=>p.amount>0).map(p=>`<div><span>${THB(p.amount)} × ${pct(p.rate)}</span><span>${THB(p.amount*p.rate/100/365,2)}/วัน</span></div>`).join(''):'')+`<div class="tot"><span>เฉลี่ย ${pct(rate,4)}</span><span>${THB(daily,2)} ฿/วัน</span></div><div><span>≈ 30 วัน</span><span>${THB(daily*30)} ฿</span></div>`}
 $('ai_key').value=AI.key;$('ai_model').value=AI.model;$('ai_ep').value=AI.endpoint;
 $('ai_key').oninput=e=>{AI.key=e.target.value.trim();saveAI()};$('ai_model').onchange=e=>{AI.model=e.target.value;saveAI()};$('ai_ep').oninput=e=>{AI.endpoint=e.target.value.trim()||'https://api.opentyphoon.ai/v1/chat/completions';saveAI()};
 $('expBtn').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S,null,1)],{type:'application/json'}));a.download=`loan-backup-${TODAY}.json`;a.click()};
@@ -433,7 +445,7 @@ $('resetBtn').onclick=()=>{if(confirm('ล้างข้อมูลทั้�
 
 
 // ═══════════ AI chat (Typhoon) ═══════════
-const CHIPS=['สรุปสถานะวันนี้','โปะเพิ่มเดือนละ 5,000 ช่วยได้เท่าไร','ทำไมดอกเบี้ยเดือนนี้เป็นเท่านี้','ควรจ่ายวันไหนของเดือนถึงประหยัดสุด','อธิบายรายการล่าสุดจากธนาคาร','ถ้าอยากหมดใน 10 ปี ต้องผ่อนเดือนละเท่าไร'];
+const CHIPS=['📌 สรุปวันนี้','➕ โปะ 5,000 ช่วยแค่ไหน','❓ ทำไมดอกเดือนนี้เท่านี้','📅 จ่ายวันไหนคุ้มสุด','🧾 อธิบายรายการล่าสุด','🏁 หมดใน 10 ปี ต้องผ่อนเท่าไร'];
 function whatIf(l){const base=simulate(l,{useActual:true});return[1000,3000,5000,10000].map(x=>{const s=simulate({...l,extra:(l.extra||0)+x});return`โปะเพิ่ม ${THB(x)}/เดือน → หมดเร็วขึ้น ${base.months.length-s.months.length} เดือน ประหยัดดอกเบี้ย ${THB(base.tI-s.tI)} บาท`}).join('\n')}
 function buildContext(){
   const lines=[`วันนี้ ${thD(TODAY)}`];
@@ -453,8 +465,8 @@ const SYS=()=>`คุณคือ "Fin ตั้ม" ผู้ช่วยกา
 function renderChat(){
   const setup=$('chatSetup');if(!AI.key){setup.style.display='';$('chatSetupBody').innerHTML=`<label><span>API key</span><input id="aiKey" type="password" placeholder="sk-…"></label><label><span>โมเดล</span><select id="aiModel"><option value="typhoon-v2.5-30b-a3b-instruct">typhoon-v2.5-30b-a3b-instruct (แนะนำ)</option><option value="typhoon-v2.1-12b-instruct">typhoon-v2.1-12b-instruct (เร็ว)</option></select></label><button class="btn primary block" id="aiSaveKey">บันทึก</button>`;$('aiModel').value=AI.model;$('aiSaveKey').onclick=()=>{AI.key=$('aiKey').value.trim();AI.model=$('aiModel').value;saveAI();renderChat()}}else setup.style.display='none';
   $('chips').innerHTML=CHIPS.map(c=>`<button>${c}</button>`).join('')+`<button style="color:var(--bad)" id="chatClear">ล้างแชท</button>`;
-  $('chips').querySelectorAll('button').forEach(b=>b.onclick=()=>{if(b.id==='chatClear'){AI.history=[];saveAI();renderChat()}else askAI(b.textContent)});
-  const m=$('msgs');m.innerHTML=AI.history.length?AI.history.map(x=>`<div class="msg ${x.role==='user'?'u':'a'}">${esc(x.content)}</div>`).join(''):`<div class="msg a">สวัสดีครับ ผม Fin ตั้ม เห็นข้อมูลสินเชื่อในแอปนี้ทั้งหมดแล้ว ถามได้เลย เช่น สถานะวันนี้ โปะเท่าไรดี หรือทำไมดอกเบี้ยเดือนนี้เป็นเท่านี้</div>`;
+  $('chips').querySelectorAll('button').forEach(b=>b.onclick=()=>{if(b.id==='chatClear'){AI.history=[];saveAI();renderChat()}else askAI(b.textContent.replace(/^\S+\s/,''))});
+  const m=$('msgs');m.innerHTML=AI.history.length?AI.history.map(x=>`<div class="msg ${x.role==='user'?'u':'a'}">${esc(x.content)}</div>`).join(''):`<div class="msg a">สวัสดีครับ ผม Fin ตั้ม เห็นข้อมูลสินเชื่อของคุณแล้ว ถามได้เลย 👇</div>`;
   window.scrollTo(0,document.body.scrollHeight)}
 const esc=t=>t.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 let busy=false;
@@ -484,6 +496,7 @@ function show(tab){curTab=tab;document.querySelectorAll('main').forEach(m=>m.cla
   $('fab').classList.toggle('show',tab==='log');window.scrollTo(0,0);
   if(tab==='dash'&&stale.dash){renderDash();stale.dash=0}if(tab==='cmp'&&stale.cmp){renderCmp();stale.cmp=0}if(tab==='sched'&&stale.sched){renderSched();stale.sched=0}if(tab==='log')renderLog();if(tab==='set')renderSettings();if(tab==='chat')renderChat()}
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>show(b.dataset.tab));
+(()=>{const c=$('dayCard');let open=localStorage.getItem('fin-tum:dayOpen')==='1';c.classList.toggle('open',open);$('dayHd').onclick=()=>{open=!open;c.classList.toggle('open',open);localStorage.setItem('fin-tum:dayOpen',open?'1':'0')}})();
 renderScope();show('dash');
 if('serviceWorker' in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
