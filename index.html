@@ -14,188 +14,166 @@
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-  :root{
-    --gold:#F2B800;--gold-dk:#C99A00;--brown:#5C4A2E;--ink:#1F1B16;--muted:#6E6357;--line:#EAE3D6;
-    --bg:#F6F3EE;--card:#fff;--ok:#2E7D32;--bad:#B3261E;--int:#B85C1E;--prin:#8B6B1F;--amber:#FFF6D6;
-    --t0:#8B6B1F;--t1:#C99A00;--t2:#E08A2B;--t3:#B85C1E;--t4:#8C3A2B;--t5:#5C4A2E;
-    --nav-h:66px;--sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px);
-  }
+  :root{--gold:#F2B800;--gold-dk:#C99A00;--brown:#5C4A2E;--ink:#1F1B16;--muted:#6E6357;--line:#EAE3D6;--bg:#F6F3EE;--card:#fff;
+    --ok:#2E7D32;--bad:#B3261E;--int:#B85C1E;--prin:#8B6B1F;--amber:#FFF6D6;--nav-h:66px;--sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px)}
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'Sarabun','Noto Sans Thai',system-ui,sans-serif;font-size:17px;line-height:1.45}
   body{padding-bottom:calc(var(--nav-h) + var(--sab))}
   header{background:linear-gradient(150deg,#FFCC00 0%,#F2B800 38%,#B89A5A 75%,#7A6A55 100%);color:#fff;padding:calc(12px + var(--sat)) 16px 12px;text-shadow:0 1px 2px rgba(0,0,0,.25)}
-  header .top{display:flex;justify-content:space-between;align-items:center}
-  header h1{margin:0;font-size:20px;font-weight:700}
-  header .save{font-size:13px;opacity:.85}
+  header .top{display:flex;justify-content:space-between;align-items:center}header h1{margin:0;font-size:20px;font-weight:700}header .save{font-size:13px;opacity:.85}
   .scope{display:flex;gap:8px;margin-top:10px;overflow-x:auto;padding-bottom:2px}
-  .scope button{flex:none;font:inherit;font-size:14px;font-weight:600;padding:7px 14px;border-radius:20px;border:1.5px solid rgba(255,255,255,.7);background:rgba(255,255,255,.18);color:#fff;text-shadow:none}
-  .scope button.on{background:#fff;color:var(--brown)}
+  .scope button{flex:none;font:inherit;font-size:14px;font-weight:600;padding:7px 14px;border-radius:20px;border:1.5px solid rgba(255,255,255,.7);background:rgba(255,255,255,.18);color:#fff;text-shadow:none}.scope button.on{background:#fff;color:var(--brown)}
   main{padding:14px 14px 24px;display:none}main.active{display:block}
   .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:0 1px 2px rgba(60,40,0,.04)}
   .card h2{margin:0 0 10px;font-size:16px;font-weight:700;color:var(--brown)}
   .muted{color:var(--muted);font-size:14px}
+  .chap{display:flex;align-items:center;gap:10px;margin:22px 2px 10px;font-size:13px;font-weight:700;color:var(--brown);letter-spacing:.3px}
+  .chap:first-child{margin-top:4px}.chap .n{width:24px;height:24px;border-radius:50%;background:var(--gold);color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:12px}
+  .chap .ln{flex:1;height:1px;background:var(--line)}
   .hero{background:linear-gradient(160deg,#FFF9E3,#fff);border-color:#F1E3B5}
-  .hero .lbl{font-size:14px;color:var(--muted)}
-  .hero .big{font-size:36px;font-weight:700;line-height:1.1;letter-spacing:-.3px;margin:2px 0 10px}
-  .hero .big small{font-size:16px;font-weight:500;color:var(--muted)}
-  .kv{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;margin-top:6px}
-  .kv .k{font-size:13px;color:var(--muted)}.kv .v{font-size:19px;font-weight:700}.kv .v.int{color:var(--int)}
-  .ladder{display:flex;height:34px;border-radius:10px;overflow:hidden;margin:12px 0 10px;box-shadow:inset 0 0 0 1px var(--line)}
-  .ladder div{display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;overflow:hidden;white-space:nowrap}
-  .legend{display:grid;gap:6px;font-size:14px}.legend div{display:flex;gap:8px;align-items:flex-start}.legend i{width:12px;height:12px;border-radius:3px;flex:none;margin-top:5px}
-  .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
-  .stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px}
-  .stat .l{font-size:13px;color:var(--muted)}.stat .v{font-size:20px;font-weight:700;margin-top:2px}.stat .s{font-size:12px;color:var(--muted)}
-  .stat .v.ok{color:var(--ok)}.stat .v.bad{color:var(--bad)}
+  .big{font-size:36px;font-weight:700;line-height:1.1;letter-spacing:-.3px;margin:2px 0 10px}.big small{font-size:16px;font-weight:500;color:var(--muted)}
+  .kv{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;margin-top:6px}.kv .k{font-size:13px;color:var(--muted)}.kv .v{font-size:19px;font-weight:700;white-space:nowrap}.kv .v.int{color:var(--int)}
+  .alerts{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+  .al{display:flex;gap:10px;align-items:flex-start;padding:11px 13px;border-radius:14px;font-size:14.5px;background:#fff;border:1px solid var(--line)}
+  .al.warn{background:#FFF6D6;border-color:#F1D98A}.al.bad{background:#FDECEA;border-color:#F5C6C2}.al.ok{background:#EAF5EA;border-color:#BFE0BF}
+  .al .ic{font-size:18px;line-height:1.2}.al .t{flex:1}.al .t b{display:block}.al button{font:inherit;font-size:13px;font-weight:700;padding:6px 10px;border-radius:12px;border:1px solid #D9CFBF;background:#fff;color:var(--brown);flex:none}
+  .ladder{display:flex;height:34px;border-radius:10px;overflow:hidden;margin:12px 0 10px;box-shadow:inset 0 0 0 1px var(--line)}.ladder div{display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;overflow:hidden;white-space:nowrap}
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{background:#FBF8F1;border-radius:14px;padding:12px 14px}.stat .l{font-size:13px;color:var(--muted)}.stat .v{font-size:20px;font-weight:700;margin-top:2px;white-space:nowrap}.stat .s{font-size:12px;color:var(--muted)}.stat .v.ok{color:var(--ok)}.stat .v.bad{color:var(--bad)}
   .chart{position:relative;height:210px}
-  .warn{background:#FDECEA;border:1px solid #F5C6C2;color:#8C1D18;border-radius:12px;padding:10px 12px;font-size:15px;margin-bottom:12px}
   label{display:block;margin-bottom:12px}label>span{display:block;font-size:14px;color:var(--muted);margin-bottom:4px}
-  input,select{width:100%;font:inherit;font-size:17px;padding:12px;border:1px solid #D9CFBF;border-radius:12px;background:#fff;color:var(--ink)}
-  input:focus,select:focus{outline:none;border-color:var(--gold-dk);box-shadow:0 0 0 3px rgba(242,184,0,.25)}
+  input,select,textarea{width:100%;font:inherit;font-size:17px;padding:12px;border:1px solid #D9CFBF;border-radius:12px;background:#fff;color:var(--ink)}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold-dk);box-shadow:0 0 0 3px rgba(242,184,0,.25)}
+  input[type=range]{padding:0;height:36px;accent-color:var(--gold-dk)}
   .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font:inherit;font-size:16px;font-weight:700;padding:12px 16px;border-radius:12px;border:1px solid transparent;cursor:pointer;min-height:48px}
   .btn.primary{background:var(--gold);color:var(--ink)}.btn.dark{background:var(--brown);color:#fff}.btn.ghost{background:#fff;border-color:#D9CFBF;color:var(--ink)}.btn.danger{background:#fff;border-color:#F5C6C2;color:var(--bad)}
-  .btn.block{width:100%}.btn.sm{min-height:40px;padding:8px 12px;font-size:14px}
+  .btn.block{width:100%}.btn.sm{min-height:40px;padding:8px 12px;font-size:14px}.btn:disabled{opacity:.5}
   .row{display:flex;gap:8px;align-items:center}.row>*{flex:1}.row>.btn{flex:none}
-  .seg{display:flex;border:1px solid #D9CFBF;border-radius:12px;overflow:hidden;margin-bottom:12px;background:#fff}
-  .seg button{flex:1;font:inherit;font-size:15px;padding:10px;border:0;background:transparent;color:var(--ink)}.seg button.on{background:var(--gold);font-weight:700}
-  .tier{display:grid;grid-template-columns:14px 1fr 92px 36px;gap:8px;align-items:center;margin-bottom:8px}
-  .tier i{width:14px;height:14px;border-radius:4px}.tier input{padding:10px}.tier .rest{padding:10px;background:#F3EEE4;border-radius:10px;font-size:14px;color:var(--muted)}
-  .tier button{border:0;background:none;color:#A89F92;font-size:22px;padding:4px}
+  .seg{display:flex;border:1px solid #D9CFBF;border-radius:12px;overflow:hidden;margin-bottom:12px;background:#fff}.seg button{flex:1;font:inherit;font-size:15px;padding:10px;border:0;background:transparent;color:var(--ink)}.seg button.on{background:var(--gold);font-weight:700}
+  .tier{display:grid;grid-template-columns:14px 1fr 92px 36px;gap:8px;align-items:center;margin-bottom:8px}.tier i{width:14px;height:14px;border-radius:4px}.tier input{padding:10px}.tier .rest{padding:10px;background:#F3EEE4;border-radius:10px;font-size:14px;color:var(--muted)}.tier button{border:0;background:none;color:#A89F92;font-size:22px;padding:4px}
   .calc{background:#FBF8F1;border-radius:12px;padding:12px;font-size:15px;margin-top:10px}.calc div{display:flex;justify-content:space-between}.calc .tot{border-top:1px solid #D9CFBF;margin-top:6px;padding-top:6px;font-weight:700}
   .yr{position:sticky;top:0;background:var(--bg);padding:8px 2px 6px;font-weight:700;font-size:15px;color:var(--brown);z-index:2}
-  .mrow{background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 14px;margin-bottom:6px;display:grid;grid-template-columns:1fr auto;gap:2px 10px}
-  .mrow.actual{background:var(--amber);border-color:#F1D98A}.mrow.now{border-color:var(--gold-dk);box-shadow:0 0 0 2px rgba(242,184,0,.3)}
-  .mrow .a{font-weight:700}.mrow .b{text-align:right;font-weight:700}.mrow .c,.mrow .d{font-size:13.5px;color:var(--muted)}.mrow .d{text-align:right}
-  .mrow .c b{color:var(--prin)}.mrow .d b{color:var(--int)}
-  table.cmp{width:100%;border-collapse:collapse;font-size:14px}
-  table.cmp th{text-align:right;font-weight:600;color:var(--muted);padding:6px 4px;border-bottom:1px solid var(--line);white-space:nowrap}
-  table.cmp th:first-child,table.cmp td:first-child{text-align:left}
-  table.cmp td{padding:7px 4px;border-bottom:1px solid #F3EEE4;text-align:right;white-space:nowrap}
-  table.cmp tr.f td{color:var(--muted)}table.cmp td.ok{color:var(--ok);font-weight:700}table.cmp td.bad{color:var(--bad);font-weight:700}
+  .mrow{background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 14px;margin-bottom:6px;display:grid;grid-template-columns:1fr auto;gap:2px 10px}.mrow.actual{background:var(--amber);border-color:#F1D98A}.mrow.now{border-color:var(--gold-dk);box-shadow:0 0 0 2px rgba(242,184,0,.3)}
+  .mrow .a{font-weight:700}.mrow .b{text-align:right;font-weight:700}.mrow .c,.mrow .d{font-size:13.5px;color:var(--muted)}.mrow .d{text-align:right}.mrow .c b{color:var(--prin)}.mrow .d b{color:var(--int)}
+  table.cmp{width:100%;border-collapse:collapse;font-size:14px}table.cmp th{text-align:right;font-weight:600;color:var(--muted);padding:6px 4px;border-bottom:1px solid var(--line);white-space:nowrap}table.cmp th:first-child,table.cmp td:first-child{text-align:left}
+  table.cmp td{padding:7px 4px;border-bottom:1px solid #F3EEE4;text-align:right;white-space:nowrap}table.cmp tr.f td{color:var(--muted)}table.cmp td.ok{color:var(--ok);font-weight:700}table.cmp td.bad{color:var(--bad);font-weight:700}
   .tblwrap{overflow-x:auto;margin:0 -16px;padding:0 16px}
-  .day{display:grid;grid-template-columns:44px 1fr 1fr auto;gap:6px;padding:7px 0;border-bottom:1px solid #F3EEE4;font-size:14px;align-items:center;white-space:nowrap}
-  .day .d{font-weight:700;color:var(--brown)}.day .m{color:var(--muted);font-size:13px}.day .i{text-align:right;color:var(--int);font-weight:700}
-  .day.today{background:var(--amber);margin:0 -8px;padding:7px 8px;border-radius:8px}
-  .day.h{font-size:11.5px;color:var(--muted);padding:2px 0 6px;font-weight:600}.day.h *{color:var(--muted);font-weight:600;text-align:inherit}
-  .cardhd{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
-  .cardhd h2{margin:0}.cardhd .chev{width:26px;height:26px;border-radius:50%;background:#F3EEE4;color:var(--brown);display:flex;align-items:center;justify-content:center;font-size:14px;transition:transform .2s}
-  .card.open .chev{transform:rotate(180deg)}
-  .msum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
-  .msum div{background:#FBF8F1;border-radius:10px;padding:8px 10px}.msum .l{font-size:12px;color:var(--muted)}.msum .v{font-weight:700;font-size:16px}.msum .v.int{color:var(--int)}
+  .day{display:grid;grid-template-columns:44px 1fr 1fr auto;gap:6px;padding:7px 0;border-bottom:1px solid #F3EEE4;font-size:14px;align-items:center;white-space:nowrap}.day .d{font-weight:700;color:var(--brown)}.day .m{color:var(--muted);font-size:13px}.day .i{text-align:right;color:var(--int);font-weight:700}
+  .day.today{background:var(--amber);margin:0 -8px;padding:7px 8px;border-radius:8px}.day.h{font-size:11.5px;color:var(--muted);padding:2px 0 6px;font-weight:600}.day.h *{color:var(--muted);font-weight:600}
+  .cardhd{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}.cardhd h2{margin:0}.cardhd .chev{width:26px;height:26px;border-radius:50%;background:#F3EEE4;color:var(--brown);display:flex;align-items:center;justify-content:center;font-size:14px;transition:transform .2s;flex:none}
+  .card.open .chev{transform:rotate(180deg)}.cardhd .sum{flex:1;margin:0 10px;font-size:13px;color:var(--muted);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.card.open .cardhd .sum{display:none}
   .body{display:none;margin-top:10px}.card.open .body{display:block}
-  .entry{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}
-  .entry .dt{font-size:13px;color:var(--muted);width:82px;flex:none}.entry .tx{flex:1;font-size:15px}.entry .am{font-weight:700;color:var(--ok)}.entry .am.draw{color:var(--bad)}.entry .am.fee{color:var(--muted)}
-  .entry button{border:0;background:none;color:#A89F92;font-size:22px}
+  .msum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.msum div{background:#FBF8F1;border-radius:10px;padding:8px;min-width:0}.msum .l{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.msum .v{font-weight:700;font-size:15px;white-space:nowrap}.msum .v.int{color:var(--int)}.msum .v.ok{color:var(--ok)}.msum .v.bad{color:var(--bad)}
+  .prog .bar{position:relative;height:16px;border-radius:8px;background:#EFE8DA;margin-top:30px}.prog .fill{height:100%;border-radius:8px;background:linear-gradient(90deg,#C99A00,#F2B800)}
+  .prog .pin{position:absolute;top:-6px;width:2px;height:28px;background:var(--ink);border-radius:1px}.prog .pin span{position:absolute;top:-19px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:700;white-space:nowrap;background:var(--ink);color:#fff;padding:1px 6px;border-radius:8px}
+  .prog .ev{position:absolute;top:18px;width:10px;height:10px;border-radius:50%;background:var(--int);transform:translateX(-50%);border:2px solid #fff}
+  .prog .ends{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:14px}.prog .pct{display:flex;justify-content:space-between;align-items:baseline}.prog .pct b{font-size:30px;color:var(--brown)}.prog .pct span{font-size:13px;color:var(--muted);text-align:right}
+  .evl{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid #F3EEE4;font-size:14.5px}.evl:last-child{border:0}.evl .d{width:86px;color:var(--muted);font-size:13px;flex:none}.evl .t{flex:1}.evl .a{font-weight:700;color:var(--prin)}.evl button{border:0;background:none;color:#A89F92;font-size:20px}
+  .donut{position:relative;height:190px}.donut .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}.donut .c b{font-size:22px;color:var(--brown)}.donut .c span{font-size:12px;color:var(--muted)}
+  .dleg{display:grid;grid-template-columns:1fr 1fr;gap:4px 10px;font-size:13px;margin-top:8px}.dleg div{display:flex;align-items:center;gap:6px;white-space:nowrap}.dleg i{width:10px;height:10px;border-radius:3px;flex:none}
+  .hm{display:grid;grid-template-columns:42px repeat(12,1fr);gap:3px;font-size:10.5px;align-items:center}.hm .y{color:var(--muted);font-weight:600;text-align:right;padding-right:4px}.hm .mh{color:var(--muted);text-align:center}
+  .hm .c{aspect-ratio:1;border-radius:4px;background:#F3EEE4}.hm .c.a{outline:2px solid var(--gold);outline-offset:-2px}.hm .c.now{outline:2px solid var(--ink);outline-offset:-2px}.hmleg{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);margin-top:8px}.hmleg i{width:14px;height:10px;border-radius:2px}
+  .prof{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:14.5px}.prof .k{color:var(--muted);white-space:nowrap}.prof .v{font-weight:600}.tag{display:inline-block;background:var(--amber);color:var(--brown);border-radius:10px;padding:1px 8px;font-size:12px;font-weight:700;margin-right:6px}
+  .av{width:64px;height:64px;border-radius:16px;object-fit:cover;background:var(--amber);display:flex;align-items:center;justify-content:center;font-size:30px;flex:none;border:1px solid var(--line)}
+  .av.lg{width:100%;height:150px;border-radius:14px;font-size:56px;margin-bottom:12px}.av.sm{width:22px;height:22px;border-radius:6px;font-size:13px;vertical-align:middle;margin-right:6px;display:inline-flex;border:0}
+  .profhd{display:flex;gap:12px;align-items:center;margin-bottom:12px}.profhd .t{font-weight:700;font-size:17px}.profhd .s{color:var(--muted);font-size:13px}
+  .profl{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid #F3EEE4;font-size:14.5px}.profl:last-child{border:0}.profl .n{font-weight:700}.profl .d{color:var(--muted);font-size:13px}.profl .av{width:44px;height:44px;border-radius:12px;font-size:22px}.profl>div:last-child{flex:1;min-width:0}
+  .sl{margin:6px 0 4px}.sl .h{display:flex;justify-content:space-between;font-size:14px;margin-bottom:2px}.sl .h b{color:var(--brown)}
+  .res{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.res div{background:#FBF8F1;border-radius:10px;padding:8px 10px}.res .l{font-size:12px;color:var(--muted)}.res .v{font-weight:700;font-size:16px}.res .v.ok{color:var(--ok)}.res .v.bad{color:var(--bad)}
+  .summ{background:#FBF8F1;border-radius:12px;padding:12px 14px;font-size:15px;line-height:1.6;white-space:pre-wrap}
+  .entry{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}.entry .dt{font-size:13px;color:var(--muted);width:82px;flex:none}.entry .tx{flex:1;font-size:15px}.entry .am{font-weight:700;color:var(--ok);white-space:nowrap}.entry .am.draw{color:var(--bad)}.entry .am.fee{color:var(--muted)}
+  .entry button{border:0;background:none;color:#A89F92;font-size:22px}.chk{font-size:12.5px;margin-top:2px}.chk.ok{color:var(--ok)}.chk.bad{color:var(--bad)}
   .logsum{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center}.logsum .l{font-size:12px;color:var(--muted)}.logsum .v{font-weight:700;font-size:16px}
   .empty{text-align:center;color:var(--muted);padding:28px 10px;font-size:15px}
-  .fab{position:fixed;right:18px;bottom:calc(var(--nav-h) + var(--sab) + 16px);width:58px;height:58px;border-radius:50%;background:var(--gold);color:var(--ink);font-size:32px;border:0;box-shadow:0 6px 18px rgba(201,154,0,.45);display:none;align-items:center;justify-content:center;z-index:6}
-  .fab.show{display:flex}
+  .fab{position:fixed;right:18px;bottom:calc(var(--nav-h) + var(--sab) + 16px);width:58px;height:58px;border-radius:50%;background:var(--gold);color:var(--ink);font-size:32px;border:0;box-shadow:0 6px 18px rgba(201,154,0,.45);display:none;align-items:center;justify-content:center;z-index:6}.fab.show{display:flex}
   .sheet-bg{position:fixed;inset:0;background:rgba(31,27,22,.45);display:none;z-index:20}.sheet-bg.show{display:block}
-  .sheet{position:fixed;left:0;right:0;bottom:0;background:#fff;border-radius:20px 20px 0 0;padding:10px 16px calc(16px + var(--sab));transform:translateY(100%);transition:transform .25s;z-index:21;max-height:92vh;overflow:auto}
-  .sheet.show{transform:none}.sheet .handle{width:40px;height:4px;background:#D9CFBF;border-radius:2px;margin:0 auto 12px}.sheet h3{margin:0 0 12px;font-size:18px;color:var(--brown)}
+  .sheet{position:fixed;left:0;right:0;bottom:0;background:#fff;border-radius:20px 20px 0 0;padding:10px 16px calc(16px + var(--sab));transform:translateY(100%);transition:transform .25s;z-index:21;max-height:92vh;overflow:auto}.sheet.show{transform:none}
+  .sheet .handle{width:40px;height:4px;background:#D9CFBF;border-radius:2px;margin:0 auto 12px}.sheet h3{margin:0 0 12px;font-size:18px;color:var(--brown)}
   @media (prefers-reduced-motion:reduce){.sheet{transition:none}}
   nav{position:fixed;left:0;right:0;bottom:0;height:calc(var(--nav-h) + var(--sab));padding-bottom:var(--sab);background:#1F1B16;display:flex;z-index:10}
-  nav button{flex:1;border:0;background:none;font:inherit;font-size:12px;color:#B9B0A3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
-  nav button svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
-  nav button.on{color:var(--gold);font-weight:700}
-  .toast{position:fixed;left:50%;bottom:calc(var(--nav-h) + var(--sab) + 14px);transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 16px;border-radius:20px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:30}.toast.show{opacity:1}
+  nav button{flex:1;border:0;background:none;font:inherit;font-size:11px;color:#B9B0A3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}nav button svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}nav button.on{color:var(--gold);font-weight:700}
+  .toast{position:fixed;left:50%;bottom:calc(var(--nav-h) + var(--sab) + 14px);transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 16px;border-radius:20px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:30;max-width:90vw;text-align:center}.toast.show{opacity:1}
   .loanpick{display:flex;gap:8px;overflow-x:auto;margin-bottom:12px}.loanpick button{flex:none;font:inherit;font-size:14px;font-weight:600;padding:8px 14px;border-radius:20px;border:1.5px solid #D9CFBF;background:#fff;color:var(--ink)}.loanpick button.on{background:var(--gold);border-color:var(--gold)}
   .badge{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;border-radius:10px;background:var(--amber);color:var(--brown);vertical-align:middle}
-  nav button{font-size:11px}
-  .chatwrap{display:flex;flex-direction:column;min-height:calc(100vh - 150px - var(--nav-h) - var(--sab))}
-  .msgs{flex:1;display:flex;flex-direction:column;gap:10px;padding-bottom:8px}
-  .msg{max-width:88%;padding:10px 14px;border-radius:16px;font-size:16px;line-height:1.5;white-space:pre-wrap;word-break:break-word}
-  .msg.u{align-self:flex-end;background:var(--gold);color:var(--ink);border-bottom-right-radius:4px}
-  .msg.a{align-self:flex-start;background:#fff;border:1px solid var(--line);border-bottom-left-radius:4px}
-  .msg.a.err{background:#FDECEA;border-color:#F5C6C2;color:#8C1D18}
-  .msg.a.think{color:var(--muted)}
-  .chips{display:flex;gap:8px;overflow-x:auto;padding:4px 0 10px}
-  .chips button{flex:none;font:inherit;font-size:13.5px;padding:7px 12px;border-radius:16px;border:1px solid #D9CFBF;background:#fff;color:var(--brown)}
-  .chatbar{position:sticky;bottom:calc(var(--nav-h) + var(--sab) + 8px);display:flex;gap:8px;background:var(--bg);padding-top:8px}
-  .chatbar textarea{flex:1;font:inherit;font-size:16px;padding:11px 14px;border:1px solid #D9CFBF;border-radius:22px;background:#fff;resize:none;max-height:120px;line-height:1.4}
-  .chatbar textarea:focus{outline:none;border-color:var(--gold-dk);box-shadow:0 0 0 3px rgba(242,184,0,.25)}
-  .chatbar button{width:46px;height:46px;border-radius:50%;border:0;background:var(--gold);color:var(--ink);font-size:20px;flex:none}
-  .chatbar button:disabled{opacity:.5}
-  .aibtn{display:inline-flex;align-items:center;gap:6px;font:inherit;font-size:13.5px;font-weight:700;padding:7px 12px;border-radius:16px;border:1px solid #E5D3A0;background:#FFF6D6;color:var(--brown);margin-top:10px}
-  @media (min-width:720px){main{max-width:720px;margin:0 auto}.stats{grid-template-columns:repeat(4,1fr)}}
+  .chatwrap{display:flex;flex-direction:column;min-height:calc(100vh - 150px - var(--nav-h) - var(--sab))}.msgs{flex:1;display:flex;flex-direction:column;gap:10px;padding-bottom:8px}
+  .msg{max-width:88%;padding:10px 14px;border-radius:16px;font-size:16px;line-height:1.5;white-space:pre-wrap;word-break:break-word}.msg.u{align-self:flex-end;background:var(--gold);color:var(--ink);border-bottom-right-radius:4px}.msg.a{align-self:flex-start;background:#fff;border:1px solid var(--line);border-bottom-left-radius:4px}.msg.a.err{background:#FDECEA;border-color:#F5C6C2;color:#8C1D18}.msg.a.think{color:var(--muted)}
+  .chips{display:flex;gap:8px;overflow-x:auto;padding:4px 0 10px}.chips button{flex:none;font:inherit;font-size:13.5px;padding:7px 12px;border-radius:16px;border:1px solid #D9CFBF;background:#fff;color:var(--brown)}
+  .chatbar{position:sticky;bottom:calc(var(--nav-h) + var(--sab) + 8px);display:flex;gap:8px;background:var(--bg);padding-top:8px}.chatbar textarea{flex:1;padding:11px 14px;border-radius:22px;resize:none;max-height:120px;line-height:1.4;font-size:16px}.chatbar button{width:46px;height:46px;border-radius:50%;border:0;background:var(--gold);color:var(--ink);font-size:20px;flex:none}
+  .aibtn{display:inline-flex;align-items:center;gap:6px;font:inherit;font-size:13.5px;font-weight:700;padding:7px 12px;border-radius:16px;border:1px solid #E5D3A0;background:#FFF6D6;color:var(--brown);margin-top:10px;margin-right:6px}
+  .rl{display:grid;grid-template-columns:1fr 1fr 36px;gap:8px;align-items:center;margin-bottom:8px}.rl input{padding:10px}.rl button{border:0;background:none;color:#A89F92;font-size:22px}
+  .slipimg{width:100%;max-height:160px;object-fit:contain;border-radius:10px;background:#F3EEE4;margin-top:8px}.prg{height:6px;border-radius:3px;background:#EFE8DA;overflow:hidden;margin-top:8px}.prg i{display:block;height:100%;background:var(--gold);width:0;transition:width .2s}
+  .parsed{border:1px solid var(--line);border-radius:12px;padding:10px;margin-top:10px;font-size:14px}.parsed div{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #F3EEE4}.parsed div:last-child{border:0}
+  @media (min-width:720px){main{max-width:720px;margin:0 auto}}
 </style>
 </head>
 <body>
-<header>
-  <div class="top"><h1>Fin ตั้ม</h1><span class="save" id="saveMsg"></span></div>
-  <div class="scope" id="scope"></div>
-</header>
+<header><div class="top"><h1>Fin ตั้ม</h1><span class="save" id="saveMsg"></span></div><div class="scope" id="scope"></div></header>
 
-<!-- ───────── ภาพรวม ───────── -->
+<!-- ═══════ ภาพรวม (story) ═══════ -->
 <main id="tab-dash" class="active">
-  <div class="card hero" id="hero"></div>
-  <div class="warn" id="warn" style="display:none"></div>
-  <div class="stats" id="stats"></div>
-  <div class="card"><h2>📉 เงินต้น</h2><div class="chart"><canvas id="cBal"></canvas></div><div class="muted" style="margin-top:6px" id="balNote"></div></div>
-  <div class="card" id="dayCard"><div class="cardhd" id="dayHd"><h2 id="dayTitle">📅 ดอกเบี้ยเดือนนี้</h2><span class="chev">▾</span></div><div class="msum" id="daySum"></div><div class="body" id="days"></div></div>
-  <div class="card"><h2>📊 รายปี · ดอก vs ต้น</h2><div class="chart"><canvas id="cYear"></canvas></div></div>
+  <div class="chap"><span class="n">1</span>ตอนนี้<span class="ln"></span><button class="btn ghost sm" id="allToggle" style="min-height:30px;padding:4px 10px;font-size:12px">ย่อทั้งหมด</button></div>
+  <div class="alerts" id="alerts"></div>
+  <div class="card hero cc" data-c="hero"><div class="cardhd"><h2 id="heroT">🏠 เงินต้นคงค้าง</h2><span class="sum" id="heroS"></span><span class="chev">▾</span></div><div class="body" id="heroB"></div></div>
+  <div class="card cc" data-c="prof"><div class="cardhd"><h2>📇 โปรไฟล์</h2><span class="sum" id="profS"></span><span class="chev">▾</span></div><div class="body" id="profB"></div></div>
+
+  <div class="chap"><span class="n">2</span>เดือนนี้<span class="ln"></span></div>
+  <div class="card cc" data-c="month"><div class="cardhd"><h2 id="monthT">📅 เดือนนี้</h2><span class="sum" id="monthS"></span><span class="chev">▾</span></div><div class="body" id="monthB"></div></div>
+  <div class="card cc" data-c="day"><div class="cardhd"><h2>🔎 ดอกรายวัน</h2><span class="sum" id="dayS"></span><span class="chev">▾</span></div><div class="body" id="days"></div></div>
+  <div class="card cc" data-c="summ"><div class="cardhd"><h2>📝 สรุปประจำเดือน</h2><span class="sum" id="summS"></span><span class="chev">▾</span></div><div class="body" id="summB"></div></div>
+
+  <div class="chap"><span class="n">3</span>เส้นทาง<span class="ln"></span></div>
+  <div class="card cc" data-c="prog"><div class="cardhd"><h2>🚩 ความคืบหน้า</h2><span class="sum" id="progS"></span><span class="chev">▾</span></div><div class="body" id="progB"></div></div>
+  <div class="card cc" data-c="plan"><div class="cardhd"><h2>🎯 เทียบแผน & สัญญา</h2><span class="sum" id="planS"></span><span class="chev">▾</span></div><div class="body" id="planB"></div></div>
+  <div class="card cc" data-c="bal"><div class="cardhd"><h2>📉 เงินต้น</h2><span class="sum" id="balS"></span><span class="chev">▾</span></div><div class="body"><div class="chart"><canvas id="cBal"></canvas></div><div class="muted" style="margin-top:6px" id="balNote"></div></div></div>
+  <div class="card cc" data-c="events"><div class="cardhd"><h2>📍 เหตุการณ์</h2><span class="sum" id="evS"></span><span class="chev">▾</span></div><div class="body" id="evB"></div></div>
+
+  <div class="chap"><span class="n">4</span>อนาคต<span class="ln"></span></div>
+  <div class="card cc" data-c="goal"><div class="cardhd"><h2>🏆 เป้าหมาย</h2><span class="sum" id="goalS"></span><span class="chev">▾</span></div><div class="body" id="goalB"></div></div>
+  <div class="card cc" data-c="whatif"><div class="cardhd"><h2>🧪 ถ้าโปะเพิ่ม…</h2><span class="sum" id="wiS"></span><span class="chev">▾</span></div><div class="body" id="wiB"></div></div>
+  <div class="card cc" data-c="rate"><div class="cardhd"><h2>📈 ถ้า % เปลี่ยน…</h2><span class="sum" id="rateS"></span><span class="chev">▾</span></div><div class="body" id="rateB"></div></div>
+  <div class="card cc" data-c="refi"><div class="cardhd"><h2>🔁 รีไฟแนนซ์คุ้มไหม</h2><span class="sum" id="refiS"></span><span class="chev">▾</span></div><div class="body" id="refiB"></div></div>
+  <div class="card cc" data-c="dsr"><div class="cardhd"><h2>💼 สภาพคล่อง</h2><span class="sum" id="dsrS"></span><span class="chev">▾</span></div><div class="body" id="dsrB"></div></div>
+
+  <div class="chap"><span class="n">5</span>ทั้งสัญญา<span class="ln"></span></div>
+  <div class="card cc" data-c="donut"><div class="cardhd"><h2>🍩 ต้นทุนรวม</h2><span class="sum" id="donutS"></span><span class="chev">▾</span></div><div class="body"><div class="donut"><canvas id="cDonut"></canvas><div class="c" id="donutC"></div></div><div class="dleg" id="dleg"></div></div></div>
+  <div class="card cc" data-c="hm"><div class="cardhd"><h2>🗓 ดอกรายเดือน</h2><span class="sum" id="hmS"></span><span class="chev">▾</span></div><div class="body"><div class="hm" id="hm"></div><div class="hmleg">น้อย <i style="background:rgba(184,92,30,.15)"></i><i style="background:rgba(184,92,30,.45)"></i><i style="background:rgba(184,92,30,.8)"></i> มาก · กรอบทอง = จ่ายจริง</div></div></div>
+  <div class="card cc" data-c="year"><div class="cardhd"><h2>📊 รายปี</h2><span class="sum" id="yearS"></span><span class="chev">▾</span></div><div class="body"><div class="chart"><canvas id="cYear"></canvas></div></div></div>
 </main>
 
-<!-- ───────── แผน vs จริง ───────── -->
-<main id="tab-cmp">
-  <div class="seg"><button id="cmpM" class="on">รายเดือน</button><button id="cmpY">รายปี</button></div>
-  <div id="cmpBody"></div>
-</main>
-
-<!-- ───────── ตาราง ───────── -->
-<main id="tab-sched">
-  <div class="row" style="justify-content:space-between;margin-bottom:8px"><div class="muted" id="schedSum"></div><button class="btn ghost sm" id="csvBtn">CSV</button></div>
-  <div id="sched"></div>
-</main>
-
-<!-- ───────── บันทึก ───────── -->
+<!-- ═══════ แผน/จริง ═══════ -->
+<main id="tab-cmp"><div class="seg"><button id="cmpM" class="on">รายเดือน</button><button id="cmpY">รายปี</button></div><div id="cmpBody"></div></main>
+<!-- ═══════ ตาราง ═══════ -->
+<main id="tab-sched"><div class="row" style="justify-content:space-between;margin-bottom:8px"><div class="muted" id="schedSum"></div><button class="btn ghost sm" id="csvBtn">CSV</button></div><div id="sched"></div></main>
+<!-- ═══════ บันทึก ═══════ -->
 <main id="tab-log">
   <div class="card"><div class="logsum" id="logsum"></div></div>
-  <div class="card"><p class="muted" style="margin:0 0 6px">จ่าย/โปะ → ตัดดอกค้างก่อน เหลือค่อยตัดต้น (แบบเดียวกับธนาคาร)</p><div id="log"></div></div>
+  <div class="card"><h2>📷 อ่านสลิป</h2><p class="muted" style="margin:0 0 8px">ถ่ายรูปหรือเลือกภาพสลิปกรุงศรี แอปอ่านยอด/ดอก/เงินต้นคงค้าง จับคู่สัญญาจากเลขบัญชี แล้วให้คุณยืนยันก่อนจด</p><div class="row"><button class="btn primary" id="slipCam">📷 ถ่ายสลิป</button><button class="btn ghost" id="slipPick">🖼 เลือกภาพ</button></div><input type="file" id="slipCamIn" accept="image/*" capture="environment" style="display:none"><input type="file" id="slipPickIn" accept="image/*" style="display:none"><div id="slipOut"></div></div>
+  <div class="card"><h2>📋 แปะข้อความจากแอปธนาคาร</h2><p class="muted" style="margin:0 0 8px">คัดลอกรายการจากแอปกรุงศรี (หรือพิมพ์เอง) แล้วให้ AI แกะเป็นรายการให้ กดยืนยันก่อนบันทึก</p><textarea id="pasteIn" rows="3" placeholder="เช่น 29 ส.ค. 2569 ชำระเงินกู้ 3,000.00 ยอดเงินต้นคงค้าง 3,377,205.17"></textarea><button class="btn ghost block" id="parseBtn" style="margin-top:8px">✦ แกะรายการ</button><div id="parsed"></div></div>
+  <div class="card"><p class="muted" style="margin:0 0 6px">จ่าย/โปะ → ตัดดอกค้างก่อน เหลือค่อยตัดต้น (แบบเดียวกับธนาคาร) · ใส่ "ดอกตามธนาคาร" เพื่อให้แอปตรวจสอบ</p><div id="log"></div></div>
 </main>
-
-<!-- ───────── ตั้งค่า ───────── -->
+<!-- ═══════ แชท ═══════ -->
+<main id="tab-chat"><div class="chatwrap"><div id="chatSetup" class="card" style="display:none"><h2>✦ เชื่อม Typhoon</h2><p class="muted" style="margin:0 0 10px">API key จาก opentyphoon.ai → Playground → API Keys</p><div id="chatSetupBody"></div></div><div class="chips" id="chips"></div><div class="msgs" id="msgs"></div><div class="chatbar"><textarea id="chatIn" rows="1" placeholder="ถามเรื่องสินเชื่อของคุณ…"></textarea><button id="chatSend" aria-label="ส่ง">➤</button></div></div></main>
+<!-- ═══════ ตั้งค่า ═══════ -->
 <main id="tab-set">
-  <div class="loanpick" id="loanpick"></div>
-  <div id="setBody"></div>
-  <div class="card">
-    <h2>✦ AI (Typhoon)</h2>
-    <label><span>API key</span><input type="password" id="ai_key"></label>
-    <label><span>โมเดล</span><select id="ai_model"><option value="typhoon-v2.5-30b-a3b-instruct">typhoon-v2.5-30b-a3b-instruct (แนะนำ)</option><option value="typhoon-v2.1-12b-instruct">typhoon-v2.1-12b-instruct (เร็ว)</option></select></label>
-    <label><span>Endpoint (ถ้าใช้ proxy)</span><input type="text" id="ai_ep"></label>
-    <p class="muted" style="margin:0">key อยู่ในเครื่องนี้เท่านั้น</p>
-  </div>
-  <div class="card">
-    <h2>💾 สำรองข้อมูล</h2>
-    <div class="row"><button class="btn ghost" id="expBtn">⬇ ส่งออก</button><button class="btn ghost" id="impBtn">⬆ นำเข้า</button></div>
-    <input type="file" id="impFile" accept="application/json" style="display:none">
-  </div>
+  <div class="loanpick" id="loanpick"></div><div id="setBody"></div>
+  <div class="card"><h2>💼 รายได้ & เงินสำรอง</h2><div class="row"><label><span>รายได้/เดือน (฿)</span><input type="number" inputmode="decimal" id="g_income"></label><label><span>เงินสำรอง (฿)</span><input type="number" inputmode="decimal" id="g_fund"></label></div><p class="muted" style="margin:0">ใช้คำนวณ DSR และเงินสำรองครอบคลุมกี่งวด เก็บในเครื่องเท่านั้น</p></div>
+  <div class="card"><h2>🏆 เป้าหมาย</h2><div class="row"><label><span>อยากหมดภายใน</span><input type="date" id="g_goal"></label><label><span>ชื่อเป้า</span><input id="g_goalName" placeholder="เช่น ก่อนอายุ 45"></label></div></div>
+  <div class="card"><h2>🔔 การเตือน</h2><div class="row"><label><span>เตือนล่วงหน้า (วัน)</span><input type="number" inputmode="numeric" id="g_lead" min="0" max="14"></label><button class="btn ghost" id="notiBtn">เปิดแจ้งเตือน</button></div><button class="btn ghost block" id="icsBtn">📆 ส่งวันจ่ายเข้าปฏิทิน (.ics)</button><p class="muted" style="margin:8px 0 0">PWA เตือนได้เฉพาะตอนเปิดแอป ถ้าอยากเตือนแม้ไม่เปิด ให้ใส่ลงปฏิทินมือถือ</p></div>
+  <div class="card"><h2>🔒 ค่างวดรวมคงที่</h2><div class="seg" style="margin-bottom:8px"><button id="ro_on">เปิด</button><button id="ro_off">ปิด</button></div><p class="muted" style="margin:0">เปิด = สัญญาไหนหมด เอาค่างวดไปโปะสัญญาที่เหลือ</p></div>
+  <div class="card"><h2>✦ AI (Typhoon)</h2><label><span>API key</span><input type="password" id="ai_key"></label><label><span>โมเดล</span><select id="ai_model"><option value="typhoon-v2.5-30b-a3b-instruct">typhoon-v2.5-30b-a3b-instruct (แนะนำ)</option><option value="typhoon-v2.1-12b-instruct">typhoon-v2.1-12b-instruct (เร็ว)</option></select></label><label><span>Endpoint (ถ้าใช้ proxy)</span><input type="text" id="ai_ep"></label></div>
+  <div class="card"><h2>💾 สำรองข้อมูล</h2><div class="row"><button class="btn ghost" id="expBtn">⬇ ส่งออก</button><button class="btn ghost" id="impBtn">⬆ นำเข้า</button></div><input type="file" id="impFile" accept="application/json" style="display:none"></div>
   <button class="btn danger block" id="resetBtn">🗑 รีเซ็ตทั้งหมด</button>
-</main>
-
-<!-- ───────── แชท ───────── -->
-<main id="tab-chat">
-  <div class="chatwrap">
-    <div id="chatSetup" class="card" style="display:none"><h2>✦ เชื่อม Typhoon</h2><p class="muted" style="margin:0 0 10px">API key จาก opentyphoon.ai → Playground → API Keys</p><div id="chatSetupBody"></div></div>
-    <div class="chips" id="chips"></div>
-    <div class="msgs" id="msgs"></div>
-    <div class="chatbar"><textarea id="chatIn" rows="1" placeholder="ถามเรื่องสินเชื่อของคุณ…"></textarea><button id="chatSend" aria-label="ส่ง">➤</button></div>
-  </div>
 </main>
 
 <button class="fab" id="fab" aria-label="เพิ่มรายการ">+</button>
 <div class="sheet-bg" id="sheetBg"></div>
-<div class="sheet" id="sheet">
-  <div class="handle"></div>
-  <h3>✏️ จดรายการ</h3>
+<div class="sheet" id="sheet"><div class="handle"></div><h3 id="sheetT">✏️ จดรายการ</h3>
   <label><span>สัญญา</span><select id="eLoan"></select></label>
   <label><span>วันที่</span><input type="date" id="eDate"></label>
-  <label><span>ประเภท</span><select id="eKind"><option value="pay">✅ ชำระค่างวด</option><option value="extra">➕ โปะเพิ่ม</option><option value="draw">🏦 เบิกเงินกู้ (ต้นเพิ่ม)</option><option value="fee">🧾 ค่าธรรมเนียม</option></select></label>
-  <label><span>จำนวน (฿)</span><input type="number" inputmode="decimal" id="eAmt" step="100"></label>
-  <label><span>หมายเหตุ</span><input type="text" id="eNote" placeholder="เช่น หักบัญชีอัตโนมัติ"></label>
-  <button class="btn primary block" id="eSave">บันทึก</button>
-</div>
-
+  <label><span>ประเภท</span><select id="eKind"><option value="pay">✅ ชำระค่างวด</option><option value="extra">➕ โปะเพิ่ม</option><option value="draw">🏦 เบิกเงินกู้ (ต้นเพิ่ม)</option><option value="fee">🧾 ค่าธรรมเนียม</option><option value="event">📍 เหตุการณ์ (โบนัส/หมดโปร/บันทึก)</option></select></label>
+  <label><span id="eAmtL">จำนวน (฿)</span><input type="number" inputmode="decimal" id="eAmt" step="100"></label>
+  <label id="eBankL"><span>ดอกตามธนาคาร (฿) — ไม่บังคับ ใส่แล้วแอปตรวจให้</span><input type="number" inputmode="decimal" id="eBank" step="0.01"></label>
+  <label><span>หมายเหตุ / ชื่อเหตุการณ์</span><input type="text" id="eNote" placeholder="เช่น หักบัญชีอัตโนมัติ / โบนัสปลายปี"></label>
+  <button class="btn primary block" id="eSave">บันทึก</button></div>
 <nav>
   <button data-tab="dash" class="on"><svg viewBox="0 0 24 24"><path d="M3 12l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>ภาพรวม</button>
   <button data-tab="cmp"><svg viewBox="0 0 24 24"><path d="M3 17l5-6 4 4 5-8 4 5"/><path d="M3 21h18"/></svg>แผน/จริง</button>
@@ -210,293 +188,419 @@
 // ═══════════ state ═══════════
 const KEY='loan-app:v2';
 const uid=()=>Math.random().toString(36).slice(2,9);
-const DEFAULT=()=>({scope:'all',loans:[
-  {id:'home',name:'สินเชื่อบ้าน',acct:'75600-3',principal:3377900,startDate:'2026-08-17',payDay:29,payment:22000,extra:0,termMonths:240,rateMode:'flat',flatRate:2.0755,
+const DEFAULT=()=>({scope:'all',rollover:false,income:0,fund:0,goal:'',goalName:'',lead:3,loans:[
+  {id:'home',name:'สินเชื่อบ้าน',acct:'75600-3',type:'home',bank:'กรุงศรี (สวัสดิการพนักงาน)',purpose:'รีไฟแนนซ์บ้านจาก CIMB Thai',collateral:'',note:'',principal:3377900,startDate:'2026-08-17',payDay:29,payment:22000,extra:0,termMonths:240,rateMode:'flat',flatRate:2.0755,rates:[],
    tiers:[{id:uid(),upTo:1000000,rate:1.5},{id:uid(),upTo:2500000,rate:2.0},{id:uid(),upTo:null,rate:2.5}],plan:null,
-   txns:[{id:uid(),date:'2026-08-17',kind:'draw',amount:3377900,note:'เบิกเงินกู้ด้วยเช็คเงินสด'},{id:uid(),date:'2026-08-29',kind:'pay',amount:3000,note:'ชำระผ่านกรุงศรีออนไลน์'}]},
-  {id:'mrta',name:'MRTA (ประกัน)',acct:'75602-9',principal:120355,startDate:'2026-08-17',payDay:29,payment:1200,extra:0,termMonths:120,rateMode:'flat',flatRate:1.0,
+   txns:[{id:uid(),date:'2026-08-17',kind:'draw',amount:3377900,note:'เบิกเงินกู้ด้วยเช็คเงินสด'},{id:uid(),date:'2026-08-29',kind:'pay',amount:3000,bankInt:2305.17,note:'ชำระผ่านกรุงศรีออนไลน์'}]},
+  {id:'mrta',name:'MRTA (ประกัน)',acct:'75602-9',type:'mrta',bank:'กรุงศรี',purpose:'เบี้ยประกันคุ้มครองสินเชื่อบ้าน (MRTA)',collateral:'',note:'',principal:120355,startDate:'2026-08-17',payDay:29,payment:1200,extra:0,termMonths:120,rateMode:'flat',flatRate:1.0,rates:[],
    tiers:[{id:uid(),upTo:null,rate:1.0}],plan:null,txns:[{id:uid(),date:'2026-08-17',kind:'draw',amount:120355,note:'เบิกเงินกู้ด้วยเงินโอน'}]}
 ]});
 let S=DEFAULT();
+try{const v=JSON.parse(localStorage.getItem(KEY));if(v&&v.loans)S={...DEFAULT(),...v}}catch(e){}
+for(const l of S.loans){l.rates??=[];l.txns??=[];l.type??='other';l.termMonths??=240}
 let AI={key:'',model:'typhoon-v2.5-30b-a3b-instruct',endpoint:'https://api.opentyphoon.ai/v1/chat/completions',history:[]};
 try{const a=JSON.parse(localStorage.getItem('fin-tum:ai'));if(a)AI={...AI,...a}}catch(e){}
 const saveAI=()=>{try{localStorage.setItem('fin-tum:ai',JSON.stringify(AI))}catch(e){}};
-try{const v=JSON.parse(localStorage.getItem(KEY));if(v&&v.loans)S=v}catch(e){}
 let saveT;function save(){clearTimeout(saveT);saveT=setTimeout(()=>{try{localStorage.setItem(KEY,JSON.stringify(S));flash('บันทึกแล้ว')}catch(e){flash('บันทึกไม่สำเร็จ')}},400)}
-function flash(m){const el=$('saveMsg');el.textContent=m;setTimeout(()=>el.textContent='',1500)}
-function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1700)}
 const $=id=>document.getElementById(id);
+function flash(m){$('saveMsg').textContent=m;setTimeout(()=>$('saveMsg').textContent='',1500)}
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)}
 
 // ═══════════ helpers ═══════════
 const THB=(n,d=0)=>(Number.isFinite(n)?n:0).toLocaleString('th-TH',{minimumFractionDigits:d,maximumFractionDigits:d});
 const pct=(n,d=2)=>`${(Number.isFinite(n)?n:0).toFixed(d)}%`;
 const TM=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
 const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-const ym=s=>s.slice(0,7);const P=s=>new Date(s+'T00:00:00');
-const thM=k=>{const[y,m]=k.split('-');return`${TM[+m-1]} ${+y+543}`};
-const thD=s=>{const d=P(s);return`${d.getDate()} ${TM[d.getMonth()]} ${d.getFullYear()+543}`};
-const dim=(y,m)=>new Date(y,m,0).getDate(); // m 1-12
-const TODAY=iso(new Date());
+const P=s=>new Date(s+'T00:00:00');const thM=k=>{const[y,m]=k.split('-');return`${TM[+m-1]} ${+y+543}`};const thD=s=>{const d=P(s);return`${d.getDate()} ${TM[d.getMonth()]} ${d.getFullYear()+543}`};
+const dim=(y,m)=>new Date(y,m,0).getDate();const TODAY=iso(new Date());const NOWK=TODAY.slice(0,7);const daysBetween=(a,b)=>Math.round((P(b)-P(a))/864e5);
+const addM=(s,n)=>{const d=P(s);d.setMonth(d.getMonth()+n);return iso(d)};
 const COLORS=['#8B6B1F','#C99A00','#E08A2B','#B85C1E','#8C3A2B','#5C4A2E'];
 const sortedTiers=l=>[...l.tiers].filter(t=>Number.isFinite(t.rate)).sort((a,b)=>(a.upTo??Infinity)-(b.upTo??Infinity));
-const loanById=id=>S.loans.find(l=>l.id===id);
-const scopeLoans=()=>S.scope==='all'?S.loans:S.loans.filter(l=>l.id===S.scope);
+const loanById=id=>S.loans.find(l=>l.id===id);const scopeLoans=()=>S.scope==='all'?S.loans:S.loans.filter(l=>l.id===S.scope);
+const TYPES={home:'🏠 บ้าน',car:'🚗 รถ',personal:'👤 ส่วนบุคคล',mrta:'🛡 MRTA',other:'📄 อื่นๆ'};
+const KN={pay:'ชำระ',extra:'โปะ',draw:'เบิกกู้',fee:'ค่าธรรมเนียม',event:'เหตุการณ์'};
+const avatar=(l,cls='')=>l.photo?`<img class="av ${cls}" src="${l.photo}" alt="">`:`<span class="av ${cls}">${(TYPES[l.type||'other']||'📄').split(' ')[0]}</span>`;
+const cm=n=>n>=1e6?(n/1e6).toFixed(2)+'M':n>=1e3?(n/1e3).toFixed(0)+'k':THB(n);
 
-// ═══════════ engine (daily, actual/365) ═══════════
+// ═══════════ engine (daily, actual/365, dated rates, events) ═══════════
 function allocate(bal,tiers){let prev=0,rem=bal;const parts=[];for(const t of tiers){const cap=t.upTo==null?Infinity:Math.max(t.upTo,prev);const amt=Math.max(0,Math.min(rem,cap-prev));parts.push({id:t.id,rate:t.rate,amount:amt,from:prev,to:t.upTo});rem-=amt;prev=cap}return parts}
-function yearlyRate(bal,loan,tiers){if(bal<=0)return{rate:0,parts:[]};if(loan.rateMode==='flat')return{rate:loan.flatRate,parts:[{id:'f',rate:loan.flatRate,amount:bal,from:0,to:null}]};
-  const parts=allocate(bal,tiers);const r=parts.reduce((s,p)=>s+p.amount*p.rate,0)/bal;return{rate:r,parts}}
-
-// simulate day by day. useActual=false → plan only (draws + planned payments)
-function simulate(loan,{useActual=true,maxYears=40,payment}={}){
-  const tiers=sortedTiers(loan);const pay=(payment??loan.payment)+(payment!=null?0:loan.extra);
+function flatAt(loan,ds,delta=0){let r=loan.flatRate;for(const x of [...loan.rates].sort((a,b)=>a.from.localeCompare(b.from)))if(x.from<=ds&&Number.isFinite(x.rate))r=x.rate;return r+delta}
+function yearlyRate(bal,loan,tiers,ds,delta=0){if(bal<=0)return{rate:0,parts:[]};if(loan.rateMode==='flat'){const r=flatAt(loan,ds,delta);return{rate:r,parts:[{id:'f',rate:r,amount:bal,from:0,to:null}]}}
+  const parts=allocate(bal,tiers).map(p=>({...p,rate:p.rate+delta}));return{rate:parts.reduce((s,p)=>s+p.amount*p.rate,0)/bal,parts}}
+function simulate(loan,{useActual=true,maxYears=40,payment,extras=[],rateDelta=0,rateFrom=TODAY,events=true,rateOverride}={}){
+  const tiers=sortedTiers(loan);const basePay=(payment??loan.payment)+(payment!=null?0:(loan.extra||0));const payAt=ds=>basePay+extras.reduce((a,e)=>a+(ds>=e.from?e.amount:0),0);
+  const L=rateOverride!=null?{...loan,rateMode:'flat',flatRate:rateOverride,rates:[]}:loan;
   const txns=(useActual?loan.txns:loan.txns.filter(t=>t.kind==='draw')).filter(t=>t.date&&Number.isFinite(t.amount));
   const byDate={};for(const t of txns)(byDate[t.date]??=[]).push(t);
   if(!txns.some(t=>t.kind==='draw'))(byDate[loan.startDate]??=[]).push({kind:'draw',amount:loan.principal});
-  const lastActual=useActual?txns.filter(t=>t.kind!=='draw').reduce((m,t)=>t.date>m?t.date:m,''):'';
+  const lastActual=useActual?txns.filter(t=>t.kind!=='draw'&&t.kind!=='event').reduce((m,t)=>t.date>m?t.date:m,''):'';
   const start=P(loan.startDate);const end=new Date(start);end.setFullYear(end.getFullYear()+maxYears);
-  let bal=0,accrued=0,tI=0,tP=0,tF=0,payoff=null,stuck=false,snap=null;
-  const months=[],days=[];let cur=null;
-  const applyPay=(amt,isActual)=>{amt=Math.min(amt,bal+accrued);const i=Math.min(amt,accrued);accrued-=i;const p=amt-i;bal-=p;tP+=amt;cur.paid+=amt;cur.pp+=p;if(isActual)cur.actual=true;if(bal<=0.005&&!payoff){bal=0;payoff=cur.lastDate}};
+  let bal=0,accrued=0,tI=0,tP=0,tF=0,payoff=null,stuck=false,snap=null,lastPaid=0;const months=[],days=[],check={};let cur=null;
+  const applyPay=(amt,isActual)=>{amt=Math.min(amt,bal+accrued);lastPaid=amt;const i=Math.min(amt,accrued);accrued-=i;const p=amt-i;bal-=p;tP+=amt;cur.paid+=amt;cur.pp+=p;cur.ip+=i;if(isActual)cur.actual=true;if(bal<=0.005&&!payoff){bal=0;payoff=cur.lastDate}};
   for(let d=new Date(start);d<=end;d.setDate(d.getDate()+1)){
     const ds=iso(d),k=ds.slice(0,7);
-    if(!cur||cur.key!==k){if(cur)months.push(cur);cur={key:k,label:thM(k),open:bal,interest:0,paid:0,pp:0,close:bal,accruedEnd:0,rate:0,actual:false,lastDate:ds}}
+    if(!cur||cur.key!==k){if(cur)months.push(cur);cur={key:k,label:thM(k),open:bal,interest:0,paid:0,pp:0,ip:0,close:bal,accruedEnd:0,rate:0,actual:false,lastDate:ds}}
     cur.lastDate=ds;
-    for(const t of byDate[ds]||[]){if(t.kind==='draw'){bal+=t.amount;cur.actual=useActual}else if(t.kind==='fee'){tF+=t.amount}else applyPay(t.amount,true)}
-    if(ds===TODAY||(!snap&&ds>TODAY)){const{rate,parts}=yearlyRate(bal,loan,tiers);snap={date:ds,bal,accrued,rate,parts,daily:bal*rate/100/365,lastActual}}
-    const pd=Math.min(loan.payDay,dim(d.getFullYear(),d.getMonth()+1));
-    const plannedOk=useActual?(ds>lastActual&&ds>=TODAY):true;
-    if(d.getDate()===pd&&plannedOk&&ds>loan.startDate&&bal>0)applyPay(pay,false);
-    const{rate}=yearlyRate(bal,loan,tiers);const di=bal>0?bal*rate/100/365:0;accrued+=di;tI+=di;cur.interest+=di;cur.rate=rate;cur.close=bal;cur.accruedEnd=accrued;
-    if(k===TODAY.slice(0,7))days.push({date:ds,bal,di,accrued});
-    if(bal<=0.005&&accrued<=0.005&&ds>=TODAY&&ds>lastActual){break}
-  }
+    for(const t of byDate[ds]||[]){if(t.kind==='draw'){bal+=t.amount;cur.actual=useActual}else if(t.kind==='fee'){tF+=t.amount}else if(t.kind==='event'){if(events&&t.amount>0&&ds>=TODAY&&ds>lastActual)applyPay(t.amount,false)}else{if(t.id)check[t.id]={appInt:accrued,bal};applyPay(t.amount,true)}}
+    if(ds===TODAY||(!snap&&ds>TODAY)){const{rate,parts}=yearlyRate(bal,L,tiers,ds,ds>=rateFrom?rateDelta:0);snap={date:ds,bal,accrued,rate,parts,daily:bal*rate/100/365,lastActual}}
+    const pd=Math.min(loan.payDay,dim(d.getFullYear(),d.getMonth()+1));const plannedOk=useActual?(ds>lastActual&&ds>=TODAY):true;
+    if(d.getDate()===pd&&plannedOk&&ds>loan.startDate&&bal>0)applyPay(payAt(ds),false);
+    const{rate}=yearlyRate(bal,L,tiers,ds,ds>=rateFrom?rateDelta:0);const di=bal>0?bal*rate/100/365:0;accrued+=di;tI+=di;cur.interest+=di;cur.rate=rate;cur.close=bal;cur.accruedEnd=accrued;
+    if(k===NOWK)days.push({date:ds,bal,di,accrued});
+    if(bal<=0.005&&accrued<=0.005&&ds>=TODAY&&ds>lastActual)break}
   if(cur&&(months.length===0||months.at(-1).key!==cur.key))months.push(cur);
-  if(!payoff&&bal>0.005)stuck=true;
-  if(!snap){const{rate,parts}=yearlyRate(bal,loan,tiers);snap={date:TODAY,bal,accrued,rate,parts,daily:bal*rate/100/365,lastActual}}
-  return{months,days,tI,tP,tF,payoff,stuck,snap,loan}}
-
-function solvePayment(loan,term){let lo=0,hi=loan.principal;for(let i=0;i<40;i++){const mid=(lo+hi)/2;const s=simulate(loan,{useActual:false,maxYears:Math.ceil(term/12)+1,payment:mid});if(s.stuck||s.months.length>term+1)lo=mid;else hi=mid}return Math.ceil(hi)}
-
-// merge results across loans (scope=all)
+  if(!payoff&&bal>0.005)stuck=true;const freed=payoff?payAt(payoff):0;const freedNow=payoff?Math.max(freed-lastPaid,0):0;
+  if(!snap){const{rate,parts}=yearlyRate(bal,L,tiers,TODAY,0);snap={date:TODAY,bal,accrued,rate,parts,daily:bal*rate/100/365,lastActual}}
+  return{months,days,tI,tP,tF,payoff,stuck,snap,loan,freed,freedNow,check}}
+function solvePayment(loan,term,opts={}){let lo=0,hi=loan.principal;for(let i=0;i<40;i++){const mid=(lo+hi)/2;const s=simulate(loan,{useActual:false,maxYears:Math.ceil(term/12)+1,payment:mid,...opts});if(s.stuck||s.months.length>term+1)lo=mid;else hi=mid}return Math.ceil(hi)}
+function simAll(loans=S.loans,opts={}){
+  let sims=Object.fromEntries(loans.map(l=>[l.id,simulate(l,opts)]));if(!S.rollover||loans.length<2)return sims;
+  for(let pass=0;pass<4;pass++){const order=[...loans].sort((a,b)=>(sims[a.id].payoff||'9999')<(sims[b.id].payoff||'9999')?-1:1);const next={};const freed=[];
+    for(const l of order){const ex=freed.filter(f=>!sims[l.id].payoff||f.from<sims[l.id].payoff);next[l.id]=simulate(l,{...opts,extras:ex});if(next[l.id].payoff){const n=next[l.id];const nd=P(n.payoff);nd.setDate(nd.getDate()+1);freed.push({from:n.payoff,amount:n.freedNow},{from:iso(nd),amount:n.freed-n.freedNow})}}
+    const same=loans.every(l=>next[l.id].payoff===sims[l.id].payoff);sims=next;if(same)break}
+  return sims}
 function combine(sims){
   if(sims.length===1)return sims[0];
-  const map={};for(const s of sims)for(const m of s.months){const o=map[m.key]??={key:m.key,label:m.label,open:0,interest:0,paid:0,pp:0,close:0,accruedEnd:0,rate:0,actual:false,_b:0};o.open+=m.open;o.interest+=m.interest;o.paid+=m.paid;o.pp+=m.pp;o.close+=m.close;o.accruedEnd+=m.accruedEnd;o.actual||=m.actual;o.rate+=m.rate*m.close;o._b+=m.close}
+  const map={};for(const s of sims)for(const m of s.months){const o=map[m.key]??={key:m.key,label:m.label,open:0,interest:0,paid:0,pp:0,ip:0,close:0,accruedEnd:0,rate:0,actual:false,_b:0};o.open+=m.open;o.interest+=m.interest;o.paid+=m.paid;o.pp+=m.pp;o.ip+=m.ip;o.close+=m.close;o.accruedEnd+=m.accruedEnd;o.actual||=m.actual;o.rate+=m.rate*m.close;o._b+=m.close}
   const months=Object.values(map).sort((a,b)=>a.key.localeCompare(b.key)).map(m=>({...m,rate:m._b>0?m.rate/m._b:0}));
   const dmap={};for(const s of sims)for(const d of s.days){const o=dmap[d.date]??={date:d.date,bal:0,di:0,accrued:0};o.bal+=d.bal;o.di+=d.di;o.accrued+=d.accrued}
   const bal=sims.reduce((a,s)=>a+s.snap.bal,0);
   const snap={date:TODAY,bal,accrued:sims.reduce((a,s)=>a+s.snap.accrued,0),daily:sims.reduce((a,s)=>a+s.snap.daily,0),rate:bal>0?sims.reduce((a,s)=>a+s.snap.rate*s.snap.bal,0)/bal:0,parts:null,lastActual:sims.reduce((m,s)=>s.snap.lastActual>m?s.snap.lastActual:m,'')};
-  return{months,days:Object.values(dmap).sort((a,b)=>a.date.localeCompare(b.date)),tI:sims.reduce((a,s)=>a+s.tI,0),tP:sims.reduce((a,s)=>a+s.tP,0),tF:sims.reduce((a,s)=>a+s.tF,0),payoff:sims.reduce((m,s)=>s.payoff&&s.payoff>m?s.payoff:m,null),stuck:sims.some(s=>s.stuck),snap,loan:null}}
-const simScope=()=>combine(scopeLoans().map(l=>simulate(l)));
-const planScope=()=>{const ls=scopeLoans();if(!ls.every(l=>l.plan))return null;return combinePlan(ls.map(l=>l.plan))};
+  return{months,days:Object.values(dmap).sort((a,b)=>a.date.localeCompare(b.date)),tI:sims.reduce((a,s)=>a+s.tI,0),tP:sims.reduce((a,s)=>a+s.tP,0),tF:sims.reduce((a,s)=>a+s.tF,0),payoff:sims.reduce((m,s)=>s.payoff&&(!m||s.payoff>m)?s.payoff:m,null),stuck:sims.some(s=>s.stuck),snap,loan:null,check:Object.assign({},...sims.map(s=>s.check))}}
+const simScope=(opts)=>{const all=simAll(S.loans,opts);return combine(scopeLoans().map(l=>all[l.id]))};
 function combinePlan(plans){const map={};for(const p of plans)for(const m of p.months){const o=map[m.key]??={key:m.key,close:0,interest:0,paid:0};o.close+=m.close;o.interest+=m.interest;o.paid+=m.paid}return{lockedAt:plans[0].lockedAt,months:Object.values(map).sort((a,b)=>a.key.localeCompare(b.key))}}
+const planScope=()=>{const ls=scopeLoans();return ls.every(l=>l.plan)?combinePlan(ls.map(l=>l.plan)):null};
+// contract baseline: bank's original term with level payment, no extras
+function contractSim(){const ls=scopeLoans();return combine(ls.map(l=>{const pay=solvePayment(l,l.termMonths);return simulate(l,{useActual:false,payment:pay,events:false})}))}
+// next due
+function nextDue(l){const d=new Date();let y=d.getFullYear(),m=d.getMonth()+1;let pd=Math.min(l.payDay,dim(y,m));let ds=`${y}-${String(m).padStart(2,'0')}-${String(pd).padStart(2,'0')}`;if(ds<TODAY){m++;if(m>12){m=1;y++}pd=Math.min(l.payDay,dim(y,m));ds=`${y}-${String(m).padStart(2,'0')}-${String(pd).padStart(2,'0')}`}return ds}
+const paidThisMonth=l=>l.txns.some(t=>(t.kind==='pay'||t.kind==='extra')&&t.date.slice(0,7)===NOWK);
+const allEvents=()=>S.loans.flatMap(l=>l.txns.filter(t=>t.kind==='event').map(t=>({...t,loan:l})));
 
 // ═══════════ charts ═══════════
 let charts={};const font={family:'Sarabun',size:12};const grid={color:'#EAE3D6'};
 function mkChart(id,cfg){charts[id]?.destroy();charts[id]=new Chart($(id),cfg)}
 
-// ═══════════ render: header scope ═══════════
-function renderScope(){$('scope').innerHTML=[['all','รวมทุกสัญญา'],...S.loans.map(l=>[l.id,l.name])].map(([k,n])=>`<button data-s="${k}" class="${S.scope===k?'on':''}">${n}</button>`).join('');
-  $('scope').querySelectorAll('button').forEach(b=>b.onclick=()=>{S.scope=b.dataset.s;save();renderScope();dirtyAll();show(curTab)})}
+// ═══════════ alerts ═══════════
+function buildAlerts(sim){
+  const ls=scopeLoans(),A=[];
+  for(const l of ls){const nd=nextDue(l);const dl=daysBetween(TODAY,nd);const paid=paidThisMonth(l);
+    if(!paid&&dl<=S.lead)A.push({k:dl===0?'bad':'warn',ic:'🔔',t:`<b>${dl===0?'วันนี้':'อีก '+dl+' วัน'} ถึงกำหนด ${l.name}</b>${thD(nd)} · ${THB(l.payment+(l.extra||0))} ฿`,act:'จดยอด',fn:()=>openSheet(l.id)});
+    else if(!paid&&nd.slice(0,7)!==NOWK)A.push({k:'warn',ic:'📝',t:`<b>เดือนนี้ยังไม่ได้จดยอด ${l.name}</b>วันจ่ายผ่านไปแล้ว ถ้าจ่ายแล้วจดไว้ให้แอปเทียบแผนถูก`,act:'จดยอด',fn:()=>openSheet(l.id)});
+    for(const t of l.txns.filter(t=>t.bankInt>0)){const c=sim.check[t.id];if(c){const d=t.bankInt-c.appInt;if(Math.abs(d)>1)A.push({k:'bad',ic:'⚠️',t:`<b>ดอกไม่ตรง ${l.name} ${thD(t.date)}</b>ธนาคาร ${THB(t.bankInt,2)} vs แอป ${THB(c.appInt,2)} (${d>0?'+':''}${THB(d,2)}) — % อาจเปลี่ยนหรือมีค่าธรรมเนียมแฝง`,act:'ดู %',fn:()=>{setLoan=l.id;show('set')}})}}
+    for(const r of l.rates){const dr=daysBetween(TODAY,r.from);if(dr>0&&dr<=30)A.push({k:'warn',ic:'📈',t:`<b>${l.name} % จะเปลี่ยนเป็น ${pct(r.rate,4)} ใน ${dr} วัน</b>${thD(r.from)}${r.note?' · '+r.note:''}`})}}
+  for(const e of allEvents()){const de=daysBetween(TODAY,e.date);if(de>=0&&de<=30)A.push({k:'ok',ic:'📍',t:`<b>${e.note||'เหตุการณ์'} ${de===0?'วันนี้':'อีก '+de+' วัน'}</b>${thD(e.date)}${e.amount?' · โปะ '+THB(e.amount):''} · ${e.loan.name}`})}
+  if(S.goal&&sim.payoff){const ahead=sim.payoff<=S.goal;if(!ahead)A.push({k:'warn',ic:'🏆',t:`<b>ยังไม่ถึงเป้า "${S.goalName||thD(S.goal)}"</b>คาดหมด ${thD(sim.payoff)} ช้ากว่าเป้า ${Math.round(daysBetween(S.goal,sim.payoff)/30)} เดือน — ดูบท 4 ว่าต้องโปะเท่าไร`})}
+  if(sim.stuck)A.push({k:'bad',ic:'⛔',t:'<b>ค่างวดน้อยกว่าดอกเบี้ย เงินต้นไม่ลด</b>แก้ค่างวดในตั้งค่า'});
+  const verified=ls.flatMap(l=>l.txns.filter(t=>t.bankInt>0&&sim.check[t.id]&&Math.abs(t.bankInt-sim.check[t.id].appInt)<=1));
+  if(!A.length)A.push({k:'ok',ic:'✅',t:`<b>ทุกอย่างปกติ</b>${verified.length?`ตรวจดอกกับธนาคารแล้ว ${verified.length} รายการ ตรงกัน`:'ไม่มีอะไรต้องทำตอนนี้'}`});
+  $('alerts').innerHTML=A.map((a,i)=>`<div class="al ${a.k}"><span class="ic">${a.ic}</span><span class="t">${a.t}</span>${a.act?`<button data-i="${i}">${a.act}</button>`:''}</div>`).join('');
+  $('alerts').querySelectorAll('button').forEach(b=>b.onclick=()=>A[b.dataset.i].fn());
+  // browser notification once per day
+  try{if('Notification' in window&&Notification.permission==='granted'){const due=A.find(a=>a.ic==='🔔');const key='fin-tum:notified';if(due&&localStorage.getItem(key)!==TODAY){new Notification('Fin ตั้ม',{body:due.t.replace(/<[^>]+>/g,' ').trim(),icon:'icon-192.png'});localStorage.setItem(key,TODAY)}}}catch(e){}}
 
-// ═══════════ render: dashboard ═══════════
+// ═══════════ dashboard (story) ═══════════
 function renderDash(){
-  const sim=simScope(),sn=sim.snap,ls=scopeLoans();const single=ls.length===1?ls[0]:null;
-  const plan=planScope();const daysSince=sn.lastActual?Math.round((P(TODAY)-P(sn.lastActual))/864e5):null;
-  let h=`<div class="lbl">🏠 เงินต้นคงค้าง${single?` · ${single.name} <span class="muted">${single.acct}</span>`:' · รวม '+ls.length+' สัญญา'}</div>
-    <div class="big">${THB(sn.bal,2)} <small>฿</small></div>
-    <div class="kv">
-      <div><div class="k">💰 ต้องจ่ายวันนี้ (ต้น+ดอก)</div><div class="v">${THB(sn.bal+sn.accrued,2)}</div></div>
-      <div><div class="k">⏳ ดอกค้าง${daysSince!=null?` ${daysSince} วัน`:''}</div><div class="v int">${THB(sn.accrued,2)}</div></div>
-      <div><div class="k">📆 ดอกวันละ</div><div class="v int">${THB(sn.daily,2)}</div></div>
-      <div><div class="k">% เฉลี่ย/ปี</div><div class="v">${pct(sn.rate,4)}</div></div>
-    </div>`;
-  if(single&&single.rateMode==='tier'&&sn.parts){const tot=Math.max(sn.bal,1);h+=`<div class="ladder">${sn.parts.map((p,i)=>p.amount>0?`<div style="width:${p.amount/tot*100}%;background:${COLORS[i%6]}">${p.amount/tot>0.14?pct(p.rate):''}</div>`:'').join('')}</div><div class="legend">${sn.parts.map((p,i)=>`<div><i style="background:${COLORS[i%6]}"></i><div><b>${pct(p.rate)}</b> <span class="muted">${p.to==null?'เกิน '+THB(p.from):THB(p.from)+' – '+THB(p.to)}</span> · ${THB(p.amount)}</div></div>`).join('')}</div>`}
-  h+=`<button class="aibtn" onclick="askAI('อธิบายสถานะสินเชื่อของฉันวันนี้แบบเข้าใจง่าย และแนะนำสิ่งที่ควรทำเดือนนี้')">✦ อธิบายให้ฟัง</button>`;
-  $('hero').innerHTML=h;
-  const w=$('warn');if(sim.stuck){w.style.display='';w.textContent='⚠️ ค่างวดน้อยกว่าดอกเบี้ย เงินต้นไม่ลด — แก้ในตั้งค่า'}else w.style.display='none';
-  const nowM=sim.months.find(m=>m.key===TODAY.slice(0,7));
-  let planStat=['🎯 เทียบแผน','ยังไม่ล็อก','ล็อกได้ที่แท็บ แผน/จริง',''];
-  if(plan&&nowM){const pm=plan.months.find(m=>m.key===nowM.key);if(pm){const d=pm.close-nowM.close;planStat=['🎯 เทียบแผน',(d>=0?'−':'+')+THB(Math.abs(d)),d>=0?'ต้นต่ำกว่าแผน 👍':'ต้นสูงกว่าแผน',d>=0?'ok':'bad']}}
-  const st=[['🏁 หมดประมาณ',sim.payoff?thM(sim.payoff.slice(0,7)):'–',`อีก ${sim.months.length} เดือน · ${(sim.months.length/12).toFixed(1)} ปี`,''],
-    ['💸 ดอกรวมทั้งสัญญา',THB(sim.tI),`≈ ${THB(sim.tI/Math.max(sim.months.length,1))}/เดือน`,''],
-    ['📅 ดอกเดือนนี้',nowM?THB(nowM.interest):'–',nowM?`ตัดต้น ${THB(nowM.pp)}`:'',''],planStat];
-  $('stats').innerHTML=st.map(([l,v,s,c])=>`<div class="stat"><div class="l">${l}</div><div class="v ${c}">${v}</div><div class="s">${s}</div></div>`).join('');
+  const ALL=simAll(),ls=scopeLoans(),sim=combine(ls.map(l=>ALL[l.id])),sn=sim.snap,single=ls.length===1?ls[0]:null,plan=planScope();
+  const nowM=sim.months.find(m=>m.key===NOWK);const daysSince=sn.lastActual?daysBetween(sn.lastActual,TODAY):null;
+  buildAlerts(sim);
+  // 1 ── hero
+  $('heroT').innerHTML=`${single?avatar(single,'sm'):'🏠 '}เงินต้นคงค้าง <span class="muted" style="font-weight:500">· ${single?single.name:'รวม '+ls.length+' สัญญา'}</span>`;
+  $('heroS').textContent=`${THB(sn.bal)} · ต้องจ่าย ${THB(sn.bal+sn.accrued)}`;
+  let h=`<div class="big">${THB(sn.bal,2)} <small>฿</small></div><div class="kv"><div><div class="k">💰 ต้องจ่ายวันนี้ (ต้น+ดอก)</div><div class="v">${THB(sn.bal+sn.accrued,2)}</div></div><div><div class="k">⏳ ดอกค้าง${daysSince!=null?` ${daysSince} วัน`:''}</div><div class="v int">${THB(sn.accrued,2)}</div></div><div><div class="k">📆 ดอกวันละ</div><div class="v int">${THB(sn.daily,2)}</div></div><div><div class="k">% เฉลี่ย/ปี</div><div class="v">${pct(sn.rate,4)}</div></div></div>`;
+  if(single&&single.rateMode==='tier'&&sn.parts){const tot=Math.max(sn.bal,1);h+=`<div class="ladder">${sn.parts.map((p,i)=>p.amount>0?`<div style="width:${p.amount/tot*100}%;background:${COLORS[i%6]}">${p.amount/tot>0.14?pct(p.rate):''}</div>`:'').join('')}</div>`}
+  h+=`<button class="aibtn" onclick="askAI('อธิบายสถานะสินเชื่อของฉันวันนี้แบบเข้าใจง่าย และแนะนำสิ่งที่ควรทำเดือนนี้')">✦ อธิบายให้ฟัง</button>`;$('heroB').innerHTML=h;
+  // profile
+  const pf=l=>`${l.photo?`<img class="av lg" src="${l.photo}" alt="">`:''}<div class="prof"><div class="k">ประเภท</div><div class="v"><span class="tag">${TYPES[l.type||'other']}</span>${l.acct?`เลขที่ ${l.acct}`:''}</div>${l.bank?`<div class="k">ธนาคาร</div><div class="v">${l.bank}</div>`:''}${l.purpose?`<div class="k">เกี่ยวกับ</div><div class="v" style="font-weight:500">${l.purpose}</div>`:''}${l.collateral?`<div class="k">หลักประกัน</div><div class="v" style="font-weight:500">${l.collateral}</div>`:''}<div class="k">วงเงิน</div><div class="v">${THB(l.principal)} ฿ · ${l.rateMode==='flat'?pct(flatAt(l,TODAY),4):'ขั้นบันได'} · จ่ายทุกวันที่ ${l.payDay}</div><div class="k">สัญญา</div><div class="v">${l.termMonths} เดือน (${(l.termMonths/12).toFixed(0)} ปี) · เริ่ม ${thD(l.startDate)}</div><div class="k">ค่างวด</div><div class="v">${THB(l.payment)}${l.extra?` +โปะ ${THB(l.extra)}`:''} ฿/เดือน</div>${l.note?`<div class="k">หมายเหตุ</div><div class="v" style="font-weight:500">${l.note}</div>`:''}</div>`;
+  $('profB').innerHTML=single?pf(single):ls.map(l=>`<div class="profl">${avatar(l)}<div><div class="n"><span class="tag">${TYPES[l.type||'other']}</span>${l.name} <span class="muted" style="font-weight:400">${l.acct}</span></div><div class="d">${l.purpose||'—'} · ${THB(l.principal)} ฿ · ${l.rateMode==='flat'?pct(flatAt(l,TODAY),2):'ขั้นบันได'} · ค่างวด ${THB(l.payment)}</div></div></div>`).join('');
+  $('profS').textContent=single?`${TYPES[single.type]} ${single.bank||''}`.trim():ls.map(l=>l.name).join(' · ');
+  // 2 ── month
+  const dueList=ls.map(l=>({l,nd:nextDue(l),paid:paidThisMonth(l)}));const nxt=dueList.sort((a,b)=>a.nd.localeCompare(b.nd))[0];
+  $('monthT').textContent=`📅 ${thM(NOWK)}`;$('monthS').textContent=nowM?`ดอก ${THB(nowM.interest)} · จ่าย ${THB(nowM.paid)}`:'';
+  const pm=plan?plan.months.find(m=>m.key===NOWK):null;
+  $('monthB').innerHTML=`<div class="msum"><div><div class="l">ดอกเบี้ย</div><div class="v int">${nowM?THB(nowM.interest):'–'}</div></div><div><div class="l">จ่าย</div><div class="v">${nowM?THB(nowM.paid):'–'}</div></div><div><div class="l">ตัดต้น</div><div class="v ok">${nowM?THB(nowM.pp):'–'}</div></div></div>
+    <div class="msum" style="margin-top:8px">${dueList.map(x=>`<div><div class="l">${x.l.name}</div><div class="v ${x.paid?'ok':''}" style="font-size:14px">${x.paid?'✅ จ่ายแล้ว':'📆 '+x.nd.slice(8)+' '+TM[+x.nd.slice(5,7)-1]}</div></div>`).join('')}${pm&&nowM?`<div><div class="l">vs แผน</div><div class="v ${pm.close>=nowM.close?'ok':'bad'}" style="font-size:14px">${pm.close>=nowM.close?'−':'+'}${THB(Math.abs(pm.close-nowM.close))}</div></div>`:''}</div>`;
+  // day
+  const mInt=sim.days.reduce((a,d)=>a+d.di,0),past=sim.days.filter(d=>d.date<=TODAY);
+  $('dayS').textContent=`วันละ ${THB(sim.days.length?mInt/sim.days.length:0,2)} · ${past.length} วันแรก ${THB(past.reduce((a,d)=>a+d.di,0))}`;
+  $('days').innerHTML=sim.days.length?`<div class="day h"><div>วัน</div><div>ต้น</div><div>ค้างสะสม</div><div class="i">ดอก/วัน</div></div>`+sim.days.map(d=>`<div class="day${d.date===TODAY?' today':''}"><div class="d">${+d.date.slice(8)}</div><div class="m">${cm(d.bal)}</div><div class="m">${THB(d.accrued)}</div><div class="i">+${THB(d.di,2)}</div></div>`).join(''):'<div class="empty">ยังไม่มีข้อมูล</div>';
+  // monthly summary (app-generated)
+  const prevM=sim.months[sim.months.findIndex(m=>m.key===NOWK)-1];
+  let sm=`📝 ${thM(NOWK)}\n`;if(nowM){sm+=`• จ่ายรวม ${THB(nowM.paid)} ฿ → ดอก ${THB(nowM.interest)} / ตัดต้น ${THB(nowM.pp)}\n• เงินต้นเหลือ ${THB(nowM.close)} ฿`;if(prevM)sm+=` (ลดจากเดือนก่อน ${THB(prevM.close-nowM.close)})`;if(pm)sm+=`\n• เทียบแผน: ${pm.close>=nowM.close?'ดีกว่าแผน '+THB(pm.close-nowM.close)+' ฿ 👍':'ช้ากว่าแผน '+THB(nowM.close-pm.close)+' ฿'}`;sm+=`\n• คาดผ่อนหมด ${sim.payoff?thD(sim.payoff):'–'}`}
+  $('summS').textContent=nowM?`ต้นลด ${THB(nowM.pp)} · เหลือ ${cm(nowM.close)}`:'';
+  $('summB').innerHTML=`<div class="summ" id="summTxt">${sm}</div><button class="aibtn" onclick="askAI('เขียนสรุปประจำเดือนนี้ให้หน่อย สั้นๆ 4-5 บรรทัด อ่านง่าย พร้อมคำแนะนำ 1 ข้อ')">✦ ให้ AI เขียน</button><button class="aibtn" id="shareBtn">📤 แชร์</button>`;
+  $('shareBtn').onclick=()=>{const t=$('summTxt').textContent;if(navigator.share)navigator.share({title:'Fin ตั้ม',text:t}).catch(()=>{});else{navigator.clipboard?.writeText(t);toast('คัดลอกแล้ว')}};
+  // 3 ── progress with events
+  const drawn=ls.reduce((a,l)=>a+l.txns.filter(t=>t.kind==='draw').reduce((x,t)=>x+t.amount,0),0)||ls.reduce((a,l)=>a+l.principal,0);
+  const paidPrin=Math.max(drawn-sn.bal,0),pp=drawn>0?paidPrin/drawn*100:0;const startD=ls.reduce((m,l)=>l.startDate<m?l.startDate:m,'9999'),endD=sim.payoff||startD;
+  const tot=Math.max(daysBetween(startD,endD),1),el=Math.min(Math.max(daysBetween(startD,TODAY),0),tot),tp=el/tot*100;const left=sim.months.filter(m=>m.key>=NOWK).length;
+  const evs=allEvents().filter(e=>ls.includes(e.loan)&&e.date>=startD&&e.date<=endD);
+  $('progS').textContent=`${pp.toFixed(1)}% · เหลือ ${left} เดือน · 🏁 ${sim.payoff?thM(sim.payoff.slice(0,7)):'–'}`;
+  $('progB').innerHTML=`<div class="prog"><div class="pct"><b>${pp.toFixed(1)}%</b><span>ตัดต้นแล้ว ${THB(paidPrin)}<br>จาก ${THB(drawn)} ฿</span></div><div class="bar"><div class="fill" style="width:${pp.toFixed(2)}%"></div><div class="pin" style="left:${tp.toFixed(2)}%"><span>วันนี้</span></div>${evs.map(e=>`<div class="ev" style="left:${(daysBetween(startD,e.date)/tot*100).toFixed(2)}%" title="${e.note}"></div>`).join('')}</div><div class="ends"><span>🚩 ${thD(startD)}</span><span>เวลา ${tp.toFixed(0)}% · เหลือ ${left} เดือน</span><span>🏁 ${sim.payoff?thD(sim.payoff):'–'}</span></div></div>`;
+  // plan & contract
+  const con=contractSim();const conEnd=ls.reduce((m,l)=>{const e=addM(l.startDate,l.termMonths);return e>m?e:m},'');
+  const aheadM=sim.payoff?Math.round(daysBetween(sim.payoff,conEnd)/30.44):0;const saved=con.tI-sim.tI;
+  $('planS').textContent=`นำหน้าสัญญา ${aheadM} เดือน · ประหยัด ${THB(saved)}`;
+  let pb=`<div class="stats"><div class="stat"><div class="l">📜 สัญญาธนาคาร</div><div class="v">${thM(conEnd.slice(0,7))}</div><div class="s">ค่างวดขั้นต่ำ ${THB(con.months[1]?.paid||0)} · ดอกรวม ${THB(con.tI)}</div></div><div class="stat"><div class="l">🚀 คุณ (พยากรณ์)</div><div class="v ${aheadM>=0?'ok':'bad'}">${sim.payoff?thM(sim.payoff.slice(0,7)):'–'}</div><div class="s">${aheadM>=0?'เร็วกว่าสัญญา':'ช้ากว่าสัญญา'} ${Math.abs(aheadM)} เดือน · ประหยัดดอก ${THB(saved)}</div></div>`;
+  if(plan&&pm&&nowM){const dB=pm.close-nowM.close;pb+=`<div class="stat"><div class="l">🎯 แผนของคุณ (ล็อก ${thD(plan.lockedAt)})</div><div class="v ${dB>=0?'ok':'bad'}">${dB>=0?'−':'+'}${THB(Math.abs(dB))}</div><div class="s">${dB>=0?'ต้นต่ำกว่าแผน':'ต้นสูงกว่าแผน'}</div></div><div class="stat"><div class="l">🏁 แผนหมด</div><div class="v">${thM(plan.months.at(-1).key)}</div><div class="s">${sim.months.length<=plan.months.length?'เร็วขึ้น':'ช้าลง'} ${Math.abs(plan.months.length-sim.months.length)} เดือน</div></div>`}
+  else pb+=`<div class="stat" style="grid-column:1/-1"><div class="l">🎯 แผนของคุณ</div><div class="s">ยังไม่ล็อก — ไปแท็บ แผน/จริง กด "ล็อกแผน" ครั้งเดียว แล้วทุกเดือนจะเทียบให้</div></div>`;
+  $('planB').innerHTML=pb+'</div>';
+  // balance chart
   const step=Math.max(1,Math.floor(sim.months.length/100));const rows=sim.months.filter((_,i)=>i%step===0||i===sim.months.length-1);
   const ds=[{label:'จริง+พยากรณ์',data:rows.map(r=>r.close),borderColor:'#C99A00',backgroundColor:'rgba(242,184,0,.18)',fill:true,pointRadius:0,tension:.25,borderWidth:2.5}];
-  if(plan){const pm=Object.fromEntries(plan.months.map(m=>[m.key,m.close]));ds.push({label:'แผน',data:rows.map(r=>pm[r.key]??null),borderColor:'#5C4A2E',borderDash:[5,4],pointRadius:0,borderWidth:1.5,fill:false})}
-  mkChart('cBal',{type:'line',data:{labels:rows.map(r=>r.label),datasets:ds},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:!!plan,position:'bottom',labels:{font,boxWidth:12}},tooltip:{callbacks:{label:c=>c.dataset.label+' '+THB(c.raw)}}},scales:{x:{ticks:{font,maxTicksLimit:5,maxRotation:0},grid:{display:false}},y:{ticks:{font,callback:v=>(v/1e6).toFixed(2)+'M'},grid}}}});
-  $('balNote').textContent=plan?`- - แผน (ล็อก ${thD(plan.lockedAt)})`:'';
-  const mInt=sim.days.reduce((a,d)=>a+d.di,0),mDays=sim.days.length;const past=sim.days.filter(d=>d.date<=TODAY);
-  $('dayTitle').textContent=`📅 ดอกเบี้ย ${TM[+TODAY.slice(5,7)-1]}`;
-  $('daySum').innerHTML=`<div><div class="l">ทั้งเดือน</div><div class="v int">${THB(mInt)}</div></div><div><div class="l">วันละ</div><div class="v int">${THB(mDays?mInt/mDays:0,2)}</div></div><div><div class="l">ถึงวันนี้ ${past.length} วัน</div><div class="v int">${THB(past.reduce((a,d)=>a+d.di,0))}</div></div>`;
-  const cm=n=>n>=1e6?(n/1e6).toFixed(2)+'M':n>=1e3?(n/1e3).toFixed(0)+'k':THB(n);
-  $('days').innerHTML=sim.days.length?`<div class="day h"><div>วัน</div><div>ต้น</div><div>ค้างสะสม</div><div class="i">ดอก/วัน</div></div>`+sim.days.map(d=>`<div class="day${d.date===TODAY?' today':''}"><div class="d">${+d.date.slice(8)}</div><div class="m">${cm(d.bal)}</div><div class="m">${THB(d.accrued)}</div><div class="i">+${THB(d.di,2)}</div></div>`).join(''):'<div class="empty">ยังไม่มีข้อมูลเดือนนี้</div>';
-  const yr={};for(const m of sim.months){const y=+m.key.slice(0,4)+543;yr[y]??={i:0,p:0};yr[y].i+=m.interest;yr[y].p+=m.pp}
+  const cmap=Object.fromEntries(con.months.map(m=>[m.key,m.close]));ds.push({label:'สัญญาธนาคาร',data:rows.map(r=>cmap[r.key]??null),borderColor:'#A89F92',borderDash:[3,3],pointRadius:0,borderWidth:1.2,fill:false});
+  if(plan){const pmm=Object.fromEntries(plan.months.map(m=>[m.key,m.close]));ds.push({label:'แผน',data:rows.map(r=>pmm[r.key]??null),borderColor:'#5C4A2E',borderDash:[5,4],pointRadius:0,borderWidth:1.5,fill:false})}
+  mkChart('cBal',{type:'line',data:{labels:rows.map(r=>r.label),datasets:ds},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font,boxWidth:12}},tooltip:{callbacks:{label:c=>c.dataset.label+' '+THB(c.raw)}}},scales:{x:{ticks:{font,maxTicksLimit:5,maxRotation:0},grid:{display:false}},y:{ticks:{font,callback:v=>(v/1e6).toFixed(2)+'M'},grid}}}});
+  $('balS').textContent=`${cm(sn.bal)} → 0 ใน ${(sim.months.length/12).toFixed(1)} ปี`;$('balNote').textContent='';
+  // events list
+  const evAll=allEvents().filter(e=>ls.includes(e.loan)).sort((a,b)=>a.date.localeCompare(b.date));const rateEv=ls.flatMap(l=>l.rates.map(r=>({date:r.from,note:`% เปลี่ยนเป็น ${pct(r.rate,4)}${r.note?' · '+r.note:''}`,loan:l,rate:true})));
+  const evList=[...evAll,...rateEv,...ls.map(l=>({date:ALL[l.id].payoff||'',note:`🏁 ${l.name} หมด`,loan:l,sys:true})).filter(e=>e.date)].sort((a,b)=>a.date.localeCompare(b.date));
+  $('evS').textContent=evList.filter(e=>e.date>=TODAY).slice(0,2).map(e=>`${thM(e.date.slice(0,7))} ${e.note.slice(0,14)}`).join(' · ')||'ไม่มี';
+  $('evB').innerHTML=(evList.length?evList.map(e=>`<div class="evl"><div class="d">${thD(e.date)}</div><div class="t">${e.rate?'📈 ':e.sys?'':'📍 '}${e.note}${ls.length>1?` <span class="muted">· ${e.loan.name}</span>`:''}</div>${e.amount?`<div class="a">+${THB(e.amount)}</div>`:''}${!e.rate&&!e.sys?`<button data-l="${e.loan.id}" data-id="${e.id}">×</button>`:''}</div>`).join(''):'<div class="empty">ยังไม่มีเหตุการณ์</div>')+`<button class="btn ghost sm" style="margin-top:8px" onclick="openSheet(null,'event')">📍 เพิ่มเหตุการณ์ (โบนัสโปะ / หมดโปร / บันทึก)</button>`;
+  $('evB').querySelectorAll('button[data-id]').forEach(b=>b.onclick=()=>{const l=loanById(b.dataset.l);l.txns=l.txns.filter(x=>x.id!==b.dataset.id);save();dirtyAll();renderDash()});
+  // 4 ── goal
+  if(S.goal){const ok=sim.payoff&&sim.payoff<=S.goal;const dG=daysBetween(TODAY,S.goal);let need=0;if(!ok&&ls.length){const monthsToGoal=Math.max(1,Math.round(dG/30.44));let lo=0,hi=50000;for(let i=0;i<25;i++){const mid=(lo+hi)/2;const s=combine(ls.map(l=>simAll(S.loans.map(o=>ls.includes(o)?{...o,extra:(o.extra||0)+mid}:o))[l.id]));if(!s.payoff||s.payoff>S.goal)lo=mid;else hi=mid}need=Math.ceil(hi/100)*100}
+    $('goalS').textContent=`${S.goalName||thD(S.goal)} · ${ok?'✅ ทัน':'ต้องโปะ +'+THB(need)}`;
+    $('goalB').innerHTML=`<div class="res"><div><div class="l">🏆 ${S.goalName||'เป้า'}</div><div class="v">${thD(S.goal)}</div></div><div><div class="l">นับถอยหลัง</div><div class="v">${Math.floor(dG/365)} ปี ${Math.round(dG%365/30)} เดือน</div></div><div><div class="l">คาดหมดจริง</div><div class="v ${ok?'ok':'bad'}">${sim.payoff?thD(sim.payoff):'–'}</div></div><div><div class="l">${ok?'ทันเป้า เร็วกว่า':'ต้องโปะเพิ่ม/เดือน'}</div><div class="v ${ok?'ok':'bad'}">${ok?Math.round(daysBetween(sim.payoff,S.goal)/30.44)+' เดือน':'+'+THB(need)+' ฿'}</div></div></div>`}
+  else{$('goalS').textContent='ยังไม่ตั้ง';$('goalB').innerHTML=`<div class="empty">ตั้งเป้า "อยากหมดภายใน" ในตั้งค่า แล้วแอปจะบอกว่าทันไหม ต้องโปะเท่าไร</div>`}
+  // what-if slider
+  const wiCalc=x=>{const s=combine(ls.map(l=>simAll(S.loans.map(o=>ls.includes(o)?{...o,extra:(o.extra||0)+x}:o))[l.id]));return{m:sim.months.length-s.months.length,i:sim.tI-s.tI,end:s.payoff}};
+  $('wiB').innerHTML=`<div class="sl"><div class="h"><span>โปะเพิ่มเดือนละ</span><b id="wiV">5,000 ฿</b></div><input type="range" id="wiR" min="0" max="20000" step="500" value="5000"></div><div class="res" id="wiRes"></div>`;
+  const wiUpd=()=>{const x=+$('wiR').value;const r=wiCalc(x);$('wiV').textContent=THB(x)+' ฿';$('wiS').textContent=`+${THB(x)} → เร็วขึ้น ${r.m} เดือน`;$('wiRes').innerHTML=`<div><div class="l">หมดเร็วขึ้น</div><div class="v ok">${r.m} เดือน</div></div><div><div class="l">ประหยัดดอก</div><div class="v ok">${THB(r.i)} ฿</div></div><div><div class="l">หมดเมื่อ</div><div class="v">${r.end?thM(r.end.slice(0,7)):'–'}</div></div><div><div class="l">จ่ายรวม/เดือน</div><div class="v">${THB(ls.reduce((a,l)=>a+l.payment+(l.extra||0),0)+x*ls.length)}</div></div>`};
+  $('wiR').oninput=wiUpd;wiUpd();
+  // rate change
+  $('rateB').innerHTML=`<div class="sl"><div class="h"><span>ถ้า % เปลี่ยน</span><b id="rtV">+0.50%</b></div><input type="range" id="rtR" min="-1" max="3" step="0.25" value="0.5"></div><div class="res" id="rtRes"></div><p class="muted" style="margin:8px 0 0">ค่างวดเท่าเดิม → ดูว่าหมดช้าลงกี่เดือน ประวัติ % อยู่ในตั้งค่า</p>`;
+  const rtUpd=()=>{const d=+$('rtR').value;const s=combine(ls.map(l=>simAll(S.loans,{rateDelta:d})[l.id]));const dm=s.months.length-sim.months.length,di=s.tI-sim.tI;$('rtV').textContent=(d>=0?'+':'')+d.toFixed(2)+'%';$('rateS').textContent=`${(d>=0?'+':'')+d.toFixed(2)}% → ${dm>=0?'ช้าลง':'เร็วขึ้น'} ${Math.abs(dm)} เดือน`;
+    $('rtRes').innerHTML=`<div><div class="l">% ใหม่</div><div class="v">${pct(sn.rate+d,4)}</div></div><div><div class="l">ดอกวันละ</div><div class="v int">${THB(s.snap.daily,2)}</div></div><div><div class="l">หมด${dm>=0?'ช้าลง':'เร็วขึ้น'}</div><div class="v ${dm>0?'bad':'ok'}">${Math.abs(dm)} เดือน</div></div><div><div class="l">ดอกรวม${di>=0?'เพิ่ม':'ลด'}</div><div class="v ${di>0?'bad':'ok'}">${THB(Math.abs(di))}</div></div>`};
+  $('rtR').oninput=rtUpd;rtUpd();
+  // refinance
+  const rfKey='fin-tum:refi';let rf={fee:35000,rate:Math.max(sn.rate-0.5,0.5)};try{rf={...rf,...JSON.parse(localStorage.getItem(rfKey)||'{}')}}catch(e){}
+  $('refiB').innerHTML=`<div class="row"><label><span>ค่าธรรมเนียม (฿)</span><input type="number" inputmode="decimal" id="rfFee" value="${rf.fee}"></label><label><span>% ใหม่ต่อปี</span><input type="number" inputmode="decimal" id="rfRate" step="0.05" value="${rf.rate}"></label></div><div class="res" id="rfRes"></div>`;
+  const rfUpd=()=>{rf={fee:+$('rfFee').value||0,rate:+$('rfRate').value||0};localStorage.setItem(rfKey,JSON.stringify(rf));const s=combine(ls.map(l=>simAll(S.loans,{rateOverride:rf.rate})[l.id]));const saveI=sim.tI-s.tI;const mo=Math.max((sim.snap.daily-s.snap.daily)*30.44,0);const be=mo>0?Math.ceil(rf.fee/mo):null;const net=saveI-rf.fee;
+    $('refiS').textContent=net>0?`คุ้ม · คืนทุน ${be} เดือน · สุทธิ +${THB(net)}`:'ไม่คุ้ม';$('rfRes').innerHTML=`<div><div class="l">ประหยัดดอก/เดือน</div><div class="v ok">${THB(mo)}</div></div><div><div class="l">คืนทุนใน</div><div class="v">${be?be+' เดือน':'–'}</div></div><div><div class="l">ประหยัดทั้งสัญญา</div><div class="v">${THB(saveI)}</div></div><div><div class="l">สุทธิหลังหักค่าธรรมเนียม</div><div class="v ${net>0?'ok':'bad'}">${net>0?'+':''}${THB(net)}</div></div>`};
+  $('rfFee').oninput=rfUpd;$('rfRate').oninput=rfUpd;rfUpd();
+  // DSR
+  const monthly=S.loans.reduce((a,l)=>a+(ALL[l.id].payoff?l.payment+(l.extra||0):0),0);const dsr=S.income>0?monthly/S.income*100:null;const runway=monthly>0?S.fund/monthly:null;
+  $('dsrS').textContent=dsr!=null?`DSR ${dsr.toFixed(0)}% · สำรอง ${runway.toFixed(1)} งวด`:'ใส่รายได้ในตั้งค่า';
+  $('dsrB').innerHTML=dsr!=null?`<div class="res"><div><div class="l">ค่างวดรวม/เดือน</div><div class="v">${THB(monthly)}</div></div><div><div class="l">DSR (ภาระหนี้/รายได้)</div><div class="v ${dsr<=40?'ok':dsr<=60?'':'bad'}">${dsr.toFixed(1)}%</div></div><div><div class="l">เงินสำรอง</div><div class="v">${THB(S.fund)}</div></div><div><div class="l">ครอบคลุม</div><div class="v ${runway>=6?'ok':runway>=3?'':'bad'}">${runway.toFixed(1)} งวด</div></div></div><p class="muted" style="margin:8px 0 0">${dsr<=40?'✅ DSR ต่ำกว่า 40% ปลอดภัยตามเกณฑ์ ธปท.':dsr<=60?'⚠️ DSR 40–60% ระวังภาระ':'⛔ DSR เกิน 60% สูงมาก'} · ${runway>=6?'สำรองพอ 6 งวดขึ้นไป 👍':'ควรมีสำรองอย่างน้อย 6 งวด'}</p>`:'<div class="empty">ใส่รายได้/เดือน และเงินสำรองในตั้งค่า</div>';
+  // 5 ── donut / heatmap / yearly
+  const paidInt=sim.months.filter(m=>m.key<NOWK).reduce((a,m)=>a+m.interest,0)+(nowM?nowM.interest*(new Date().getDate()/30):0);
+  const dv=[paidPrin,sn.bal,paidInt,Math.max(sim.tI-paidInt,0)],dl=['ต้น จ่ายแล้ว','ต้น คงเหลือ','ดอก จ่ายแล้ว','ดอก ที่เหลือ'],dc=['#C99A00','#F3E7B8','#B85C1E','#F0CDB5'];
+  mkChart('cDonut',{type:'doughnut',data:{labels:dl,datasets:[{data:dv,backgroundColor:dc,borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.label+' '+THB(c.raw)}}}}});
+  const totCost=drawn+sim.tI;$('donutS').textContent=`ต้น+ดอก ${THB(totCost/1e6,2)}M · ดอก ${(sim.tI/totCost*100).toFixed(0)}%`;$('donutC').innerHTML=`<b>${THB(totCost/1e6,2)}M</b><span>ต้น+ดอก</span><span>ดอก ${(sim.tI/totCost*100).toFixed(0)}% ของยอดจ่ายรวม</span>`;$('dleg').innerHTML=dl.map((l,i)=>`<div><i style="background:${dc[i]}"></i>${l} ${THB(dv[i]/1e3,0)}k</div>`).join('');
+  const mx=Math.max(...sim.months.map(m=>m.interest),1);const ys=[...new Set(sim.months.map(m=>m.key.slice(0,4)))];let hh=`<div></div>${TM.map(t=>`<div class="mh">${t.replace('.','').slice(0,2)}</div>`).join('')}`;
+  for(const y of ys){hh+=`<div class="y">${+y+543}</div>`;for(let mm=1;mm<=12;mm++){const k=`${y}-${String(mm).padStart(2,'0')}`;const m=sim.months.find(x=>x.key===k);hh+=m?`<div class="c${m.actual?' a':''}${k===NOWK?' now':''}" style="background:rgba(184,92,30,${(0.12+0.78*m.interest/mx).toFixed(2)})" title="${m.label} ดอก ${THB(m.interest)}"></div>`:'<div></div>'}}
+  $('hm').innerHTML=hh;const nx=sim.months[sim.months.findIndex(m=>m.key===NOWK)+1];$('hmS').textContent=`เดือนนี้ ${nowM?THB(nowM.interest):'–'}${nx?` · หน้า ${THB(nx.interest)}`:''}`;
+  const yr={};for(const m of sim.months){const y=+m.key.slice(0,4)+543;yr[y]??={i:0,p:0};yr[y].i+=m.interest;yr[y].p+=m.pp}const ty=yr[+TODAY.slice(0,4)+543];$('yearS').textContent=ty?`ปีนี้ ดอก ${THB(ty.i)} · ต้น ${THB(ty.p)}`:'';
   mkChart('cYear',{type:'bar',data:{labels:Object.keys(yr),datasets:[{label:'ดอกเบี้ย',data:Object.values(yr).map(v=>v.i),backgroundColor:'#B85C1E'},{label:'เงินต้น',data:Object.values(yr).map(v=>v.p),backgroundColor:'#C99A00'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font,boxWidth:12}},tooltip:{callbacks:{label:c=>c.dataset.label+' '+THB(c.raw)}}},scales:{x:{stacked:true,ticks:{font,maxTicksLimit:8},grid:{display:false}},y:{stacked:true,ticks:{font,callback:v=>(v/1e3).toFixed(0)+'k'},grid}}}});
+  setTimeout(()=>Object.values(charts).forEach(ch=>{try{ch.resize()}catch(e){}}),60);
 }
 
-// ═══════════ render: plan vs actual ═══════════
+// ═══════════ plan vs actual tab ═══════════
 let cmpMode='m';
 function renderCmp(){
-  const ls=scopeLoans(),sim=simScope(),plan=planScope();
-  let h='';
-  const unlocked=ls.filter(l=>!l.plan);
-  if(unlocked.length){h+=`<div class="card"><h2>🎯 ล็อกแผน</h2><p class="muted" style="margin:0 0 10px">บันทึกตารางผ่อนวันนี้ไว้เป็น "แผน" แล้วเทียบกับยอดจริงทุกเดือน (${unlocked.map(l=>l.name).join(', ')} ยังไม่ล็อก)</p><button class="btn primary block" id="lockBtn">🔒 ล็อกแผน</button></div>`}
+  const ls=scopeLoans(),sim=simScope(),plan=planScope();let h='';const unlocked=ls.filter(l=>!l.plan);
+  if(unlocked.length)h+=`<div class="card"><h2>🎯 ล็อกแผน</h2><p class="muted" style="margin:0 0 10px">บันทึกตารางผ่อนวันนี้ไว้เป็น "แผน" แล้วเทียบกับยอดจริงทุกเดือน (${unlocked.map(l=>l.name).join(', ')} ยังไม่ล็อก)</p><button class="btn primary block" id="lockBtn">🔒 ล็อกแผน</button></div>`;
   else h+=`<div class="card"><div class="row" style="justify-content:space-between"><div><b>🔒 แผน ${thD(plan.lockedAt)}</b><div class="muted">เปลี่ยนค่างวดแล้วค่อยล็อกใหม่</div></div><button class="btn ghost sm" id="relockBtn">ล็อกใหม่</button></div></div>`;
-  if(plan){
-    const nowK=TODAY.slice(0,7);const pm=Object.fromEntries(plan.months.map(m=>[m.key,m]));
-    let cumP=0,cumA=0;const rows=sim.months.map(m=>{const p=pm[m.key];cumP+=p?p.interest:0;cumA+=m.interest;return{key:m.key,label:m.label,pI:p?p.interest:null,aI:m.interest,pB:p?p.close:null,aB:m.close,cumP,cumA,fc:m.key>nowK}});
-    const nowR=rows.find(r=>r.key===nowK)||rows.at(-1);
-    if(nowR&&nowR.pB!=null){const dB=nowR.pB-nowR.aB,dI=nowR.cumP-nowR.cumA;h+=`<div class="stats"><div class="stat"><div class="l">🏠 ต้น vs แผน (${nowR.label})</div><div class="v ${dB>=0?'ok':'bad'}">${dB>=0?'−':'+'}${THB(Math.abs(dB))}</div><div class="s">${dB>=0?'ต่ำกว่าแผน 👍':'สูงกว่าแผน'}</div></div><div class="stat"><div class="l">💸 ดอกสะสม vs แผน</div><div class="v ${dI>=0?'ok':'bad'}">${dI>=0?'−':'+'}${THB(Math.abs(dI))}</div><div class="s">${dI>=0?'ประหยัดได้':'เกินแผน'}</div></div><div class="stat"><div class="l">🏁 แผนหมด</div><div class="v">${thM(plan.months.at(-1).key)}</div><div class="s">${plan.months.length} เดือน</div></div><div class="stat"><div class="l">🏁 จริงคาดหมด</div><div class="v ${sim.months.length<=plan.months.length?'ok':'bad'}">${sim.payoff?thM(sim.payoff.slice(0,7)):'–'}</div><div class="s">${sim.months.length<=plan.months.length?'เร็วขึ้น':'ช้าลง'} ${Math.abs(plan.months.length-sim.months.length)} เดือน</div></div></div>`}
-    let view=rows;
-    if(cmpMode==='y'){const y={};for(const r of rows){const k=r.key.slice(0,4);const o=y[k]??={key:k,label:'พ.ศ. '+(+k+543),pI:0,aI:0,pB:null,aB:0,fc:false,has:false};o.pI+=r.pI??0;o.aI+=r.aI;o.pB=r.pB??o.pB;o.aB=r.aB;o.fc=r.fc;o.has||=r.pI!=null;o.cumP=r.cumP;o.cumA=r.cumA}view=Object.values(y).map(o=>({...o,pI:o.has?o.pI:null}))}
-    const slice=cmpMode==='m'?view.filter(r=>r.key<=nowK||view.indexOf(r)<view.findIndex(x=>x.key>nowK)+12):view;
-    h+=`<div class="card"><h2>💸 ดอก: แผน vs จริง</h2><div class="chart"><canvas id="cCmp"></canvas></div></div>`;
-    h+=`<div class="card"><h2>📋 เทียบ${cmpMode==='m'?' (+12 เดือน)':''}</h2><div class="tblwrap"><table class="cmp"><tr><th>${cmpMode==='m'?'เดือน':'ปี'}</th><th>ดอก แผน</th><th>ดอก จริง</th><th>±</th><th>ต้น แผน</th><th>ต้น จริง</th></tr>${slice.map(r=>{const d=(r.pI??0)-r.aI;return`<tr class="${r.fc?'f':''}"><td>${r.label}${r.fc?' <span class="badge">คาด</span>':''}</td><td>${r.pI!=null?THB(r.pI):'–'}</td><td>${THB(r.aI)}</td><td class="${r.pI==null?'':d>=0?'ok':'bad'}">${r.pI!=null?(d>=0?'−':'+')+THB(Math.abs(d)):'–'}</td><td>${r.pB!=null?THB(r.pB):'–'}</td><td>${THB(r.aB)}</td></tr>`}).join('')}</table></div></div>`;
-    h+=`<button class="aibtn" onclick="askAI('วิเคราะห์ผลเทียบแผนกับจริงของฉัน ทำไมถึงต่างจากแผน และควรปรับอะไร')">✦ วิเคราะห์ให้หน่อย</button>`;
-    $('cmpBody').innerHTML=h;
-    const cv=cmpMode==='m'?slice:view;
-    mkChart('cCmp',{type:'bar',data:{labels:cv.map(r=>r.label),datasets:[{label:'แผน',data:cv.map(r=>r.pI),backgroundColor:'#D9CFBF'},{label:'จริง/พยากรณ์',data:cv.map(r=>r.aI),backgroundColor:cv.map(r=>r.fc?'rgba(184,92,30,.45)':'#B85C1E')}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font,boxWidth:12}},tooltip:{callbacks:{label:c=>c.dataset.label+' '+THB(c.raw)}}},scales:{x:{ticks:{font,maxTicksLimit:8,maxRotation:0},grid:{display:false}},y:{ticks:{font,callback:v=>(v/1e3).toFixed(0)+'k'},grid}}}});
-  }else $('cmpBody').innerHTML=h;
-  const lock=()=>{for(const l of scopeLoans()){const s=simulate(l,{useActual:false});l.plan={lockedAt:TODAY,months:s.months.map(m=>({key:m.key,close:m.close,interest:m.interest,paid:m.paid}))}}save();dirtyAll();renderCmp();toast('ล็อกแผนแล้ว')};
-  const lb=$('lockBtn');if(lb)lb.onclick=lock;const rb=$('relockBtn');if(rb)rb.onclick=()=>{if(confirm('ล็อกแผนใหม่ทับแผนเดิม?'))lock()};
-}
-$('cmpM').onclick=()=>{cmpMode='m';$('cmpM').classList.add('on');$('cmpY').classList.remove('on');renderCmp()};
-$('cmpY').onclick=()=>{cmpMode='y';$('cmpY').classList.add('on');$('cmpM').classList.remove('on');renderCmp()};
+  if(plan){const pm=Object.fromEntries(plan.months.map(m=>[m.key,m]));let cumP=0,cumA=0;const rows=sim.months.map(m=>{const p=pm[m.key];cumP+=p?p.interest:0;cumA+=m.interest;return{key:m.key,label:m.label,pI:p?p.interest:null,aI:m.interest,pB:p?p.close:null,aB:m.close,cumP,cumA,fc:m.key>NOWK}});
+    const nowR=rows.find(r=>r.key===NOWK)||rows.at(-1);
+    if(nowR&&nowR.pB!=null){const dB=nowR.pB-nowR.aB,dI=nowR.cumP-nowR.cumA;h+=`<div class="stats" style="margin-bottom:12px"><div class="stat"><div class="l">🏠 ต้น vs แผน (${nowR.label})</div><div class="v ${dB>=0?'ok':'bad'}">${dB>=0?'−':'+'}${THB(Math.abs(dB))}</div><div class="s">${dB>=0?'ต่ำกว่าแผน 👍':'สูงกว่าแผน'}</div></div><div class="stat"><div class="l">💸 ดอกสะสม vs แผน</div><div class="v ${dI>=0?'ok':'bad'}">${dI>=0?'−':'+'}${THB(Math.abs(dI))}</div><div class="s">${dI>=0?'ประหยัดได้':'เกินแผน'}</div></div><div class="stat"><div class="l">🏁 แผนหมด</div><div class="v">${thM(plan.months.at(-1).key)}</div><div class="s">${plan.months.length} เดือน</div></div><div class="stat"><div class="l">🏁 จริงคาดหมด</div><div class="v ${sim.months.length<=plan.months.length?'ok':'bad'}">${sim.payoff?thM(sim.payoff.slice(0,7)):'–'}</div><div class="s">${sim.months.length<=plan.months.length?'เร็วขึ้น':'ช้าลง'} ${Math.abs(plan.months.length-sim.months.length)} เดือน</div></div></div>`}
+    let view=rows;if(cmpMode==='y'){const y={};for(const r of rows){const k=r.key.slice(0,4);const o=y[k]??={key:k,label:'พ.ศ. '+(+k+543),pI:0,aI:0,pB:null,aB:0,fc:false,has:false};o.pI+=r.pI??0;o.aI+=r.aI;o.pB=r.pB??o.pB;o.aB=r.aB;o.fc=r.fc;o.has||=r.pI!=null}view=Object.values(y).map(o=>({...o,pI:o.has?o.pI:null}))}
+    const slice=cmpMode==='m'?view.filter(r=>r.key<=NOWK||view.indexOf(r)<view.findIndex(x=>x.key>NOWK)+12):view;
+    h+=`<div class="card"><h2>💸 ดอก: แผน vs จริง</h2><div class="chart"><canvas id="cCmp"></canvas></div></div><div class="card"><h2>📋 เทียบ${cmpMode==='m'?' (+12 เดือน)':''}</h2><div class="tblwrap"><table class="cmp"><tr><th>${cmpMode==='m'?'เดือน':'ปี'}</th><th>ดอก แผน</th><th>ดอก จริง</th><th>±</th><th>ต้น แผน</th><th>ต้น จริง</th></tr>${slice.map(r=>{const d=(r.pI??0)-r.aI;return`<tr class="${r.fc?'f':''}"><td>${r.label}${r.fc?' <span class="badge">คาด</span>':''}</td><td>${r.pI!=null?THB(r.pI):'–'}</td><td>${THB(r.aI)}</td><td class="${r.pI==null?'':d>=0?'ok':'bad'}">${r.pI!=null?(d>=0?'−':'+')+THB(Math.abs(d)):'–'}</td><td>${r.pB!=null?THB(r.pB):'–'}</td><td>${THB(r.aB)}</td></tr>`}).join('')}</table></div><button class="aibtn" onclick="askAI('วิเคราะห์ผลเทียบแผนกับจริงของฉัน ทำไมถึงต่างจากแผน และควรปรับอะไร')">✦ วิเคราะห์ให้หน่อย</button></div>`;
+    $('cmpBody').innerHTML=h;const cv=cmpMode==='m'?slice:view;
+    mkChart('cCmp',{type:'bar',data:{labels:cv.map(r=>r.label),datasets:[{label:'แผน',data:cv.map(r=>r.pI),backgroundColor:'#D9CFBF'},{label:'จริง/พยากรณ์',data:cv.map(r=>r.aI),backgroundColor:cv.map(r=>r.fc?'rgba(184,92,30,.45)':'#B85C1E')}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font,boxWidth:12}},tooltip:{callbacks:{label:c=>c.dataset.label+' '+THB(c.raw)}}},scales:{x:{ticks:{font,maxTicksLimit:8,maxRotation:0},grid:{display:false}},y:{ticks:{font,callback:v=>(v/1e3).toFixed(0)+'k'},grid}}}})}
+  else $('cmpBody').innerHTML=h;
+  const lock=()=>{const all=simAll(S.loans,{useActual:false});for(const l of scopeLoans()){const s=all[l.id];l.plan={lockedAt:TODAY,months:s.months.map(m=>({key:m.key,close:m.close,interest:m.interest,paid:m.paid}))}}save();dirtyAll();renderCmp();toast('ล็อกแผนแล้ว')};
+  const lb=$('lockBtn');if(lb)lb.onclick=lock;const rb=$('relockBtn');if(rb)rb.onclick=()=>{if(confirm('ล็อกแผนใหม่ทับแผนเดิม?'))lock()}}
+$('cmpM').onclick=()=>{cmpMode='m';$('cmpM').classList.add('on');$('cmpY').classList.remove('on');renderCmp()};$('cmpY').onclick=()=>{cmpMode='y';$('cmpY').classList.add('on');$('cmpM').classList.remove('on');renderCmp()};
 
-// ═══════════ render: schedule ═══════════
-function renderSched(){const sim=simScope();const nowK=TODAY.slice(0,7);
-  $('schedSum').textContent=`${sim.months.length} เดือน · ดอกรวม ${THB(sim.tI)} ฿`;
-  let h='',y='';for(const m of sim.months){const yy=+m.key.slice(0,4)+543;if(yy!==y){y=yy;h+=`<div class="yr">พ.ศ. ${yy}</div>`}
-    h+=`<div class="mrow${m.actual?' actual':''}${m.key===nowK?' now':''}"><div class="a">${m.label}${m.actual?' <span class="badge">จริง</span>':''}</div><div class="b">${THB(m.close)}</div><div class="c"><b>${pct(m.rate,2)}</b> · จ่าย ${THB(m.paid)}</div><div class="d">ดอก <b>${THB(m.interest)}</b> · ต้น ${THB(m.pp)}</div></div>`}
+// ═══════════ schedule ═══════════
+function renderSched(){const sim=simScope();$('schedSum').textContent=`${sim.months.length} เดือน · ดอกรวม ${THB(sim.tI)} ฿`;let h='',y='';
+  for(const m of sim.months){const yy=+m.key.slice(0,4)+543;if(yy!==y){y=yy;h+=`<div class="yr">พ.ศ. ${yy}</div>`}h+=`<div class="mrow${m.actual?' actual':''}${m.key===NOWK?' now':''}"><div class="a">${m.label}${m.actual?' <span class="badge">จริง</span>':''}</div><div class="b">${THB(m.close)}</div><div class="c"><b>${pct(m.rate,2)}</b> · จ่าย ${THB(m.paid)}</div><div class="d">ดอก <b>${THB(m.interest)}</b> · ต้น ${THB(m.pp)}</div></div>`}
   $('sched').innerHTML=h||'<div class="empty">ยังไม่มีข้อมูล</div>';
-  $('csvBtn').onclick=()=>{const head='เดือน,เงินต้นต้นเดือน,อัตราเฉลี่ย%,ดอกเบี้ย,ชำระ,ตัดเงินต้น,คงเหลือ,จริง/พยากรณ์\n';const body=sim.months.map(m=>[m.label,m.open.toFixed(2),m.rate.toFixed(4),m.interest.toFixed(2),m.paid.toFixed(2),m.pp.toFixed(2),m.close.toFixed(2),m.actual?'จริง':'พยากรณ์'].join(',')).join('\n');
-    const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+head+body],{type:'text/csv;charset=utf-8'}));a.download='loan-schedule.csv';a.click()}}
+  $('csvBtn').onclick=()=>{const head='เดือน,เงินต้นต้นเดือน,อัตราเฉลี่ย%,ดอกเบี้ย,ชำระ,ตัดเงินต้น,คงเหลือ,จริง/พยากรณ์\n';const body=sim.months.map(m=>[m.label,m.open.toFixed(2),m.rate.toFixed(4),m.interest.toFixed(2),m.paid.toFixed(2),m.pp.toFixed(2),m.close.toFixed(2),m.actual?'จริง':'พยากรณ์'].join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+head+body],{type:'text/csv;charset=utf-8'}));a.download='fin-tum-schedule.csv';a.click()}}
 
-// ═══════════ render: log ═══════════
-const KN={pay:'ชำระ',extra:'โปะ',draw:'เบิกกู้',fee:'ค่าธรรมเนียม'};
-function renderLog(){const ls=scopeLoans();const all=ls.flatMap(l=>l.txns.map(t=>({...t,loan:l})));const sum=f=>all.filter(f).reduce((s,e)=>s+e.amount,0);
+// ═══════════ log ═══════════
+function renderLog(){const ls=scopeLoans();const sim=simScope();const all=ls.flatMap(l=>l.txns.filter(t=>t.kind!=='event').map(t=>({...t,loan:l})));const sum=f=>all.filter(f).reduce((s,e)=>s+e.amount,0);
   $('logsum').innerHTML=`<div><div class="l">✅ จ่ายแล้ว</div><div class="v">${THB(sum(e=>e.kind==='pay'||e.kind==='extra'))}</div></div><div><div class="l">➕ โปะ</div><div class="v">${THB(sum(e=>e.kind==='extra'))}</div></div><div><div class="l">🏦 เบิก</div><div class="v">${THB(sum(e=>e.kind==='draw'))}</div></div>`;
-  $('log').innerHTML=all.length?all.sort((a,b)=>b.date.localeCompare(a.date)).map(e=>`<div class="entry"><div class="dt">${thD(e.date)}</div><div class="tx">${KN[e.kind]}${ls.length>1?` <span class="badge">${e.loan.name}</span>`:''}${e.note?`<div class="muted">${e.note}</div>`:''}</div><div class="am ${e.kind}">${e.kind==='draw'?'−':'+'}${THB(e.amount,2)}</div><button data-l="${e.loan.id}" data-id="${e.id}" aria-label="ลบ">×</button></div>`).join(''):'<div class="empty">ยังไม่มีรายการ<br>กด ➕ เพื่อจด</div>';
-  $('log').querySelectorAll('button').forEach(b=>b.onclick=()=>{const l=loanById(b.dataset.l);l.txns=l.txns.filter(x=>x.id!==b.dataset.id);save();dirtyAll();renderLog()})}
-const openSheet=()=>{$('eLoan').innerHTML=S.loans.map(l=>`<option value="${l.id}">${l.name}</option>`).join('');if(S.scope!=='all')$('eLoan').value=S.scope;$('eDate').value=TODAY;$('eKind').value='pay';$('eAmt').value=loanById($('eLoan').value).payment;$('eNote').value='';$('sheet').classList.add('show');$('sheetBg').classList.add('show')};
+  $('log').innerHTML=all.length?all.sort((a,b)=>b.date.localeCompare(a.date)).map(e=>{const c=sim.check[e.id];let chk='';if((e.kind==='pay'||e.kind==='extra')&&c){if(e.bankInt>0){const d=e.bankInt-c.appInt;chk=`<div class="chk ${Math.abs(d)<=1?'ok':'bad'}">${Math.abs(d)<=1?'✔ ดอกตรงธนาคาร':'⚠ ต่าง '+(d>0?'+':'')+THB(d,2)} · แอป ${THB(c.appInt,2)} / ธนาคาร ${THB(e.bankInt,2)}</div>`}else chk=`<div class="chk">ดอกตามแอป ${THB(c.appInt,2)} · ตัดต้น ${THB(e.amount-c.appInt,2)}</div>`}
+    return`<div class="entry"><div class="dt">${thD(e.date)}</div><div class="tx">${KN[e.kind]}${ls.length>1?` <span class="badge">${e.loan.name}</span>`:''}${e.note?`<div class="muted">${e.note}</div>`:''}${chk}</div><div class="am ${e.kind}">${e.kind==='draw'?'−':'+'}${THB(e.amount,2)}</div><button data-l="${e.loan.id}" data-id="${e.id}">×</button></div>`}).join(''):'<div class="empty">ยังไม่มีรายการ<br>กด ➕ เพื่อจด</div>';
+  $('log').querySelectorAll('button[data-id]').forEach(b=>b.onclick=()=>{const l=loanById(b.dataset.l);l.txns=l.txns.filter(x=>x.id!==b.dataset.id);save();dirtyAll();renderLog()})}
+function openSheet(loanId,kind='pay'){$('eLoan').innerHTML=S.loans.map(l=>`<option value="${l.id}">${l.name}</option>`).join('');$('eLoan').value=loanId||(S.scope!=='all'?S.scope:S.loans[0].id);$('eDate').value=TODAY;$('eKind').value=kind;$('eAmt').value=kind==='event'?'':loanById($('eLoan').value).payment;$('eBank').value='';$('eNote').value='';kindUI();$('sheet').classList.add('show');$('sheetBg').classList.add('show')}
 const closeSheet=()=>{$('sheet').classList.remove('show');$('sheetBg').classList.remove('show')};
-$('fab').onclick=openSheet;$('sheetBg').onclick=closeSheet;
-$('eLoan').onchange=()=>{$('eAmt').value=loanById($('eLoan').value).payment};
-$('eSave').onclick=()=>{const amt=Number($('eAmt').value);if(!$('eDate').value||!(amt>0)){toast('กรอกวันที่และจำนวนเงิน');return}
-  loanById($('eLoan').value).txns.push({id:uid(),date:$('eDate').value,kind:$('eKind').value,amount:amt,note:$('eNote').value.trim()});save();dirtyAll();closeSheet();renderLog();toast('บันทึกแล้ว')};
+const kindUI=()=>{const k=$('eKind').value;$('eBankL').style.display=(k==='pay'||k==='extra')?'':'none';$('eAmtL').textContent=k==='event'?'จำนวนโปะ (฿) — ใส่ 0 ถ้าเป็นแค่บันทึก':'จำนวน (฿)';$('sheetT').textContent=k==='event'?'📍 เพิ่มเหตุการณ์':'✏️ จดรายการ'};
+$('eKind').onchange=kindUI;$('fab').onclick=()=>openSheet();$('sheetBg').onclick=closeSheet;$('eLoan').onchange=()=>{if($('eKind').value!=='event')$('eAmt').value=loanById($('eLoan').value).payment};
+$('eSave').onclick=()=>{const k=$('eKind').value;const amt=Number($('eAmt').value)||0;if(!$('eDate').value||(k!=='event'&&!(amt>0))){toast('กรอกวันที่และจำนวนเงิน');return}if(k==='event'&&!$('eNote').value.trim()){toast('ใส่ชื่อเหตุการณ์');return}
+  const t={id:uid(),date:$('eDate').value,kind:k,amount:amt,note:$('eNote').value.trim()};const b=Number($('eBank').value);if(b>0&&(k==='pay'||k==='extra'))t.bankInt=b;loanById($('eLoan').value).txns.push(t);save();dirtyAll();closeSheet();if(curTab==='log')renderLog();if(curTab==='dash')renderDash();toast('บันทึกแล้ว')};
 
-// ═══════════ render: settings ═══════════
+// paste → AI parse
+$('parseBtn').onclick=async()=>{const txt=$('pasteIn').value.trim();if(!txt){toast('แปะข้อความก่อน');return}if(!AI.key){toast('ใส่ API key ในแท็บแชทก่อน');return}$('parseBtn').disabled=true;$('parsed').innerHTML='<div class="muted">กำลังแกะ…</div>';
+  try{const sys=`แปลงข้อความรายการสินเชื่อจากแอปธนาคารไทยเป็น JSON array เท่านั้น ไม่มีคำอธิบาย รูปแบบ: [{"date":"YYYY-MM-DD","kind":"pay|extra|draw|fee","amount":number,"bankInt":number|null,"note":"..."}] กติกา: ปี พ.ศ. ให้ลบ 543 เป็น ค.ศ.; "เบิกเงินกู้" = draw; "ชำระ/โอน +" = pay; รายการที่มีแต่ยอดดอกเบี้ยติดลบ (เช่น -2,305.17 ยอดเงินต้นคงค้าง) ไม่ใช่รายการจ่าย ให้ใส่เป็น bankInt ของรายการ pay ถัดไปในวันเดียวกันถ้ามี มิฉะนั้นข้ามไป; note สั้นๆ ภาษาไทย`;
+    const res=await fetch(AI.endpoint,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+AI.key},body:JSON.stringify({model:AI.model,messages:[{role:'system',content:sys},{role:'user',content:txt}],max_tokens:800,temperature:0})});const j=await res.json();let out=j.choices?.[0]?.message?.content||'';out=out.replace(/```json|```/g,'').trim();const arr=JSON.parse(out.slice(out.indexOf('['),out.lastIndexOf(']')+1));
+    if(!arr.length)throw new Error('ไม่พบรายการ');
+    $('parsed').innerHTML=`<div class="parsed">${arr.map((t,i)=>`<div><span>${t.date} ${KN[t.kind]||t.kind}${t.note?' · '+t.note:''}${t.bankInt?' · ดอก '+THB(t.bankInt,2):''}</span><b>${THB(t.amount,2)}</b></div>`).join('')}</div><label style="margin-top:8px"><span>บันทึกลงสัญญา</span><select id="pLoan">${S.loans.map(l=>`<option value="${l.id}">${l.name}</option>`).join('')}</select></label><button class="btn primary block" id="pSave">✔ บันทึก ${arr.length} รายการ</button>`;
+    if(S.scope!=='all')$('pLoan').value=S.scope;
+    $('pSave').onclick=()=>{const l=loanById($('pLoan').value);for(const t of arr){if(!t.date||!(t.amount>0))continue;const o={id:uid(),date:t.date,kind:['pay','extra','draw','fee'].includes(t.kind)?t.kind:'pay',amount:+t.amount,note:t.note||''};if(t.bankInt>0)o.bankInt=+t.bankInt;l.txns.push(o)}save();dirtyAll();$('parsed').innerHTML='';$('pasteIn').value='';renderLog();toast('บันทึกแล้ว')}}
+  catch(e){$('parsed').innerHTML=`<div class="al bad" style="margin-top:8px"><span class="ic">⚠️</span><span class="t">แกะไม่สำเร็จ: ${e.message}</span></div>`}
+  $('parseBtn').disabled=false};
+
+// ═══════════ slip OCR ═══════════
+const TH_MON={'ม.ค':1,'ก.พ':2,'มี.ค':3,'เม.ย':4,'พ.ค':5,'มิ.ย':6,'ก.ค':7,'ส.ค':8,'ก.ย':9,'ต.ค':10,'พ.ย':11,'ธ.ค':12};
+function loadTess(){return new Promise((ok,err)=>{if(window.Tesseract)return ok();const sc=document.createElement('script');sc.src='https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.1.1/tesseract.min.js';sc.onload=ok;sc.onerror=()=>err(new Error('โหลด OCR ไม่ได้ (ต้องต่อเน็ตครั้งแรก)'));document.head.appendChild(sc)})}
+function prepImg(file){return new Promise(ok=>{const img=new Image();img.onload=()=>{const W=Math.max(img.width,1400);const sc=W/img.width;const c=document.createElement('canvas');c.width=W;c.height=Math.round(img.height*sc);const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(img,0,0,c.width,c.height);const d=x.getImageData(0,0,c.width,c.height);const a=d.data;for(let i=0;i<a.length;i+=4){const g=a[i]*.3+a[i+1]*.59+a[i+2]*.11;const v=g>165?255:g<90?0:g;a[i]=a[i+1]=a[i+2]=v}x.putImageData(d,0,0);ok({url:c.toDataURL('image/png'),thumb:img.src})};img.src=URL.createObjectURL(file)})}
+const num=t=>{const m=String(t).replace(/[,\s]/g,'').match(/-?\d+(?:\.\d{1,2})?/);return m?+m[0]:null};
+function parseSlip(text){text=text.replace(/\u0e4d\u0e32/g,'\u0e33').replace(/\u0e33\u0e32/g,'\u0e33');
+  const L=text.split('\n').map(x=>x.replace(/\s+/g,' ').trim()).filter(Boolean);const r={};const nums=l=>[...l.matchAll(/\d{1,3}(?:,\d{3})*(?:\.\d{2})|\d+\.\d{2}/g)].map(m=>+m[0].replace(/,/g,''));
+  for(const l of L){
+    const d=l.match(/(\d{1,2})\s*([ก-๙]{1,3}\.?[ก-๙]{0,2}\.?)\s*(25\d{2})/);if(d&&!r.date){const mk=Object.keys(TH_MON).find(k=>d[2].replace(/\./g,'').startsWith(k.replace(/\./g,'').slice(0,2)));if(mk)r.date=`${+d[3]-543}-${String(TH_MON[mk]).padStart(2,'0')}-${String(+d[1]).padStart(2,'0')}`}
+    const ac=l.match(/(\d)\s*-\s*(\d{5})\s*-\s*[X\dx]/g);if(ac)(r.accts??=[]).push(...ac.map(a=>a.replace(/\s/g,'').match(/\d{5}/)[0]));
+    const n=nums(l);if(!n.length)continue;const v=n[n.length-1];
+    if(/จำนวนเงิน/.test(l)&&r.amount==null)r.amount=v;
+    else if(/ดอก/.test(l)&&/ชำระ|ชาระ/.test(l)&&!/ค้าง|คาง/.test(l)&&r.bankInt==null)r.bankInt=v;
+    else if(/ต้น|ตน/.test(l)&&/คงค้าง|คงคาง|คงคัาง/.test(l)&&r.outstanding==null)r.outstanding=v;
+    else if(/ยอดเงินที่ชำระ|ยอดเงินทีชำระ|เงินที่ชำระ/.test(l)&&!/ดอก/.test(l)&&r.principalPaid==null)r.principalPaid=v;
+    else if(/FEE|LTC|ธรรมเนียม/i.test(l)&&r.fee==null)r.fee=v;
+    else if(/ใบเสร็จ/.test(l))r.receipt=l.match(/[\d\-\/]{6,}/)?.[0];
+  }
+  const all=[...text.matchAll(/\d{1,3}(?:,\d{3})+\.\d{2}/g)].map(m=>+m[0].replace(/,/g,''));
+  if(r.outstanding==null&&all.length)r.outstanding=Math.max(...all);
+  if(r.amount==null&&r.principalPaid!=null&&r.bankInt!=null)r.amount=+(r.principalPaid+r.bankInt).toFixed(2);
+  if(r.amount==null){const cand=all.filter(x=>x!==r.outstanding);if(cand.length)r.amount=cand[0]}
+  return r}
+async function readSlip(file){const out=$('slipOut');out.innerHTML=`<div class="muted">กำลังเตรียมภาพ…</div><div class="prg"><i id="slipPrg"></i></div>`;
+  try{const{url,thumb}=await prepImg(file);out.insertAdjacentHTML('afterbegin',`<img class="slipimg" src="${thumb}">`);await loadTess();const w=await Tesseract.createWorker('tha+eng',1,{logger:m=>{if(m.status==='recognizing text')$('slipPrg').style.width=(m.progress*100)+'%';else if(/loading|initializ/.test(m.status))$('slipPrg').style.width='5%'}});
+    const{data:{text}}=await w.recognize(url);await w.terminate();let r=parseSlip(text);
+    if((r.amount==null||r.date==null)&&AI.key){try{const res=await fetch(AI.endpoint,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+AI.key},body:JSON.stringify({model:AI.model,messages:[{role:'system',content:'จากข้อความ OCR สลิปโอนเงินชำระสินเชื่อของธนาคารไทย (อาจสะกดผิด) ตอบ JSON เท่านั้น: {"date":"YYYY-MM-DD (พ.ศ.-543)","amount":จำนวนเงินที่โอน,"bankInt":ยอดดอกเบี้ยที่ชำระ,"principalPaid":ยอดเงินต้นที่ชำระ,"outstanding":ยอดเงินต้นคงค้าง,"acct":"เลข 5 หลักกลางของบัญชีปลายทาง"} ค่าที่ไม่พบให้ null'},{role:'user',content:text}],max_tokens:300,temperature:0})});const j=await res.json();let o=j.choices?.[0]?.message?.content||'';o=o.replace(/```json|```/g,'');const a=JSON.parse(o.slice(o.indexOf('{'),o.lastIndexOf('}')+1));r={...r,...Object.fromEntries(Object.entries(a).filter(([k,v])=>v!=null&&r[k]==null))};if(a.acct)(r.accts??=[]).push(String(a.acct))}catch(e){}}
+    showSlip(r,text)}
+  catch(e){out.innerHTML=`<div class="al bad" style="margin-top:8px"><span class="ic">⚠️</span><span class="t">อ่านไม่สำเร็จ: ${e.message}</span></div>`}}
+function showSlip(r,text){
+  const match=S.loans.find(l=>(r.accts||[]).some(a=>String(l.acct).replace(/\D/g,'').includes(a)))||(S.scope!=='all'?loanById(S.scope):S.loans[0]);
+  const sim=simScope();const appOut=match?simAll()[match.id].snap.bal:null;
+  $('slipOut').querySelector('.prg')?.remove();$('slipOut').querySelectorAll('.muted').forEach(x=>x.remove());
+  $('slipOut').insertAdjacentHTML('beforeend',`<div class="parsed" style="padding:12px">
+    <div class="muted" style="display:block;border:0;padding:0 0 6px">ตรวจแล้วแก้ได้ก่อนบันทึก${(r.accts||[]).length?` · บัญชี …${r.accts[0]} → ${match?match.name:'ไม่พบสัญญา'}`:''}</div>
+    <label><span>สัญญา</span><select id="s_loan">${S.loans.map(l=>`<option value="${l.id}" ${match&&l.id===match.id?'selected':''}>${l.name}</option>`).join('')}</select></label>
+    <div class="row"><label><span>วันที่</span><input type="date" id="s_date" value="${r.date||TODAY}"></label><label><span>จำนวนที่โอน (฿)</span><input type="number" inputmode="decimal" id="s_amt" step="0.01" value="${r.amount??''}"></label></div>
+    <div class="row"><label><span>ดอกที่ชำระ (฿)</span><input type="number" inputmode="decimal" id="s_int" step="0.01" value="${r.bankInt??''}"></label><label><span>ต้นคงค้างหลังจ่าย (฿)</span><input type="number" inputmode="decimal" id="s_out" step="0.01" value="${r.outstanding??''}"></label></div>
+    <label><span>ประเภท</span><select id="s_kind"><option value="pay">✅ ชำระค่างวด</option><option value="extra">➕ โปะเพิ่ม</option></select></label>
+    <div class="calc" id="s_chk" style="margin:0 0 10px"></div>
+    <button class="btn primary block" id="s_save">✔ บันทึกรายการ</button>
+    <details style="margin-top:8px"><summary class="muted">ข้อความที่ OCR อ่านได้</summary><pre style="white-space:pre-wrap;font-size:12px;color:var(--muted)">${esc(text).slice(0,1500)}</pre></details></div>`);
+  const chk=()=>{const amt=+$('s_amt').value,bi=+$('s_int').value,o=+$('s_out').value;const l=loanById($('s_loan').value);let h='';
+    if(amt>0&&bi>=0)h+=`<div><span>ตัดเงินต้น</span><b>${THB(amt-bi,2)} ฿</b></div>`;
+    if(o>0&&l){const s=simulate({...l,txns:[...l.txns,{id:'tmp',date:$('s_date').value,kind:$('s_kind').value,amount:amt}]});const after=s.months.find(m=>m.key===$('s_date').value.slice(0,7));const bal=(()=>{let b=0;const ds=$('s_date').value;for(const t of [...l.txns,{date:ds,kind:'pay',amount:amt}].sort((a,b)=>a.date.localeCompare(b.date))){if(t.date>ds)break;if(t.kind==='draw')b+=t.amount}return b})();const est=s.check?.tmp;const appAfter=est?est.bal-(amt-est.appInt):null;
+      if(appAfter!=null){const d=o-appAfter;h+=`<div><span>ต้นคงค้างตามแอป</span><b>${THB(appAfter,2)}</b></div><div class="${Math.abs(d)<=1?'':'tot'}" style="color:${Math.abs(d)<=1?'var(--ok)':'var(--bad)'}"><span>${Math.abs(d)<=1?'✔ ตรงกับสลิป':'⚠ ต่างจากสลิป'}</span><b>${d>=0?'+':''}${THB(d,2)}</b></div>`;if(est&&bi>0){const di=bi-est.appInt;h+=`<div style="color:${Math.abs(di)<=1?'var(--ok)':'var(--bad)'}"><span>${Math.abs(di)<=1?'✔ ดอกตรง':'⚠ ดอกต่าง'} (แอป ${THB(est.appInt,2)})</span><b>${di>=0?'+':''}${THB(di,2)}</b></div>`}}}
+    $('s_chk').innerHTML=h||'<span class="muted">กรอกจำนวนเงินเพื่อตรวจ</span>'};
+  ['s_amt','s_int','s_out','s_date','s_loan','s_kind'].forEach(id=>$(id).oninput=chk);chk();
+  $('s_save').onclick=()=>{const amt=+$('s_amt').value;if(!(amt>0)){toast('ใส่จำนวนเงิน');return}const l=loanById($('s_loan').value);if(l.txns.some(t=>t.date===$('s_date').value&&Math.abs(t.amount-amt)<0.01)){if(!confirm('มีรายการวันเดียวกันยอดเท่ากันอยู่แล้ว บันทึกซ้ำ?'))return}
+    const t={id:uid(),date:$('s_date').value,kind:$('s_kind').value,amount:amt,note:'จากสลิป'+(r.receipt?' ใบเสร็จ '+r.receipt:'')};const bi=+$('s_int').value;if(bi>0)t.bankInt=bi;l.txns.push(t);save();dirtyAll();$('slipOut').innerHTML='';renderLog();toast('จดจากสลิปแล้ว ✔')}}
+$('slipCam').onclick=()=>$('slipCamIn').click();$('slipPick').onclick=()=>$('slipPickIn').click();
+$('slipCamIn').onchange=e=>{if(e.target.files[0])readSlip(e.target.files[0]);e.target.value=''};$('slipPickIn').onchange=e=>{if(e.target.files[0])readSlip(e.target.files[0]);e.target.value=''};
+
+// ═══════════ settings ═══════════
 let setLoan=S.loans[0]?.id;
 function renderSettings(){
   if(!loanById(setLoan))setLoan=S.loans[0]?.id;
   $('loanpick').innerHTML=S.loans.map(l=>`<button data-id="${l.id}" class="${l.id===setLoan?'on':''}">${l.name}</button>`).join('')+`<button data-id="__new">+ เพิ่มสัญญา</button>`;
-  $('loanpick').querySelectorAll('button').forEach(b=>b.onclick=()=>{if(b.dataset.id==='__new'){const l={id:uid(),name:'สัญญาใหม่',acct:'',principal:100000,startDate:TODAY,payDay:25,payment:2000,extra:0,termMonths:60,rateMode:'flat',flatRate:5,tiers:[{id:uid(),upTo:null,rate:5}],plan:null,txns:[]};S.loans.push(l);setLoan=l.id;save();renderScope()}else setLoan=b.dataset.id;renderSettings()});
-  const l=loanById(setLoan);if(!l){$('setBody').innerHTML='';return}
-  const tier=l.rateMode==='tier';const sorted=sortedTiers(l);
+  $('loanpick').querySelectorAll('button').forEach(b=>b.onclick=()=>{if(b.dataset.id==='__new'){const l={id:uid(),name:'สัญญาใหม่',acct:'',type:'other',bank:'',purpose:'',collateral:'',note:'',principal:100000,startDate:TODAY,payDay:25,payment:2000,extra:0,termMonths:60,rateMode:'flat',flatRate:5,rates:[],tiers:[{id:uid(),upTo:null,rate:5}],plan:null,txns:[]};S.loans.push(l);setLoan=l.id;save();renderScope()}else setLoan=b.dataset.id;renderSettings()});
+  const l=loanById(setLoan);if(!l){$('setBody').innerHTML='';return}const tier=l.rateMode==='tier',sorted=sortedTiers(l);
   $('setBody').innerHTML=`
-  <div class="card"><h2>สัญญา</h2>
+  <div class="card"><h2>📇 สัญญา</h2>
+    <div class="profhd">${avatar(l)}<div style="flex:1"><div class="t">${l.name}</div><div class="s">รูปโปรไฟล์ เช่น รูปบ้าน รูปรถ</div><div class="row" style="margin-top:6px"><button class="btn ghost sm" id="phBtn">📷 ${l.photo?'เปลี่ยนรูป':'ใส่รูป'}</button>${l.photo?'<button class="btn danger sm" id="phDel">ลบรูป</button>':''}</div></div><input type="file" id="phIn" accept="image/*" style="display:none"></div>
     <label><span>ชื่อ</span><input id="f_name" value="${l.name}"></label>
-    <label><span>เลขที่สัญญา (ท้าย)</span><input id="f_acct" value="${l.acct}"></label>
-    <label><span>วงเงิน (฿)</span><input type="number" inputmode="decimal" id="f_principal" step="1000" value="${l.principal}"></label>
-    <label><span>วันเบิกเงินกู้</span><input type="date" id="f_startDate" value="${l.startDate}"></label>
-    <label><span>จ่ายทุกวันที่</span><input type="number" inputmode="numeric" id="f_payDay" min="1" max="31" value="${l.payDay}"></label>
-    <label><span>ค่างวด/เดือน (฿)</span><input type="number" inputmode="decimal" id="f_payment" step="500" value="${l.payment}"></label>
-    <label><span>โปะเพิ่ม/เดือน (฿)</span><input type="number" inputmode="decimal" id="f_extra" step="500" value="${l.extra}"></label>
-    <label><span>อยากหมดใน (เดือน)</span><div class="row"><input type="number" inputmode="numeric" id="f_termMonths" step="12" value="${l.termMonths}"><button class="btn ghost" id="solveBtn">🧮 หาค่างวด</button></div></label>
+    <div class="row"><label><span>เลขที่ (ท้าย)</span><input id="f_acct" value="${l.acct}"></label><label><span>ประเภท</span><select id="f_type"><option value="home">🏠 บ้าน</option><option value="car">🚗 รถ</option><option value="personal">👤 ส่วนบุคคล</option><option value="mrta">🛡 MRTA</option><option value="other">📄 อื่นๆ</option></select></label></div>
+    <label><span>ธนาคาร / ผู้ให้กู้</span><input id="f_bank" value="${l.bank||''}"></label>
+    <label><span>เกี่ยวกับอะไร</span><input id="f_purpose" value="${l.purpose||''}"></label>
+    <label><span>หลักประกัน</span><input id="f_collateral" value="${l.collateral||''}"></label>
+    <label><span>หมายเหตุ</span><input id="f_note" value="${l.note||''}"></label>
+    <div class="row"><label><span>วงเงิน (฿)</span><input type="number" inputmode="decimal" id="f_principal" step="1000" value="${l.principal}"></label><label><span>วันเบิกเงินกู้</span><input type="date" id="f_startDate" value="${l.startDate}"></label></div>
+    <div class="row"><label><span>สัญญากี่เดือน</span><input type="number" inputmode="numeric" id="f_termMonths" step="12" value="${l.termMonths}"></label><label><span>จ่ายทุกวันที่</span><input type="number" inputmode="numeric" id="f_payDay" min="1" max="31" value="${l.payDay}"></label></div>
+    <div class="row"><label><span>ค่างวด/เดือน (฿)</span><input type="number" inputmode="decimal" id="f_payment" step="500" value="${l.payment}"></label><label><span>โปะเพิ่ม/เดือน (฿)</span><input type="number" inputmode="decimal" id="f_extra" step="500" value="${l.extra||0}"></label></div>
+    <button class="btn ghost block" id="solveBtn">🧮 หาค่างวดให้หมดใน ${l.termMonths} เดือน</button>
   </div>
   <div class="card"><h2>% ดอกเบี้ย (รายวัน ÷365)</h2>
     <div class="seg"><button id="modeFlat" class="${tier?'':'on'}">อัตราเดียว</button><button id="modeTier" class="${tier?'on':''}">ขั้นบันได</button></div>
-    <div id="flatBox" style="display:${tier?'none':''}"><label><span>% ต่อปี</span><input type="number" inputmode="decimal" id="f_flatRate" step="0.0001" value="${l.flatRate}"></label></div>
-    <div id="tierBox" style="display:${tier?'':'none'}">
-      <div class="tier" style="margin-bottom:2px"><i></i><span class="muted" style="font-size:12px">ต้นไม่เกิน (฿)</span><span class="muted" style="font-size:12px">%/ปี</span><span></span></div>
-      ${l.tiers.map(t=>{const ci=sorted.findIndex(s=>s.id===t.id);return`<div class="tier" data-t="${t.id}"><i style="background:${COLORS[ci%6]}"></i>${t.upTo==null?'<div class="rest">ส่วนที่เหลือทั้งหมด</div>':`<input type="number" inputmode="decimal" step="100000" value="${t.upTo}" data-f="upTo">`}<input type="number" inputmode="decimal" step="0.05" value="${t.rate}" data-f="rate">${t.upTo==null?'<span></span>':'<button aria-label="ลบ">×</button>'}</div>`}).join('')}
-      <button class="btn ghost sm" id="addTier">+ เพิ่มขั้น</button>
-    </div>
+    <div id="flatBox" style="display:${tier?'none':''}"><label><span>% ต่อปี (เริ่มต้น)</span><input type="number" inputmode="decimal" id="f_flatRate" step="0.0001" value="${l.flatRate}"></label>
+      <div class="muted" style="margin-bottom:6px">📈 ประวัติ / กำหนดการเปลี่ยน % (เช่น หมดโปรปีที่ 3 → MRR-1.5)</div>
+      <div class="rl" style="font-size:12px;color:var(--muted)"><span>ตั้งแต่วันที่</span><span>% ใหม่</span><span></span></div>
+      ${[...l.rates].sort((a,b)=>a.from.localeCompare(b.from)).map(r=>`<div class="rl" data-r="${r.id}"><input type="date" value="${r.from}" data-f="from"><input type="number" inputmode="decimal" step="0.0001" value="${r.rate}" data-f="rate"><button>×</button></div>`).join('')}
+      <button class="btn ghost sm" id="addRate">+ เพิ่มการเปลี่ยน %</button></div>
+    <div id="tierBox" style="display:${tier?'':'none'}"><div class="tier" style="margin-bottom:2px"><i></i><span class="muted" style="font-size:12px">ต้นไม่เกิน (฿)</span><span class="muted" style="font-size:12px">%/ปี</span><span></span></div>
+      ${l.tiers.map(t=>{const ci=sorted.findIndex(s=>s.id===t.id);return`<div class="tier" data-t="${t.id}"><i style="background:${COLORS[ci%6]}"></i>${t.upTo==null?'<div class="rest">ส่วนที่เหลือทั้งหมด</div>':`<input type="number" inputmode="decimal" step="100000" value="${t.upTo}" data-f="upTo">`}<input type="number" inputmode="decimal" step="0.05" value="${t.rate}" data-f="rate">${t.upTo==null?'<span></span>':'<button>×</button>'}</div>`}).join('')}
+      <button class="btn ghost sm" id="addTier">+ เพิ่มขั้น</button></div>
     <div class="calc" id="calc"></div>
   </div>
-  <div class="card"><h2>🔍 หา % จริงจากสลิป</h2>
-    <p class="muted" style="margin:0 0 10px">ใส่ดอกที่ธนาคารคิด + กี่วัน + เงินต้น → ได้ % จริง</p>
+  <div class="card"><h2>🔍 หา % จริงจากสลิป</h2><p class="muted" style="margin:0 0 10px">ใส่ดอกที่ธนาคารคิด + กี่วัน + เงินต้น → ได้ % จริง</p>
     <div class="row"><label><span>ดอก (฿)</span><input type="number" inputmode="decimal" id="r_int" value="2305.17"></label><label><span>วัน</span><input type="number" inputmode="numeric" id="r_days" value="12"></label></div>
-    <label><span>เงินต้น (฿)</span><input type="number" inputmode="decimal" id="r_bal" value="${l.principal}"></label>
-    <div class="calc" id="r_out"></div>
-  </div>
+    <label><span>เงินต้น (฿)</span><input type="number" inputmode="decimal" id="r_bal" value="${l.principal}"></label><div class="calc" id="r_out"></div></div>
   ${S.loans.length>1?`<button class="btn danger block" id="delLoan" style="margin-bottom:12px">ลบสัญญานี้</button>`:''}`;
   const bind=(id,key,num=true)=>{const el=$(id);el.oninput=()=>{l[key]=num?(el.value===''?NaN:Number(el.value)):el.value;save();dirtyAll();if(key==='name')renderScope();renderCalc(l)}};
-  bind('f_name','name',false);bind('f_acct','acct',false);bind('f_principal','principal');bind('f_startDate','startDate',false);bind('f_payDay','payDay');bind('f_payment','payment');bind('f_extra','extra');bind('f_termMonths','termMonths');bind('f_flatRate','flatRate');
+  ['name','acct','bank','purpose','collateral','note','startDate'].forEach(k=>bind('f_'+k,k,false));['principal','termMonths','payDay','payment','extra','flatRate'].forEach(k=>bind('f_'+k,k));
+  $('phBtn').onclick=()=>$('phIn').click();$('phIn').onchange=e=>{const f=e.target.files[0];if(!f)return;const img=new Image();img.onload=()=>{const M=480;const sc=Math.min(1,M/Math.max(img.width,img.height));const c=document.createElement('canvas');c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);c.getContext('2d').drawImage(img,0,0,c.width,c.height);l.photo=c.toDataURL('image/jpeg',0.8);save();dirtyAll();renderScope();renderSettings();toast('ใส่รูปแล้ว')};img.src=URL.createObjectURL(f);e.target.value=''};
+  const pd=$('phDel');if(pd)pd.onclick=()=>{delete l.photo;save();dirtyAll();renderScope();renderSettings()};
+  $('f_type').value=l.type||'other';$('f_type').onchange=e=>{l.type=e.target.value;save();dirtyAll()};
   $('modeFlat').onclick=()=>{l.rateMode='flat';save();dirtyAll();renderSettings()};$('modeTier').onclick=()=>{l.rateMode='tier';save();dirtyAll();renderSettings()};
+  $('setBody').querySelectorAll('.rl[data-r]').forEach(d=>{const r=l.rates.find(x=>x.id===d.dataset.r);d.querySelectorAll('input').forEach(inp=>inp.oninput=()=>{r[inp.dataset.f]=inp.dataset.f==='rate'?Number(inp.value):inp.value;save();dirtyAll()});d.querySelector('button').onclick=()=>{l.rates=l.rates.filter(x=>x.id!==r.id);save();dirtyAll();renderSettings()}});
+  $('addRate').onclick=()=>{l.rates.push({id:uid(),from:addM(TODAY,12),rate:l.flatRate+0.5,note:''});save();dirtyAll();renderSettings()};
   $('setBody').querySelectorAll('.tier[data-t]').forEach(d=>{const t=l.tiers.find(x=>x.id===d.dataset.t);d.querySelectorAll('input').forEach(inp=>inp.oninput=()=>{t[inp.dataset.f]=inp.value===''?NaN:Number(inp.value);save();dirtyAll();renderCalc(l)});const b=d.querySelector('button');if(b)b.onclick=()=>{l.tiers=l.tiers.filter(x=>x.id!==t.id);save();dirtyAll();renderSettings()}});
   $('addTier').onclick=()=>{const caps=l.tiers.filter(t=>t.upTo!=null).map(t=>t.upTo);const next=(caps.length?Math.max(...caps):0)+500000;l.tiers=[...l.tiers.filter(t=>t.upTo!=null),{id:uid(),upTo:next,rate:3},...l.tiers.filter(t=>t.upTo==null)];save();dirtyAll();renderSettings()};
-  $('solveBtn').onclick=()=>{l.payment=solvePayment(l,l.termMonths);$('f_payment').value=l.payment;save();dirtyAll();toast(`ค่างวด ${THB(l.payment)} บาท/เดือน`)};
-  const rc=()=>{const i=+$('r_int').value,d=+$('r_days').value,b=+$('r_bal').value;const r=b>0&&d>0?i*365/(d*b)*100:0;$('r_out').innerHTML=`<div><span>% จริง</span><b>${pct(r,4)}/ปี</b></div><div class="muted" style="display:block">${THB(i,2)} × 365 ÷ (${d} × ${THB(b)}) · วันละ ${THB(i/d,2)} ฿</div><button class="btn ghost sm" id="useRate" style="margin-top:8px">✔ ใช้ % นี้</button>`;$('useRate').onclick=()=>{l.rateMode='flat';l.flatRate=+r.toFixed(4);save();dirtyAll();renderSettings();toast('ตั้งอัตราแล้ว')}};
-  ['r_int','r_days','r_bal'].forEach(id=>$(id).oninput=rc);rc();
+  $('solveBtn').onclick=()=>{l.payment=solvePayment(l,l.termMonths);$('f_payment').value=l.payment;save();dirtyAll();toast(`ค่างวด ${THB(l.payment)} ฿/เดือน`)};
+  const rc=()=>{const i=+$('r_int').value,d=+$('r_days').value,b=+$('r_bal').value;const r=b>0&&d>0?i*365/(d*b)*100:0;$('r_out').innerHTML=`<div><span>% จริง</span><b>${pct(r,4)}/ปี</b></div><div class="muted" style="display:block">${THB(i,2)} × 365 ÷ (${d} × ${THB(b)}) · วันละ ${THB(i/d,2)} ฿</div><button class="btn ghost sm" id="useRate" style="margin-top:8px">✔ ใช้ % นี้</button>`;$('useRate').onclick=()=>{l.rateMode='flat';l.flatRate=+r.toFixed(4);save();dirtyAll();renderSettings();toast('ตั้ง % แล้ว')}};['r_int','r_days','r_bal'].forEach(id=>$(id).oninput=rc);rc();
   const del=$('delLoan');if(del)del.onclick=()=>{if(confirm(`ลบ ${l.name} และรายการทั้งหมด?`)){S.loans=S.loans.filter(x=>x.id!==l.id);if(S.scope===l.id)S.scope='all';save();renderScope();dirtyAll();renderSettings()}};
-  renderCalc(l);
-}
-function renderCalc(l){const el=$('calc');if(!el)return;const{rate,parts}=yearlyRate(l.principal,l,sortedTiers(l));const daily=l.principal*rate/100/365;
-  el.innerHTML=`<div class="muted" style="display:block;margin-bottom:4px">ที่ต้น ${THB(l.principal)} ฿</div>`+(l.rateMode==='tier'?parts.filter(p=>p.amount>0).map(p=>`<div><span>${THB(p.amount)} × ${pct(p.rate)}</span><span>${THB(p.amount*p.rate/100/365,2)}/วัน</span></div>`).join(''):'')+`<div class="tot"><span>เฉลี่ย ${pct(rate,4)}</span><span>${THB(daily,2)} ฿/วัน</span></div><div><span>≈ 30 วัน</span><span>${THB(daily*30)} ฿</span></div>`}
-$('ai_key').value=AI.key;$('ai_model').value=AI.model;$('ai_ep').value=AI.endpoint;
-$('ai_key').oninput=e=>{AI.key=e.target.value.trim();saveAI()};$('ai_model').onchange=e=>{AI.model=e.target.value;saveAI()};$('ai_ep').oninput=e=>{AI.endpoint=e.target.value.trim()||'https://api.opentyphoon.ai/v1/chat/completions';saveAI()};
-$('expBtn').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S,null,1)],{type:'application/json'}));a.download=`loan-backup-${TODAY}.json`;a.click()};
-$('impBtn').onclick=()=>$('impFile').click();
-$('impFile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const v=JSON.parse(r.result);if(!v.loans)throw 0;S=v;save();renderScope();dirtyAll();renderSettings();toast('นำเข้าแล้ว')}catch(_){toast('ไฟล์ไม่ถูกต้อง')}};r.readAsText(f);e.target.value=''};
+  renderCalc(l)}
+function renderCalc(l){const el=$('calc');if(!el)return;const{rate,parts}=yearlyRate(l.principal,l,sortedTiers(l),TODAY);const daily=l.principal*rate/100/365;el.innerHTML=`<div class="muted" style="display:block;margin-bottom:4px">ที่ต้น ${THB(l.principal)} ฿</div>`+(l.rateMode==='tier'?parts.filter(p=>p.amount>0).map(p=>`<div><span>${THB(p.amount)} × ${pct(p.rate)}</span><span>${THB(p.amount*p.rate/100/365,2)}/วัน</span></div>`).join(''):'')+`<div class="tot"><span>เฉลี่ย ${pct(rate,4)}</span><span>${THB(daily,2)} ฿/วัน</span></div><div><span>≈ 30 วัน</span><span>${THB(daily*30)} ฿</span></div>`}
+// globals
+const gbind=(id,key,num=true,after)=>{const el=$(id);el.value=S[key]??'';el.oninput=()=>{S[key]=num?Number(el.value)||0:el.value;save();dirtyAll();after&&after()}};
+gbind('g_income','income');gbind('g_fund','fund');gbind('g_goal','goal',false);gbind('g_goalName','goalName',false);gbind('g_lead','lead');
+const roUI=()=>{$('ro_on').classList.toggle('on',!!S.rollover);$('ro_off').classList.toggle('on',!S.rollover)};roUI();$('ro_on').onclick=()=>{S.rollover=true;save();dirtyAll();roUI()};$('ro_off').onclick=()=>{S.rollover=false;save();dirtyAll();roUI()};
+$('notiBtn').onclick=async()=>{if(!('Notification' in window)){toast('เบราว์เซอร์นี้ไม่รองรับ');return}const p=await Notification.requestPermission();toast(p==='granted'?'เปิดแจ้งเตือนแล้ว (เตือนตอนเปิดแอป)':'ไม่ได้รับอนุญาต')};
+$('icsBtn').onclick=()=>{let ics='BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Fin Tum//TH\n';for(const l of S.loans){const nd=nextDue(l).replace(/-/g,'');ics+=`BEGIN:VEVENT\nUID:${l.id}@fintum\nDTSTART;VALUE=DATE:${nd}\nRRULE:FREQ=MONTHLY;BYMONTHDAY=${Math.min(l.payDay,28)}\nSUMMARY:จ่าย ${l.name} ${THB(l.payment+(l.extra||0))} บาท\nDESCRIPTION:Fin ตั้ม\nBEGIN:VALARM\nTRIGGER:-P${S.lead||3}D\nACTION:DISPLAY\nDESCRIPTION:ใกล้ถึงกำหนดจ่าย ${l.name}\nEND:VALARM\nEND:VEVENT\n`}ics+='END:VCALENDAR';const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([ics],{type:'text/calendar'}));a.download='fin-tum.ics';a.click()};
+$('ai_key').value=AI.key;$('ai_model').value=AI.model;$('ai_ep').value=AI.endpoint;$('ai_key').oninput=e=>{AI.key=e.target.value.trim();saveAI()};$('ai_model').onchange=e=>{AI.model=e.target.value;saveAI()};$('ai_ep').oninput=e=>{AI.endpoint=e.target.value.trim()||'https://api.opentyphoon.ai/v1/chat/completions';saveAI()};
+$('expBtn').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S,null,1)],{type:'application/json'}));a.download=`fin-tum-${TODAY}.json`;a.click()};
+$('impBtn').onclick=()=>$('impFile').click();$('impFile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const v=JSON.parse(r.result);if(!v.loans)throw 0;S={...DEFAULT(),...v};save();renderScope();dirtyAll();renderSettings();toast('นำเข้าแล้ว')}catch(_){toast('ไฟล์ไม่ถูกต้อง')}};r.readAsText(f);e.target.value=''};
 $('resetBtn').onclick=()=>{if(confirm('ล้างข้อมูลทั้งหมด?')){S=DEFAULT();save();renderScope();dirtyAll();renderSettings()}};
 
-
-// ═══════════ AI chat (Typhoon) ═══════════
-const CHIPS=['📌 สรุปวันนี้','➕ โปะ 5,000 ช่วยแค่ไหน','❓ ทำไมดอกเดือนนี้เท่านี้','📅 จ่ายวันไหนคุ้มสุด','🧾 อธิบายรายการล่าสุด','🏁 หมดใน 10 ปี ต้องผ่อนเท่าไร'];
-function whatIf(l){const base=simulate(l,{useActual:true});return[1000,3000,5000,10000].map(x=>{const s=simulate({...l,extra:(l.extra||0)+x});return`โปะเพิ่ม ${THB(x)}/เดือน → หมดเร็วขึ้น ${base.months.length-s.months.length} เดือน ประหยัดดอกเบี้ย ${THB(base.tI-s.tI)} บาท`}).join('\n')}
-function buildContext(){
-  const lines=[`วันนี้ ${thD(TODAY)}`];
-  for(const l of S.loans){const s=simulate(l);const sn=s.snap;const nowK=TODAY.slice(0,7);const nm=s.months.find(m=>m.key===nowK);
-    lines.push(`\n## ${l.name} (เลขที่ ${l.acct})`,`- วงเงิน ${THB(l.principal)} บาท เริ่ม ${thD(l.startDate)} วันชำระประจำเดือน วันที่ ${l.payDay}`,
-      `- อัตราดอกเบี้ย ${l.rateMode==='flat'?pct(l.flatRate,4)+' ต่อปี':'ขั้นบันได: '+sortedTiers(l).map(t=>`${t.upTo==null?'ส่วนเกิน':'ไม่เกิน '+THB(t.upTo)} ${pct(t.rate)}`).join(', ')} คิดรายวัน (÷365) ตัดดอกเบี้ยค้างก่อนเงินต้น`,
-      `- เงินต้นคงค้าง ${THB(sn.bal,2)} ดอกเบี้ยค้าง ${THB(sn.accrued,2)} บาท ยอดที่ต้องชำระทั้งหมดวันนี้ ${THB(sn.bal+sn.accrued,2)} ดอกเบี้ยเดินวันละ ${THB(sn.daily,2)} บาท`,
-      `- ค่างวด ${THB(l.payment)} โปะเพิ่ม ${THB(l.extra||0)} /เดือน → คาดผ่อนหมด ${s.payoff?thD(s.payoff):'ไม่หมด (ค่างวดไม่พอ)'} รวม ${s.months.length} เดือน ดอกเบี้ยรวมทั้งสัญญา ${THB(s.tI)} บาท`,
-      nm?`- เดือนนี้: ดอกเบี้ย ${THB(nm.interest)} ชำระ ${THB(nm.paid)} ตัดเงินต้น ${THB(nm.pp)}`:'');
-    if(l.plan){const pm=l.plan.months.find(m=>m.key===nowK);if(pm&&nm)lines.push(`- เทียบแผน (ล็อก ${thD(l.plan.lockedAt)}): เงินต้นแผน ${THB(pm.close)} จริง ${THB(nm.close)} (${nm.close<=pm.close?'ต่ำกว่าแผน':'สูงกว่าแผน'} ${THB(Math.abs(pm.close-nm.close))}) แผนผ่อนหมด ${thM(l.plan.months.at(-1).key)} vs พยากรณ์ ${s.payoff?thM(s.payoff.slice(0,7)):'-'}`)}
-    const tx=[...l.txns].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,8);if(tx.length)lines.push('- รายการล่าสุด: '+tx.map(t=>`${thD(t.date)} ${KN[t.kind]} ${THB(t.amount,2)}${t.note?' ('+t.note+')':''}`).join('; '));
-    lines.push('- จำลอง: '+whatIf(l).replace(/\n/g,'; '));
-    const next=s.months.filter(m=>m.key>nowK).slice(0,3);if(next.length)lines.push('- 3 เดือนถัดไป (พยากรณ์): '+next.map(m=>`${m.label} ดอก ${THB(m.interest)} ต้น ${THB(m.pp)} คงเหลือ ${THB(m.close)}`).join('; '));
-  }
-  return lines.join('\n');}
-const SYS=()=>`คุณคือ "Fin ตั้ม" ผู้ช่วยการเงินส่วนตัวในแอปติดตามสินเชื่อของผู้ใช้ ตอบเป็นภาษาไทย กระชับ เป็นกันเอง ใช้ตัวเลขจากข้อมูลด้านล่างเท่านั้น ห้ามเดาตัวเลขที่ไม่มี ถ้าต้องคำนวณให้แสดงวิธีคิดสั้นๆ ดอกเบี้ยคิดรายวัน = เงินต้น × อัตรา ÷ 365 ถ้าผู้ใช้ถามเรื่องนอกเหนือข้อมูล ให้บอกว่าต้องเพิ่มข้อมูลในแอปก่อน ไม่ต้องใช้ markdown หัวข้อหรือตาราง ใช้ข้อความธรรมดาและขึ้นบรรทัดใหม่\n\n# ข้อมูลจากแอป\n${buildContext()}`;
-function renderChat(){
-  const setup=$('chatSetup');if(!AI.key){setup.style.display='';$('chatSetupBody').innerHTML=`<label><span>API key</span><input id="aiKey" type="password" placeholder="sk-…"></label><label><span>โมเดล</span><select id="aiModel"><option value="typhoon-v2.5-30b-a3b-instruct">typhoon-v2.5-30b-a3b-instruct (แนะนำ)</option><option value="typhoon-v2.1-12b-instruct">typhoon-v2.1-12b-instruct (เร็ว)</option></select></label><button class="btn primary block" id="aiSaveKey">บันทึก</button>`;$('aiModel').value=AI.model;$('aiSaveKey').onclick=()=>{AI.key=$('aiKey').value.trim();AI.model=$('aiModel').value;saveAI();renderChat()}}else setup.style.display='none';
-  $('chips').innerHTML=CHIPS.map(c=>`<button>${c}</button>`).join('')+`<button style="color:var(--bad)" id="chatClear">ล้างแชท</button>`;
-  $('chips').querySelectorAll('button').forEach(b=>b.onclick=()=>{if(b.id==='chatClear'){AI.history=[];saveAI();renderChat()}else askAI(b.textContent.replace(/^\S+\s/,''))});
-  const m=$('msgs');m.innerHTML=AI.history.length?AI.history.map(x=>`<div class="msg ${x.role==='user'?'u':'a'}">${esc(x.content)}</div>`).join(''):`<div class="msg a">สวัสดีครับ ผม Fin ตั้ม เห็นข้อมูลสินเชื่อของคุณแล้ว ถามได้เลย 👇</div>`;
-  window.scrollTo(0,document.body.scrollHeight)}
-const esc=t=>t.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
-let busy=false;
-async function askAI(text){
-  show('chat');if(!AI.key){toast('ใส่ API key ก่อน');return}if(busy||!text.trim())return;busy=true;$('chatSend').disabled=true;
+// ═══════════ AI chat ═══════════
+const CHIPS=['📌 สรุปวันนี้','➕ โปะ 5,000 ช่วยแค่ไหน','❓ ทำไมดอกเดือนนี้เท่านี้','📅 จ่ายวันไหนคุ้มสุด','📈 ถ้า % ขึ้น 0.5 กระทบแค่ไหน','🏁 หมดใน 10 ปี ต้องผ่อนเท่าไร'];
+function buildContext(){const ALL=simAll();const lines=[`วันนี้ ${thD(TODAY)}`,S.rollover&&S.loans.length>1?'ตั้งค่า: ค่างวดรวมคงที่':'',S.income?`รายได้/เดือน ${THB(S.income)} เงินสำรอง ${THB(S.fund)}`:'',S.goal?`เป้าหมาย: หมดภายใน ${thD(S.goal)} ${S.goalName||''}`:''];
+  for(const l of S.loans){const s=ALL[l.id],sn=s.snap,nm=s.months.find(m=>m.key===NOWK);
+    lines.push(`\n## ${l.name} (เลขที่ ${l.acct}) ${TYPES[l.type]}`,`- ${l.bank||''} ${l.purpose||''} ${l.collateral?'หลักประกัน '+l.collateral:''}`.trim(),`- วงเงิน ${THB(l.principal)} เริ่ม ${thD(l.startDate)} สัญญา ${l.termMonths} เดือน จ่ายทุกวันที่ ${l.payDay}`,
+      `- ดอกเบี้ย ${l.rateMode==='flat'?pct(flatAt(l,TODAY),4)+' ต่อปี':'ขั้นบันได: '+sortedTiers(l).map(t=>`${t.upTo==null?'ส่วนเกิน':'ไม่เกิน '+THB(t.upTo)} ${pct(t.rate)}`).join(', ')} คิดรายวัน ÷365 ตัดดอกค้างก่อนเงินต้น${l.rates.length?' · กำหนดเปลี่ยน %: '+l.rates.map(r=>thD(r.from)+' → '+pct(r.rate,4)).join(', '):''}`,
+      `- เงินต้นคงค้าง ${THB(sn.bal,2)} ดอกค้าง ${THB(sn.accrued,2)} ต้องจ่ายวันนี้ ${THB(sn.bal+sn.accrued,2)} ดอกวันละ ${THB(sn.daily,2)}`,
+      `- ค่างวด ${THB(l.payment)} โปะ ${THB(l.extra||0)} → คาดหมด ${s.payoff?thD(s.payoff):'ไม่หมด'} รวม ${s.months.length} เดือน ดอกรวม ${THB(s.tI)} · สัญญาธนาคารหมด ${thD(addM(l.startDate,l.termMonths))}`,nm?`- เดือนนี้: ดอก ${THB(nm.interest)} จ่าย ${THB(nm.paid)} ตัดต้น ${THB(nm.pp)}`:'');
+    if(l.plan){const pm=l.plan.months.find(m=>m.key===NOWK);if(pm&&nm)lines.push(`- เทียบแผน (ล็อก ${thD(l.plan.lockedAt)}): ต้นแผน ${THB(pm.close)} จริง ${THB(nm.close)} แผนหมด ${thM(l.plan.months.at(-1).key)}`)}
+    const tx=[...l.txns].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,8);if(tx.length)lines.push('- รายการล่าสุด: '+tx.map(t=>`${thD(t.date)} ${KN[t.kind]} ${THB(t.amount,2)}${t.bankInt?' (ดอกธนาคาร '+THB(t.bankInt,2)+' แอปคิด '+THB(s.check[t.id]?.appInt||0,2)+')':''}${t.note?' '+t.note:''}`).join('; '));
+    lines.push('- จำลอง: '+[1000,3000,5000,10000].map(x=>{const q=simAll(S.loans.map(o=>o.id===l.id?{...o,extra:(o.extra||0)+x}:o))[l.id];return`โปะ +${THB(x)} → เร็วขึ้น ${s.months.length-q.months.length} เดือน ประหยัด ${THB(s.tI-q.tI)}`}).join('; ')+'; '+[0.25,0.5,1].map(d=>{const q=simAll(S.loans,{rateDelta:d})[l.id];return`% +${d} → ช้าลง ${q.months.length-s.months.length} เดือน ดอกเพิ่ม ${THB(q.tI-s.tI)}`}).join('; '));
+    const next=s.months.filter(m=>m.key>NOWK).slice(0,3);if(next.length)lines.push('- 3 เดือนถัดไป: '+next.map(m=>`${m.label} ดอก ${THB(m.interest)} ต้น ${THB(m.pp)} เหลือ ${THB(m.close)}`).join('; '))}
+  return lines.filter(Boolean).join('\n')}
+const SYS=()=>`คุณคือ "Fin ตั้ม" ผู้ช่วยการเงินส่วนตัวในแอปติดตามสินเชื่อ ตอบภาษาไทย กระชับ เป็นกันเอง ใช้ตัวเลขจากข้อมูลด้านล่างเท่านั้น ห้ามเดา ถ้าต้องคำนวณแสดงวิธีคิดสั้นๆ ดอกเบี้ยรายวัน = เงินต้น × % ÷ 365 ไม่ใช้ markdown หัวข้อ/ตาราง ใช้ข้อความธรรมดาขึ้นบรรทัดใหม่\n\n# ข้อมูลจากแอป\n${buildContext()}`;
+function renderChat(){const setup=$('chatSetup');if(!AI.key){setup.style.display='';$('chatSetupBody').innerHTML=`<label><span>API key</span><input id="aiKey" type="password" placeholder="sk-…"></label><label><span>โมเดล</span><select id="aiModel"><option value="typhoon-v2.5-30b-a3b-instruct">typhoon-v2.5-30b-a3b-instruct (แนะนำ)</option><option value="typhoon-v2.1-12b-instruct">typhoon-v2.1-12b-instruct (เร็ว)</option></select></label><button class="btn primary block" id="aiSaveKey">บันทึก</button>`;$('aiModel').value=AI.model;$('aiSaveKey').onclick=()=>{AI.key=$('aiKey').value.trim();AI.model=$('aiModel').value;saveAI();$('ai_key').value=AI.key;renderChat()}}else setup.style.display='none';
+  $('chips').innerHTML=CHIPS.map(c=>`<button>${c}</button>`).join('')+`<button style="color:var(--bad)" id="chatClear">ล้างแชท</button>`;$('chips').querySelectorAll('button').forEach(b=>b.onclick=()=>{if(b.id==='chatClear'){AI.history=[];saveAI();renderChat()}else askAI(b.textContent.replace(/^\S+\s/,''))});
+  $('msgs').innerHTML=AI.history.length?AI.history.map(x=>`<div class="msg ${x.role==='user'?'u':'a'}">${esc(x.content)}</div>`).join(''):`<div class="msg a">สวัสดีครับ ผม Fin ตั้ม เห็นข้อมูลสินเชื่อของคุณแล้ว ถามได้เลย 👇</div>`;window.scrollTo(0,document.body.scrollHeight)}
+const esc=t=>t.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));let busy=false;
+async function askAI(text){show('chat');if(!AI.key){toast('ใส่ API key ก่อน');return}if(busy||!text.trim())return;busy=true;$('chatSend').disabled=true;
   AI.history.push({role:'user',content:text.trim()});if(AI.history.length>30)AI.history=AI.history.slice(-30);saveAI();renderChat();
-  const m=$('msgs');const el=document.createElement('div');el.className='msg a think';el.textContent='กำลังคิด…';m.appendChild(el);window.scrollTo(0,document.body.scrollHeight);
-  try{
-    const res=await fetch(AI.endpoint,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+AI.key},body:JSON.stringify({model:AI.model,messages:[{role:'system',content:SYS()},...AI.history.slice(-12)],max_tokens:900,temperature:0.4,stream:true})});
-    if(!res.ok)throw new Error(`HTTP ${res.status} ${(await res.text()).slice(0,140)}`);
-    let out='';el.classList.remove('think');el.textContent='';
-    if(res.body&&res.headers.get('content-type')?.includes('text/event-stream')){const rd=res.body.getReader();const td=new TextDecoder();let buf='';
-      while(true){const{done,value}=await rd.read();if(done)break;buf+=td.decode(value,{stream:true});const parts=buf.split('\n');buf=parts.pop();
-        for(const ln of parts){const t=ln.trim();if(!t.startsWith('data:'))continue;const d=t.slice(5).trim();if(d==='[DONE]')continue;try{const j=JSON.parse(d);const c=j.choices?.[0]?.delta?.content||'';if(c){out+=c;el.textContent=out;window.scrollTo(0,document.body.scrollHeight)}}catch(_){}}}}
+  const el=document.createElement('div');el.className='msg a think';el.textContent='กำลังคิด…';$('msgs').appendChild(el);window.scrollTo(0,document.body.scrollHeight);
+  try{const res=await fetch(AI.endpoint,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+AI.key},body:JSON.stringify({model:AI.model,messages:[{role:'system',content:SYS()},...AI.history.slice(-12)],max_tokens:900,temperature:0.4,stream:true})});
+    if(!res.ok)throw new Error(`HTTP ${res.status} ${(await res.text()).slice(0,140)}`);let out='';el.classList.remove('think');el.textContent='';
+    if(res.body&&res.headers.get('content-type')?.includes('text/event-stream')){const rd=res.body.getReader();const td=new TextDecoder();let buf='';while(true){const{done,value}=await rd.read();if(done)break;buf+=td.decode(value,{stream:true});const parts=buf.split('\n');buf=parts.pop();for(const ln of parts){const t=ln.trim();if(!t.startsWith('data:'))continue;const d=t.slice(5).trim();if(d==='[DONE]')continue;try{const j=JSON.parse(d);const c=j.choices?.[0]?.delta?.content||'';if(c){out+=c;el.textContent=out;window.scrollTo(0,document.body.scrollHeight)}}catch(_){}}}}
     else{const j=await res.json();out=j.choices?.[0]?.message?.content||'';el.textContent=out}
-    if(!out)throw new Error('ไม่มีคำตอบกลับมา');
-    AI.history.push({role:'assistant',content:out});saveAI();
-  }catch(e){el.className='msg a err';el.textContent='เรียก Typhoon ไม่สำเร็จ: '+e.message+(/Failed to fetch/.test(e.message)?'\n(ถ้าเป็น CORS ให้ตั้ง endpoint เป็น proxy ในแท็บตั้งค่า)':'')}
+    if(!out)throw new Error('ไม่มีคำตอบกลับมา');AI.history.push({role:'assistant',content:out});saveAI()}
+  catch(e){el.className='msg a err';el.textContent='เรียก Typhoon ไม่สำเร็จ: '+e.message+(/Failed to fetch/.test(e.message)?'\n(ถ้าเป็น CORS ให้ตั้ง endpoint เป็น proxy ในตั้งค่า)':'')}
   busy=false;$('chatSend').disabled=false;window.scrollTo(0,document.body.scrollHeight)}
-$('chatSend').onclick=()=>{const t=$('chatIn').value;$('chatIn').value='';$('chatIn').style.height='auto';askAI(t)};
-$('chatIn').addEventListener('input',e=>{e.target.style.height='auto';e.target.style.height=Math.min(e.target.scrollHeight,120)+'px'});
-$('chatIn').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&window.innerWidth>720){e.preventDefault();$('chatSend').click()}});
+$('chatSend').onclick=()=>{const t=$('chatIn').value;$('chatIn').value='';$('chatIn').style.height='auto';askAI(t)};$('chatIn').addEventListener('input',e=>{e.target.style.height='auto';e.target.style.height=Math.min(e.target.scrollHeight,120)+'px'});$('chatIn').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&window.innerWidth>720){e.preventDefault();$('chatSend').click()}});
 
-// ═══════════ tabs ═══════════
+// ═══════════ scope, cards, tabs ═══════════
+function renderScope(){$('scope').innerHTML=[['all','รวมทุกสัญญา',null],...S.loans.map(l=>[l.id,l.name,l])].map(([k,n,l])=>`<button data-s="${k}" class="${S.scope===k?'on':''}" style="display:inline-flex;align-items:center">${l?avatar(l,'sm'):''}${n}</button>`).join('');$('scope').querySelectorAll('button').forEach(b=>b.onclick=()=>{S.scope=b.dataset.s;save();renderScope();dirtyAll();show(curTab)})}
 let stale={},curTab='dash';function dirtyAll(){stale={dash:1,cmp:1,sched:1}}dirtyAll();
-function show(tab){curTab=tab;document.querySelectorAll('main').forEach(m=>m.classList.toggle('active',m.id==='tab-'+tab));document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.tab===tab));
-  $('fab').classList.toggle('show',tab==='log');window.scrollTo(0,0);
+function show(tab){curTab=tab;document.querySelectorAll('main').forEach(m=>m.classList.toggle('active',m.id==='tab-'+tab));document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.tab===tab));$('fab').classList.toggle('show',tab==='log');window.scrollTo(0,0);
   if(tab==='dash'&&stale.dash){renderDash();stale.dash=0}if(tab==='cmp'&&stale.cmp){renderCmp();stale.cmp=0}if(tab==='sched'&&stale.sched){renderSched();stale.sched=0}if(tab==='log')renderLog();if(tab==='set')renderSettings();if(tab==='chat')renderChat()}
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>show(b.dataset.tab));
-(()=>{const c=$('dayCard');let open=localStorage.getItem('fin-tum:dayOpen')==='1';c.classList.toggle('open',open);$('dayHd').onclick=()=>{open=!open;c.classList.toggle('open',open);localStorage.setItem('fin-tum:dayOpen',open?'1':'0')}})();
+(()=>{const DEF={hero:1,prof:0,month:1,day:0,summ:0,prog:1,plan:1,bal:0,events:0,goal:1,whatif:0,rate:0,refi:0,dsr:0,donut:0,hm:0,year:0};let st={};try{st={...DEF,...JSON.parse(localStorage.getItem('fin-tum:cards')||'{}')}}catch(e){st={...DEF}}
+  const cards=[...document.querySelectorAll('.card.cc')];const apply=()=>{cards.forEach(c=>c.classList.toggle('open',!!st[c.dataset.c]));localStorage.setItem('fin-tum:cards',JSON.stringify(st));const anyOpen=cards.some(c=>st[c.dataset.c]&&c.dataset.c!=='hero');$('allToggle').textContent=anyOpen?'ย่อทั้งหมด':'ขยายทั้งหมด';setTimeout(()=>Object.values(charts).forEach(ch=>{try{ch.resize()}catch(e){}}),60)};
+  cards.forEach(c=>c.querySelector('.cardhd').onclick=()=>{st[c.dataset.c]=st[c.dataset.c]?0:1;apply()});
+  $('allToggle').onclick=()=>{const anyOpen=cards.some(c=>st[c.dataset.c]&&c.dataset.c!=='hero');Object.keys(DEF).forEach(k=>st[k]=anyOpen?0:1);st.hero=1;apply()};apply()})();
 renderScope();show('dash');
 if('serviceWorker' in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
